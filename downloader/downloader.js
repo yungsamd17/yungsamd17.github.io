@@ -1,8 +1,8 @@
 window.DownloadApi = {
 	converter: {
-		plugin: arg => `https://raw.githubusercontent.com/yungsamd17/BetterDiscordAddons/master/Plugins/${arg}/${arg}.plugin.js`,
-		theme: arg => `https://raw.githubusercontent.com/yungsamd17/BetterDiscordAddons/master/Themes/${arg}/${arg}.theme.css`,
-		url: arg => arg = arg.startsWith("https://") || arg.startsWith("http://") ? arg : `https://raw.githubusercontent.com/yungsamd17/BetterDiscordAddons/master/${arg}`
+		plugin: arg => `https://raw.githubusercontent.com/yungsamd1/BetterDiscordAddons/Plugins/${arg}/${arg}.plugin.js`,
+		theme: arg => `https://raw.githubusercontent.com/yungsamd1/BetterDiscordAddons/Themes/${arg}/${arg}.theme.css`,
+		url: arg => arg = arg.startsWith("https://") || arg.startsWith("http://") ? arg : `https://raw.githubusercontent.com/yungsamd1/BetterDiscordAddons/${arg}`
 	},
 	convert: (parameterString, error) => {
 		if (typeof parameterString == "string") for (let parameter in window.DownloadApi.converter) {
