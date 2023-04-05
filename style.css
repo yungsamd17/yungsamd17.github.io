@@ -1,40 +1,106 @@
-/* Styles of the 404 page of my website. */
+/*Styles for Sam's Website*/
+
+* {
+  box-sizing: border-box;
+}
 
 body {
-    background: #000000;
-    color: #d3d7de;
-    font-family: "Courier new";
-    font-size: 18px;
-    line-height: 1.5em;
-	cursor: default;
+  font-family: Arial;
+  padding: 10px;
+  background: #121212;
 }
 
-a {
-	color: #fff;
+/* Header Title */
+.header {
+  padding: 30px;
+  text-align: center;
+  background: #212121;
 }
 
-.code-area {
-    position: absolute;
-    width: 320px;
-	min-width: 320px;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+.header h1 {
+  color: white;
+  font-size: 50px;
 }
 
-.code-area > span {
-    display: block;
+/* Style the top navigation bar */
+.topnav {
+  overflow: hidden;
+  background-color: #303030;
 }
 
-@media screen and (max-width: 320px) {
-    .code-area {
-		font-size: 5vw;
-		min-width: auto;
-        width: 95%;
-		margin: auto;
-		padding: 5px;
-		padding-left: 10px;
-		line-height: 6.5vw;
-    }
+/* Style the topnav links */
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change color on hover */
+.topnav a:hover {
+  background-color: #636363;
+}
+
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {     
+  float: left;
+  width: 75%;
+  padding-right: 20px;
+}
+
+/* Right column */
+.rightcolumn {
+  float: left;
+  width: 25%;
+  background-color: #303030;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Add a card effect for articles */
+.card {
+  color: white;
+  background-color: #212121;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Twitter Button embed  */
+.twitterButton {
+  padding: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Footer */
+.footer {
+  color: white;
+  padding: 20px;
+  text-align: center;
+  background: #212121;
+  margin-top: 1000px;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+  .leftcolumn, .rightcolumn {   
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
 }
