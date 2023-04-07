@@ -83,9 +83,10 @@ body {
 
 }
 
-/* Twitter Button embed  */
-.twitterButton {
-  padding: 20px;
+/* Twitter timeline embed*/
+.twitterTimeline {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 /* Clear floats after the columns */
