@@ -20,10 +20,33 @@ body {
 
 }
 
+/* Secondary Header Title*/
+.header2 {
+  padding: 10px;
+  padding-left: 10px;
+  text-align: left;
+  background: #4e5c69;
+  border-radius: 15px;
+}
+
+/* Image */
+.image-container {
+  display: flex;
+  align-items: center;
+}
+.image-container img {
+  margin-right: 5px;
+}
+
 .header h1 {
   color: white;
   font-size: 50px;
 
+}
+
+.header2 h1 {
+  color: white;
+  font-size: 25px;
 }
 
 /* Style the top navigation bar */
@@ -48,12 +71,37 @@ body {
   transition-duration: 0.100s;
 }
 
+/* Style the topnav links */
+.topnav2 a {
+  float: right;
+  display: block;
+  margin: 5px;
+  color: #000000;
+  background-color: #00f8b9;
+  text-align: center;
+  padding: 14px 16px;
+  border-radius: 5px;
+  border: 10px;
+  border-color: black;
+  text-decoration: none;
+  transition-duration: 0.100s;
+}
+
 /* Change color on hover */
 .topnav a:hover {
   background-color: #555555;
 }
 
-/* Create two unequal columns that floats next to each other */
+/* Change color on hover */
+.topnav2 a:hover {
+  background-color: #006e52;
+}
+
+/* Center column */
+.centercolumn {
+  width: 100%;
+}
+
 /* Left column */
 .leftcolumn {     
   float: left;
@@ -80,7 +128,16 @@ body {
   margin-top: 20px;
   border-radius: 15px;
   border: 10px;
+}
 
+.card2 {
+  color: white;
+  background-color: #3e4c59;
+  padding: 20px;
+  padding-left: 30px;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 10px;
 }
 
 /* Twitter timeline embed*/
@@ -103,7 +160,79 @@ body {
   text-align: center;
   background: #212121;
   margin-top: 1000px;
+  border-radius: 15px;
+  border: 15px;
 }
+
+/* Carmods Footer */
+.footer2 {
+  color: white;
+  padding: 20px;
+  padding-left: 30px;
+  text-align: left;
+  background: #3e4c59;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 15px;
+}
+
+/* Alternate link 1 style */
+.alternate-link1 {
+  color: #00f8b9;
+  text-decoration: none;
+}
+
+/* Link style on 1 hover */
+.alternate-link1:hover {
+  color: #00f8b9;
+  text-decoration: underline;
+}
+
+/* Alternate link 2 style */
+.alternate-link2 {
+  color: white;
+  text-decoration: none;
+}
+
+
+/* Link style on 2 hover */
+.alternate-link2:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Alternate link 3 style */
+.alternate-link3 {
+  display: block;
+  font-weight: none;
+  color: white;
+  text-decoration: none;
+}
+
+
+/* Link style on 3 hover */
+.alternate-link3:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Unvisited links */
+a {
+  color: white;
+}
+
+/* Link style on hover */
+a:hover {
+
+}
+
+/* Visited links 
+a:visited {
+  color: #c58af9;
+  text-decoration: underline;
+}
+
+*/
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 800px) {
