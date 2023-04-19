@@ -337,7 +337,7 @@ i {
     border-radius: 15px;
   }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 450px) {
   .header h1 {
     font-size: 120px;
   }
