@@ -59,6 +59,10 @@ body {
   margin-top: 20px;
   font-weight: bold;
 }
+/* carmods Style p3 for NP Exclusive mods*/
+.p3 {
+  margin: 0px;
+}
 /* Style the top navigation bar */
 .topnav {
   overflow: hidden;
