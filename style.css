@@ -74,10 +74,6 @@ body {
 /* socials Style the top navigation bar for*/
 .topnav2 {
   overflow: hidden;
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
   background-color: #4F5A70;
   border-radius: 15px;
 }
@@ -163,8 +159,14 @@ body {
 .centercolumn {
   width: 100%;
 }
-/* left column */
+/* left column for main*/
 .leftcolumn {     
+  float: left;
+  width: 75%;
+  padding-right: 20px;
+}
+/* left column for carmods*/
+.leftcolumn2 {     
   float: left;
   width: 75%;
   padding-right: 20px;
@@ -317,15 +319,11 @@ p {
 i {
   font-size: 32px;
 }
-/* fixes for mobile view */
+/* fixes for mobile view on main and socials */
 @media screen and (max-width: 1400px) {
   .topnav {
     width: 100%;
     border-bottom-right-radius: 15px;
-  }
-  .rightcolumn2 {
-    width: 100%;
-    padding-right: 0px;
   }
   .leftcolumn {
     width: 100%;
@@ -336,6 +334,21 @@ i {
     height: 545px;
     border-radius: 15px;
   }
+  .leftcolumn2 {
+    width: 65%;
+  }
+  .rightcolumn2 {
+    width: 35%;
+  }
+}
+/* other fixes for caarmods*/
+@media screen and (max-width: 1800px) {
+  .leftcolumn2 {
+    width: 70%;
+  }
+  .rightcolumn2 {
+    width: 30%;
+  }
 }
 @media screen and (max-width: 1000px) {
   .header h1 {
@@ -345,22 +358,31 @@ i {
     font-size: 46px;
   }
   .button a {
-    font-size: 36px;
+    font-size: 32px;
     float: none;
   }
   .button2 a {
-    font-size: 36px;
+    font-size: 32px;
     float: none;
   }
   .button3 a {
-    font-size: 38px;
-    margin: 25px;
-    float: none;
+    font-size: 32px;
   }
   .footer {
-    font-size: 32px;
+    font-size: 28px;
   }
   .footer2 {
-    font-size: 32px;
+    font-size: 28px;
+  }
+}
+/* fixes for mobile view in carmods */
+@media screen and (max-width: 1100px) {
+  .leftcolumn2 {
+    width: 100%;
+    padding-right: 0px;
+  }
+  .rightcolumn2 {
+    width: 100%;
+    padding-right: 0px;
   }
 }
