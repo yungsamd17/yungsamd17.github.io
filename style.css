@@ -74,9 +74,9 @@ body {
 /* socials Style the top navigation bar for*/
 .topnav2 {
   overflow: hidden;
-  padding-left: 35%;
-  padding-right: 35%;
   padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-bottom: 20px;
   background-color: #4F5A70;
   border-radius: 15px;
@@ -337,31 +337,25 @@ i {
     border-radius: 15px;
   }
 }
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 1000px) {
   .header h1 {
-    font-size: 120px;
+    font-size: 110px;
   }
   .header2 h1 {
     font-size: 46px;
   }
   .button a {
-    font-size: 40px;
-    padding: 25px;
+    font-size: 36px;
+    float: none;
   }
   .button2 a {
-    font-size: 40px;
-    padding: 25px;
+    font-size: 36px;
+    float: none;
   }
   .button3 a {
-    font-size: 48px;
-    margin: 30px;
-    padding: 25px;
-  }
-  .topnav2 {
-    padding-left: 15%;
-    padding-right: 15%;
-    padding-top: 50px;
-    padding-bottom: 50px;
+    font-size: 38px;
+    margin: 25px;
+    float: none;
   }
   .footer {
     font-size: 32px;
