@@ -256,6 +256,7 @@ body {
 /* Alternate link 1 style */
 .alternate-link1 {
   color: #00f8b9;
+  font-weight: bold;
   text-decoration: none;
 }
 /* Link style on 1 hover */
