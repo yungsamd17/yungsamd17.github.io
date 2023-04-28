@@ -41,7 +41,7 @@ body {
 /* carmods Header h1 */
 .header2 h1 {
   color: white;
-  font-size: 36px;
+  font-size: 32px;
 }
 /* socials Header h1 */
 .header3 h1 {
@@ -351,7 +351,7 @@ i {
     width: 30%;
   }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 600px) {
   .header h1 {
     font-size: 110px;
   }
