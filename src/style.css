@@ -8,6 +8,27 @@ body {
   padding: 10px;
   background: #1C2331;
 }
+.searchBar {
+  background-color: #4e5c69;
+  color: #ffffff;
+  height: 50px;
+  width: 100%;
+  padding: 5px;
+  padding-left: 15px;
+  border: 0px solid #1f2933;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 1; /* Firefox */
+}
+mark {
+  background-color: #00f8b9;
+  font-weight: bold;
+}
+
 /* index Header Title */
 .header {
   padding: 10px;
@@ -71,11 +92,20 @@ body {
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
 }
-/* socials Style the top navigation bar for*/
+/* socials Style the top navigation bar*/
 .topnav2 {
   overflow: hidden;
   background-color: #4F5A70;
   border-radius: 15px;
+}
+/* carmods Style for Search bar card*/
+.topnav3 {
+  color: white;
+  background-color: #3e4c59;
+  padding: 30px;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 10px;
 }
 /* index button*/
 .button a {
@@ -207,9 +237,9 @@ body {
   margin-top: 20px;
   margin-bottom: 20px;
   border-radius: 15px;
-  border: 10px;
+  border: 20px;
 }
-/* carmods card effect for content*/
+/* carmods card for content*/
 .card2 {
   color: white;
   background-color: #3e4c59;
@@ -219,7 +249,17 @@ body {
   padding-bottom: 40px;
   margin-top: 20px;
   border-radius: 15px;
-  border: 10px;
+  border: 20px;
+}
+/* carmods card for pastebin's*/
+.card3 {
+  color: white;
+  text-align: center;
+  background-color: #3e4c59;
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 20px;
 }
 /* Twitter timeline embed*/
 .twitterTimeline {
@@ -352,6 +392,11 @@ i {
   }
 }
 @media screen and (max-width: 1000px) {
+  .searchBar {
+    height: 90px;
+    font-size: 38px;
+    padding-left: 20px;
+  }
   .header h1 {
     font-size: 110px;
   }
