@@ -2,25 +2,25 @@
 function searchMods(searchTerm) {
   var modCards = document.getElementsByClassName("card2");
   for (var i = 0; i < modCards.length; i++) {
-    var links = modCards[i].getElementsByTagName("a");
+    var elements = modCards[i].querySelectorAll("a, p");
     var isMatch = false;
-    for (var j = 0; j < links.length; j++) {
-      var linkText = links[j].textContent;
+    for (var j = 0; j < elements.length; j++) {
+      var elementText = elements[j].textContent;
       // Use a regular expression to match the search term with any word boundary and ignore case
       var regex = new RegExp("\\b" + searchTerm, "gi");
-      if (linkText.match(regex)) {
-        // Highlight all occurrences of the search term in the link text
-        var highlightedLink = linkText.replace(regex, "<mark>$&</mark>");
-        links[j].innerHTML = highlightedLink;
+      if (elementText.match(regex)) {
+        // Highlight all occurrences of the search term in the element text
+        var highlightedElement = elementText.replace(regex, "<mark>$&</mark>");
+        elements[j].innerHTML = highlightedElement;
         isMatch = true;
       } else {
-        links[j].innerHTML = linkText;
+        elements[j].innerHTML = elementText;
       }
     }
     if (isMatch) {
       if (modCards[i] !== null) {
         modCards[i].style.display = "";
-    }
+      }
     }
   }
 }
