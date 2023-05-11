@@ -8,28 +8,8 @@ body {
   padding: 10px;
   background: #1C2331;
 }
-.searchBar {
-  background-color: #4e5c69;
-  color: #ffffff;
-  height: 50px;
-  width: 100%;
-  padding: 5px;
-  padding-left: 15px;
-  border: 0px solid #1f2933;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: bold;
-}
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: white;
-  opacity: 1; /* Firefox */
-}
-mark {
-  background-color: #00f8b9;
-  font-weight: bold;
-}
 
-/* index Header Title */
+/* index Header */
 .header {
   padding: 10px;
   margin-bottom: 20px;
@@ -37,35 +17,7 @@ mark {
   background: #4F5A70;
   border-radius: 15px;
 }
-/* carmods Header Title */
-.header2 {
-  padding: 10px;
-  padding-left: 10px;
-  text-align: left;
-  background: #4e5c69;
-  border-radius: 15px;
-}
-/* Image */
-.image-container {
-  display: flex;
-  align-items: center;
-}
-.image-container img {
-  margin-right: 5px;
-}
 .header h1 {
-  color: #1C2331;
-  font-size: 80px;
-  margin: 10px;
-  font-weight: normal;
-}
-/* carmods Header h1 */
-.header2 h1 {
-  color: white;
-  font-size: 32px;
-}
-/* socials Header h1 */
-.header3 h1 {
   color: #1C2331;
   font-size: 80px;
   margin: 10px;
@@ -75,16 +27,7 @@ mark {
 .p {
   font-size: 18px;
 }
-/* carmods Style p2 for Updates*/
-.p2 {
-  margin-top: 20px;
-  font-weight: bold;
-}
-/* carmods Style p3 for NP Exclusive mods*/
-.p3 {
-  margin: 0px;
-}
-/* Style the top navigation bar */
+/* Top nav. bar */
 .topnav {
   overflow: hidden;
   background-color: #4F5A70;
@@ -92,20 +35,11 @@ mark {
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
 }
-/* socials Style the top navigation bar*/
+/* socials Top nav. bar */
 .topnav2 {
   overflow: hidden;
   background-color: #4F5A70;
   border-radius: 15px;
-}
-/* carmods Style for Search bar card*/
-.topnav3 {
-  color: white;
-  background-color: #3e4c59;
-  padding: 30px;
-  margin-top: 20px;
-  border-radius: 15px;
-  border: 10px;
 }
 /* index button*/
 .button a {
@@ -122,7 +56,7 @@ mark {
   text-decoration: none;
   transition-duration: 0.250s;
 }
-/* index button to carmods*/
+/* index carmods button */
 .button2 a {
   float: right;
   display: block;
@@ -156,17 +90,17 @@ mark {
   color: #1C2331;
   background-color: #939DB0;
 }
-/* index carmods button color on hover*/
+/* index carmods button color on hover */
 .button2 a:hover {
   color: #1C2331;
   background-color: #939DB0;
 }
-/* socials buttons color on hover*/
+/* socials buttons color on hover */
 .button3 a:hover {
   color: #1c2331;
   background-color: #939DB0;
 }
-/* socials defines hover color for each button*/
+/* socials defines hover color for each button */
 .button3 a.button-twitch:hover {
   background-color: #8d41fe;
 }
@@ -185,18 +119,13 @@ mark {
 .button3 a.button-github:hover {
   background-color: #792f9e;
 }
-/* center column */
+
+/* CENTER COLUMN */
 .centercolumn {
   width: 100%;
 }
 /* left column for main*/
 .leftcolumn {     
-  float: left;
-  width: 75%;
-  padding-right: 20px;
-}
-/* left column for carmods*/
-.leftcolumn2 {     
   float: left;
   width: 75%;
   padding-right: 20px;
@@ -212,20 +141,6 @@ mark {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }
-/* carmods right column */
-.rightcolumn2 {
-  float: left;
-  width: 25%;
-  color: white;
-  background-color: #3e4c59;
-  padding: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-bottom: 40px;
-  margin-top: 20px;
-  border-radius: 15px;
-  border: 20px;
-}
 /* index card effect for content */
 .card {
   color: #1C2331;
@@ -236,28 +151,6 @@ mark {
   padding-bottom: 20px;
   margin-top: 20px;
   margin-bottom: 20px;
-  border-radius: 15px;
-  border: 20px;
-}
-/* carmods card for content*/
-.card2 {
-  color: white;
-  background-color: #3e4c59;
-  padding-top: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-bottom: 40px;
-  margin-top: 20px;
-  border-radius: 15px;
-  border: 20px;
-}
-/* carmods card for pastebin's*/
-.card3 {
-  color: white;
-  text-align: center;
-  background-color: #3e4c59;
-  padding: 10px;
-  margin-top: 20px;
   border-radius: 15px;
   border: 20px;
 }
@@ -282,60 +175,6 @@ mark {
   margin-top: 20px;
   border-radius: 15px;
   border: 15px;
-}
-/* carmods footer */
-.footer2 {
-  color: white;
-  padding: 25px;
-  text-align: center;
-  background: #3e4c59;
-  margin-top: 20px;
-  border-radius: 15px;
-  border: 15px;
-}
-/* Alternate link 1 style */
-.alternate-link1 {
-  color: #00f8b9;
-  font-weight: bold;
-  text-decoration: none;
-}
-/* Link style on 1 hover */
-.alternate-link1:hover {
-  color: #00f8b9;
-  text-decoration: underline;
-}
-/* Alternate link 2 style */
-.alternate-link2 {
-  color: white;
-  text-decoration: none;
-}
-/* Link style on 2 hover */
-.alternate-link2:hover {
-  color: white;
-  text-decoration: underline;
-}
-/* Alternate link 3 style */
-.alternate-link3 {
-  display: block;
-  font-weight: none;
-  color: white;
-  text-decoration: none;
-}
-/* Link style on 3 hover */
-.alternate-link3:hover {
-  color: white;
-  text-decoration: underline;
-}
-/* Alternate link 4 style */
-.alternate-link4 {
-  color: #00f8b9;
-  text-align: center;
-  text-decoration: none;
-}
-/* Link style on 1 hover */
-.alternate-link4:hover {
-  color: #00f8b9;
-  text-decoration: underline;
 }
 /* Index links*/
 .link {
@@ -375,33 +214,10 @@ i {
     height: 545px;
     border-radius: 15px;
   }
-  .leftcolumn2 {
-    width: 65%;
-  }
-  .rightcolumn2 {
-    width: 35%;
-  }
-}
-/* other fixes for caarmods*/
-@media screen and (max-width: 1800px) {
-  .leftcolumn2 {
-    width: 70%;
-  }
-  .rightcolumn2 {
-    width: 30%;
-  }
 }
 @media screen and (max-width: 1000px) {
-  .searchBar {
-    height: 90px;
-    font-size: 38px;
-    padding-left: 20px;
-  }
   .header h1 {
     font-size: 110px;
-  }
-  .header2 h1 {
-    font-size: 46px;
   }
   .button a {
     font-size: 32px;
@@ -416,19 +232,5 @@ i {
   }
   .footer {
     font-size: 28px;
-  }
-  .footer2 {
-    font-size: 28px;
-  }
-}
-/* fixes for mobile view in carmods */
-@media screen and (max-width: 1100px) {
-  .leftcolumn2 {
-    width: 100%;
-    padding-right: 0px;
-  }
-  .rightcolumn2 {
-    width: 100%;
-    padding-right: 0px;
   }
 }
