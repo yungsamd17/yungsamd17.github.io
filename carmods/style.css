@@ -268,9 +268,11 @@ form {
 /* Normal links */
 a {
   color: white;
+  text-decoration: none;
 }
 a:hover {
   color: #1f2933;
+  text-decoration: underline;
 }
 
 
