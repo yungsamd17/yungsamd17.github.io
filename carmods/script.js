@@ -5,8 +5,8 @@ window.addEventListener("load", function () {
     loadingOverlay.style.opacity = 0;
     setTimeout(function () {
       loadingOverlay.style.display = "none";
-    }, 125); // Delay to hide the overlay after the opacity transition
-  }, 250); // Delay of # second before hiding the overlay
+    }, 200); // Delay to hide the overlay after the opacity transition
+  }, 350); // Delay of # second before hiding the overlay
 });
 
 // Search
