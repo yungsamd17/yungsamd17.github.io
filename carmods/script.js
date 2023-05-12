@@ -102,7 +102,6 @@ window.onload = function () {
   loadSearchResults();
   var input = document.getElementById("searchInput");
   input.addEventListener("keypress", handleKeyPress);
-  input.addEventListener("input", handleSearchInputChange);
 
   var clearButton = document.getElementById("clearSearchButton");
   clearButton.addEventListener("click", clearSearchInput);
