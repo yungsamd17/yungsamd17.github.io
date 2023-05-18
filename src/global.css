@@ -18,7 +18,7 @@ body {
 .header h1 {
   color: #939db0;
   font-weight: bold;
-  font-size: 80px;
+  font-size: 100px;
   margin: 10px;
   font-weight: normal;
 }
@@ -72,13 +72,12 @@ body {
   margin: 15px;
   color: #4f5a70;
   background-color: #1C2331;
-  text-align: center;
   font-weight: bold;
+  text-align: center;
   padding: 15px;
   border-radius: 10px;
   border-color: black;
   text-decoration: none;
-  transition-duration: 0.250s;
 }
 /* index color on hover */
 .button a:hover {
@@ -93,26 +92,9 @@ body {
 /* socials buttons color on hover */
 .button3 a:hover {
   color: #1c2331;
+  background-color: #939DB0;
 }
-/* socials defines hover color for each button */
-.button3 a.button-twitch:hover {
-  background-color: #8d41fe;
-}
-.button3 a.button-twitter:hover {
-  background-color: #1c9aef;
-}
-.button3 a.button-youtube:hover {
-  background-color: #ff0101;
-}
-.button3 a.button-discord:hover {
-  background-color: #5662f6;
-}
-.button3 a.button-spotify:hover {
-  background-color: #1ed760;
-}
-.button3 a.button-github:hover {
-  background-color: #792f9e;
-}
+
 
 /* CENTER COLUMN */
 .centercolumn {
@@ -149,13 +131,7 @@ body {
   border: 20px;
 }
 .footer-space-card {
-  margin-bottom: 225px;
-}
-/* Twitter timeline embed*/
-.twitterTimeline {
-  width: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  margin-bottom: 205px;
 }
 /* Separator */
 .separator-container {
@@ -190,6 +166,15 @@ body {
 .link:hover {
   text-decoration: underline;
 }
+.link2 {
+  color: #1C2331;
+  font-weight: bold;
+  text-decoration: none;
+}
+.link2:hover{
+  text-decoration: underline;
+}
+
 /* normal links */
 a {
   color: white;
@@ -201,9 +186,6 @@ a:hover {
 p {
   margin: 5px;
 }
-i {
-  font-size: 32px;
-}
 /* fixes for mobile view on main and socials */
 @media screen and (max-width: 1400px) {
   .topnav {
@@ -214,28 +196,12 @@ i {
     width: 100%;
     padding-right: 0px;
   }
-  .rightcolumn {   
-    width: 100%;
-    height: 545px;
-    border-radius: 15px;
-  }
 }
 @media screen and (max-width: 1000px) {
-  .header h1 {
-    font-size: 110px;
-  }
   .button a {
-    font-size: 28px;
     float: none;
   }
   .button2 a {
-    font-size: 28px;
     float: none;
-  }
-  .button3 a {
-    font-size: 28px;
-  }
-  .footer {
-    font-size: 26px;
   }
 }

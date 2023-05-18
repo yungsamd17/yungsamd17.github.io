@@ -324,10 +324,16 @@ i {
     font-size: 38px;
     padding-left: 20px;
   }
+  #searchInput:focus {
+  outline: 10px solid #1f2933;
+}
   .clearSearchButton {
     height: 90px;
     width: 10%;
     font-size: 38px;
+  }
+  .clearSearchButton:hover {
+    outline: 10px solid #1f2933;
   }
   .header h1 {
     font-size: 46px;
