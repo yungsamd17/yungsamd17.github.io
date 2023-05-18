@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 body {
-  font-family: Arial;
+  font-family: Verdana, sans-serif;
   padding: 10px;
   background: #1C2331;
 }
@@ -14,11 +14,10 @@ body {
   padding: 10px;
   margin-bottom: 20px;
   text-align: center;
-  background: #4F5A70;
-  border-radius: 15px;
 }
 .header h1 {
-  color: #1C2331;
+  color: #939db0;
+  font-weight: bold;
   font-size: 80px;
   margin: 10px;
   font-weight: normal;
@@ -31,9 +30,7 @@ body {
 .topnav {
   overflow: hidden;
   background-color: #4F5A70;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
+  border-radius: 15px;
 }
 /* socials Top nav. bar */
 .topnav2 {
@@ -54,7 +51,6 @@ body {
   border-radius: 10px;
   border-color: black;
   text-decoration: none;
-  transition-duration: 0.250s;
 }
 /* index carmods button */
 .button2 a {
@@ -69,7 +65,6 @@ body {
   border-radius: 10px;
   border-color: black;
   text-decoration: none;
-  transition-duration: 0.250s;
 }
 /* socials buttons */
 .button3 a {
@@ -98,7 +93,6 @@ body {
 /* socials buttons color on hover */
 .button3 a:hover {
   color: #1c2331;
-  background-color: #939DB0;
 }
 /* socials defines hover color for each button */
 .button3 a.button-twitch:hover {
@@ -154,11 +148,23 @@ body {
   border-radius: 15px;
   border: 20px;
 }
+.footer-space-card {
+  margin-bottom: 225px;
+}
 /* Twitter timeline embed*/
 .twitterTimeline {
   width: 100%;
   padding-top: 20px;
   padding-bottom: 20px;
+}
+/* Separator */
+.separator-container {
+  padding: 0;
+}
+.separator {
+  border: none;
+  border-top: 5px solid #1c2331;
+  border-radius: 5px;
 }
 /* Clear floats after the columns */
 .row:after {
@@ -172,7 +178,6 @@ body {
   padding: 20px;
   text-align: center;
   background: #4F5A70;
-  margin-top: 20px;
   border-radius: 15px;
   border: 15px;
 }
