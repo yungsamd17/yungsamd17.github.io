@@ -61,14 +61,11 @@ form {
   color: white;
   background-color: #4e5c69;
 }
-#searchInput:hover {
-  outline: 5px solid #1f2933;
-}
 #searchInput:focus {
   outline: 5px solid #1f2933;
 }
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: white;
+  color: #cccccc;
   opacity: 1; /* Firefox */
   font-style: italic;
 }
