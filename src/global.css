@@ -18,7 +18,7 @@ body {
 .header h1 {
   color: #939db0;
   font-weight: bold;
-  font-size: 100px;
+  font-size: 7rem;
   margin: 10px;
   font-weight: normal;
 }
@@ -51,6 +51,7 @@ body {
   border-radius: 10px;
   border-color: black;
   text-decoration: none;
+  font-size: 1rem;
 }
 /* index carmods button */
 .button2 a {
@@ -65,6 +66,7 @@ body {
   border-radius: 10px;
   border-color: black;
   text-decoration: none;
+  font-size: 1rem;
 }
 /* socials buttons */
 .button3 a {
@@ -78,6 +80,7 @@ body {
   border-radius: 10px;
   border-color: black;
   text-decoration: none;
+  font-size: 1rem;
 }
 /* index color on hover */
 .button a:hover {
@@ -200,8 +203,13 @@ p {
 @media screen and (max-width: 1000px) {
   .button a {
     float: none;
+    font-size: 16px;
   }
   .button2 a {
     float: none;
+    font-size: 16px;
+  }
+  .button3 a {
+    font-size: 16px;
   }
 }
