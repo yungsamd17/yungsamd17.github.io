@@ -8,6 +8,10 @@ body {
   padding: 10px;
   background: #1C2331;
 }
+::selection {
+  background-color: #1C2331;
+  color: #939db0;
+}
 
 /* index Header */
 .header {
