@@ -48,6 +48,11 @@ function myFunction() {
       }
     }
 
+    // Exclude elements in the rightcolumn div class
+    if (element.closest(".rightcolumn")) {
+      isExcluded = true;
+    }
+
     if (!parentUL && !isExcluded) {
       element.style.display = "none";
     } else {
