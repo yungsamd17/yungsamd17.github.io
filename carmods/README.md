@@ -5,7 +5,7 @@
 <h1> <div align="center"><a href="https://yungsamd17.github.io/carmods/">NoPixel Vehicle Mods</div> </h1>
 
 <div align="center">
-  <h3><b>Reguraly updated LIST OF ALL VEHICLE MODS of <a href="https://www.nopixel.net">NoPixel</a> FiveM Server</b></h3>
+  <h3><b>Reguraly updated LIST OF ALL VEHICLE MODS from <a href="https://www.nopixel.net">NoPixel</a> FiveM Server</b></h3>
 <br>
   97% of the Mods are the same as seen on NoPixel
   <br>
