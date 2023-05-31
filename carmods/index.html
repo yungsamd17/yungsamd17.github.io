@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>NoPixel Vehicle Mods | Sam</title>
@@ -9,28 +9,22 @@
 	<script type="text/javascript" src="script.js" defer></script>
 </head>
 <body onload="openLinksInNewTab('modList')">
-<div id="loadingOverlay">
-  <div id="loadingSpinner"></div>
-</div>
 <div class="header">
-	<div class="image-container">
-		<img src="src/logo/np-logo.png" alt="NoPixel Logo">
-		  <h1 style="user-select: none;">LIST OF ALL <a href="https://www.nopixel.net" class="link2">NoPixel</a> VEHICLE MODS</h1>
-	</div>
+	<h1>LIST OF ALL <a href="https://www.nopixel.net">NoPixel</a> VEHICLE MODS</h1>
 </div>
 <div class="row">
   <div class="leftcolumn">
     <div class="topnav">
       <form>
         <input type="text" id="searchInput" onkeypress="handleKeyPress(event)" placeholder="Search for mods..." autocomplete="off">
-        <button class="clearSearchButton" id="clearSearchButton" title="Clear search box"><i class="fa fa-close"></i></button>
+        <button class="clearSearchButton hideButton" id="clearSearchButton" title="Clear search box"><i class="fa fa-close"></i></button>
       </form>
     </div>
     <div class="card">
       <span id="searchResultsMessage"></span>
-      <a href="https://pastebin.com/jsvw46cn" class="link1">Pastebin</a>
+      <a href="https://pastebin.com/jsvw46cn" class="link1" target="_blank">Pastebin</a>
       <br>
-      <a href="https://pastebin.com/EERcd3Yh" class="link1">Old Pastebin</a>
+      <a href="https://pastebin.com/EERcd3Yh" class="link1" target="_blank">Old Pastebin</a>
       <h2><a href="https://www.gta5-mods.com/users/GTAWiseGuy" class="link2">GTAWiseGuy</a> Mods:</h2>
       <ul id="modList">
       <li><a href="https://www.gta5-mods.com/vehicles/6str-annis-zr380-custom-add-on-tuning" class="link3">Annis ZR380 Custom</a></li>

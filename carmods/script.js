@@ -1,14 +1,3 @@
-// Loading Overlay
-window.addEventListener("load", function () {
-  setTimeout(function () {
-    var loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.opacity = 0;
-    setTimeout(function () {
-      loadingOverlay.style.display = "none";
-    }, 200); // Delay to hide the overlay after the opacity transition
-  }, 350); // Delay of # second before hiding the overlay
-});
-
 // Search
 function myFunction() {
   var input, filter, ul, li, a, i, txtValue;
@@ -62,7 +51,15 @@ function myFunction() {
 
   var searchResultsCount = document.querySelectorAll("ul#modList li:not([style='display: none;'])").length;
   var messageElement = document.getElementById("searchResultsMessage");
-  messageElement.textContent = "Found " + searchResultsCount + " matching search results.";
+  messageElement.textContent = "Found " + searchResultsCount + " matching search result(s).";
+
+  // Show or hide the clear search button based on search results count
+  var clearButton = document.getElementById("clearSearchButton");
+  if (searchResultsCount > 0) {
+    clearButton.style.display = "block";
+  } else {
+    clearButton.style.display = "none";
+  }
 }
 
 function handleKeyPress(event) {
