@@ -1,0 +1,137 @@
+/* yungsamd17.github.io | Global style */
+
+* {
+  box-sizing: border-box;
+}   
+
+body {
+  padding: 0;
+  background-color: #0e0e10;
+  color: #f1f1f1;
+  max-width: 700px;
+  padding: 0;
+  margin: 0 auto;
+  font-size: 1rem;
+  font-family: 'Verdana', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+::selection {
+    background-color: #ff8a80;
+    color: #18181b;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  color: #ff8a80;
+}
+
+.main {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.headerName {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+.headerName h1 {
+  margin: 0;
+  margin-left: 5px;
+  text-align: left;
+}
+.headerName p {
+  margin: 0;
+  text-align: center;
+  color: #b6b6b6;
+  margin-left: 0.65vh;
+}
+
+.link-bar {
+  margin-left: auto;;
+}
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.socials {
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  color: #868686;
+}
+.socials-logo {
+  display: flex;
+  margin: 4px;
+}
+
+.card {
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: left;
+}
+.card h2 {
+  margin-left: 5px;
+}
+.card p {
+  color: #868686;
+  margin: 4px;
+}
+
+.footer {
+  padding-bottom: 10px;
+  color: #868686;
+  opacity: .5;
+}
+.footer a {
+  text-decoration: none;
+  text-align: center;
+}
+.footer a:hover {
+  text-decoration: underline;
+  text-align: center;
+}
+
+
+
+@media (max-width: 578px) {
+  .wrapper {
+    justify-content: center;
+    margin-bottom: 10vh;
+  }
+  
+  .headerName h1 {
+    text-align: center;
+  }
+
+  .link-bar{
+    margin: 0;
+    margin-top: 10px;
+  }
+
+  .link-row{
+    justify-content: space-between;
+  }
+
+  .card {
+    text-align: center;
+  }
+}
