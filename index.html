@@ -18,6 +18,9 @@
     <script type="text/javascript" src="https://livejs.com/live.js"></script><!-- Dev Only -->
   </head>
   <body>
+    <button onclick="darkmodeFunction()" class="dark-modeBtn">
+      <span id="darkModeIcon" class="fas fa-sun"></span>
+    </button>
     <div class="main">
       <div class="wrapper">
         <div class="headerName">
@@ -82,7 +85,7 @@
     </div>
     <div class="footer">
       <script>
-          document.write(/\d{4}/.exec(Date())[0])
+        document.write(/\d{4}/.exec(Date())[0])
       </script>
       &#8226;&nbsp;<a href="https://github.com/yungsamd17/yungsamd17.github.io" target="_blank"><i class="fa-brands fa-github"></i> GitHub Repo</a>
     </div>
@@ -92,6 +95,13 @@
         event.preventDefault(); // Prevent default behavior
       }
     });
+
+    function darkmodeFunction() {
+      var element = document.body;
+      var button = document.querySelector('.dark-modeBtn');
+      element.classList.toggle("dark-mode");
+      button.classList.toggle('active');
+    }
   </script>
   </body>
 </html>

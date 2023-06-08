@@ -37,6 +37,53 @@ a:hover {
   width: 100%;
 }
 
+.dark-mode {
+  background-color: #f1f1f1;
+  color: #0e0e10;
+}
+
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+.dark-mode .dark-modeBtn{
+  background-color: #0e0e10;
+  color: #f1f1f1;
+}
+.dark-mode p,
+.dark-mode a {
+  color: #0e0e10;
+}
+.dark-mode .card p {
+  color: #0e0e10;
+}
+.dark-mode a:hover {
+  color: #ff8a80;
+}
+
+.dark-modeBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  border: none;
+  background-color: #868686;
+  color: #0e0e10;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: transform 0.5s ease;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.dark-modeBtn:hover {
+  background-color: #ff8a80;
+}
+.dark-modeBtn.active #darkModeIcon::before {
+  content: "\f186"; /* Moon icon from Font Awesome */
+}
+
 .wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -104,10 +151,12 @@ a:hover {
 .footer a {
   text-decoration: none;
   text-align: center;
+  color: #868686;
 }
 .footer a:hover {
   text-decoration: underline;
   text-align: center;
+  color: #868686;
 }
 
 
@@ -133,5 +182,9 @@ a:hover {
 
   .card {
     text-align: center;
+  }
+
+  .dark-modeBtn {
+    bottom: 40px;
   }
 }
