@@ -7,13 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script type="text/javascript" src="script.js" defer></script>
-  <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> Dev Only -->
 </head>
-
-<button onclick="topFunction()" id="topBtn" class="topBtn" title="Back to top">
-  <i class="fa fa-arrow-up"></i>
-</button>
-
 <body onload="openLinksInNewTab('modList')">
 <div class="header">
 	<h1>LIST OF ALL <a href="https://www.nopixel.net">NoPixel</a> VEHICLE MODS</h1>
@@ -221,28 +215,5 @@
   <p>Made by <a href="https://www.twitter.com/yungsamd17" class="link4">Sam</a></p>
   <p><a href="https://github.com/yungsamd17/yungsamd17.github.io/tree/main/carmods" class="link4" ><i class="fa">&#xf09b;</i> GitHub project</a></p>
 </div>
-
-<script>
-// Get the button
-let mybutton = document.getElementById("topBtn");
-
-// When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-  if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
-    mybutton.style.display = "block";
-  } else {
-    mybutton.style.display = "none";
-  }
-}
-
-// When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-}
-</script>
-
 </body>
 </html>
