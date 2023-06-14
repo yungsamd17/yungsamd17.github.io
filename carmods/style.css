@@ -267,10 +267,6 @@ p {
   margin: 5px;
 }
 
-/* OTHER */
-i {
-  font-size: 32px;
-}
 ::selection {
   background-color: #00f8b9;
   color: #1f2933;
