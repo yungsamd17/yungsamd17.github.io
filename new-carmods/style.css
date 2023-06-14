@@ -125,7 +125,7 @@ header input[type="search"] {
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: #4e5c69;
   opacity: 1; /* Firefox */
-  font-style: italic;
+  font-weight: 200;
 }
 
 /* Carmods */
@@ -162,7 +162,7 @@ header input[type="search"] {
   color: white;
   background-color: #3e4c59;
   padding: 30px 30px 10px 30px;
-  margin: 85px 15px 50px 15px;
+  margin: 85px 15px 45px 15px;
   border-radius: 15px;
   border: 20px;
 }
@@ -183,11 +183,11 @@ header input[type="search"] {
   background: #4e5c69;
 }
 .footer p {
-  margin: 0 77px 0 0;
+  margin: 0 85px 0 0;
 }
 .github-button {
   background-color: #4e5c69;
-  padding: 1.5px 4px 0 4px;
+  padding: 1.5px 3px 0 4px;
   margin: 1px 0 0 0;
   border: none;
   border-radius: 3px;
@@ -197,6 +197,7 @@ header input[type="search"] {
   display: inline-block;
   cursor: pointer;
   float: left;
+  font-weight: bold;
 }
 .github-button:hover {
   background-color: #1f2933;
@@ -243,12 +244,9 @@ Link 1 */
   cursor: pointer;
   text-align: center;
   text-decoration: none;
+  font-weight: bold;
 }
 .link4:hover {
-  background-color: #1f2933;
-  text-decoration: none;
-}
-.github-button:hover {
   background-color: #1f2933;
   text-decoration: none;
 }
@@ -289,12 +287,16 @@ a:hover {
 
   header input[type="search"] {
     width: 250px;
-    margin: 15px 10px 15px 0;
+    margin: 10px 10px 10px 0;
   }
   .card {
-    padding: 15px;
+    padding: 5px 15px 5px 15px;
     padding-top: 20px;
-    margin: 80px 10px 10px 10px;
+    margin: 70px 10px 40px 10px;
+  }
+  .topBtn {
+    bottom: 55px;
+    right: 25px;
   }
 }
 
@@ -318,9 +320,9 @@ a:hover {
   }
 
   .card {
-    padding: 15px;
+    padding: 5px 15px 5px 15px;
     padding-top: 20px;
-    margin: 70px 10px 10px 10px;
+    margin: 60px 10px 40px 10px;
   }
 }
 
