@@ -41,6 +41,10 @@ function myFunction() {
     if (element.closest(".rightcolumn")) {
       isExcluded = true;
     }
+    // Exclude elements in the footer div class
+    if (element.closest(".footer")) {
+      isExcluded = true;
+    }
 
     if (!parentUL && !isExcluded) {
       element.style.display = "none";

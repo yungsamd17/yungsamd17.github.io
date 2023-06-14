@@ -5,33 +5,31 @@ body {
   font-family: Arial;
 }
 
-/* width 
+/* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
-/* Track 
+/* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px #1e2831; 
   border-radius: 5px;
 }
  
-/* Handle 
+/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #4e5c69; 
   border-radius: 5px;
 }
 
-/* Handle on hover 
+/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #00f8b9; 
 }
-*/
 
 .topBtn {
   display: none;
   position: fixed;
-  bottom: 30px;
+  bottom: 65px;
   right: 30px;
   z-index: 99;
   width: 50px;
@@ -64,7 +62,7 @@ header {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   font-size: 2rem;
 }
-header .main {
+header .navbar {
   align-items: center;
   display: -webkit-inline-box;
   display: inline-flex;
@@ -93,14 +91,8 @@ header .logo {
   color: #00f8b9;
   font-weight: 900;
 }
-.nopixelLogo:hover {
-  color: #00b386;
-}
 .vehMods {
   color: #fff;
-}
-.vehMods:hover {
-  color: #ccc;
 }
 
 /* SEARCH */
@@ -169,8 +161,8 @@ header input[type="search"] {
   list-style-type: none;
   color: white;
   background-color: #3e4c59;
-  padding: 30px;
-  margin: 85px 15px 15px 15px;
+  padding: 30px 30px 10px 30px;
+  margin: 85px 15px 50px 15px;
   border-radius: 15px;
   border: 20px;
 }
@@ -182,10 +174,33 @@ header input[type="search"] {
 }
 
 .footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   padding: 5px;
   text-align: center;
   color: #fff;
   background: #4e5c69;
+}
+.footer p {
+  margin: 0 77px 0 0;
+}
+.github-button {
+  background-color: #4e5c69;
+  padding: 1.5px 4px 0 4px;
+  margin: 1px 0 0 0;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  float: left;
+}
+.github-button:hover {
+  background-color: #1f2933;
+  text-decoration: none;
 }
 
 /* LINK STYLES
@@ -220,11 +235,22 @@ Link 1 */
 }
 /* Link 4 */
 .link4 {
+  background-color: #4e5c69;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  display: inline-block;
+  cursor: pointer;
   text-align: center;
   text-decoration: none;
 }
 .link4:hover {
-  text-decoration: underline;
+  background-color: #1f2933;
+  text-decoration: none;
+}
+.github-button:hover {
+  background-color: #1f2933;
+  text-decoration: none;
 }
 /* Normal links */
 a {
@@ -248,10 +274,6 @@ a:hover {
 /* Style for NP Exclusive mods*/
 .p3 {
   margin: 0px;
-}
-/* Normal phrases */
-p {
-  margin: 5px;
 }
 
 /* OTHER */
@@ -299,12 +321,6 @@ p {
     padding: 15px;
     padding-top: 20px;
     margin: 70px 10px 10px 10px;
-  }
-
-  .menu {
-    display: block;
-    line-height: 80px;
-    margin: 0;
   }
 }
 
