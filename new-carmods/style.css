@@ -1,0 +1,307 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1f2933;
+  font-family: Arial;
+}
+
+/* width 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track 
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #1e2831; 
+  border-radius: 5px;
+}
+ 
+/* Handle 
+::-webkit-scrollbar-thumb {
+  background: #4e5c69; 
+  border-radius: 5px;
+}
+
+/* Handle on hover 
+::-webkit-scrollbar-thumb:hover {
+  background: #00f8b9; 
+}
+*/
+
+.topBtn {
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 99;
+  width: 50px;
+  height: 50px;
+  font-size: 1.3rem;
+  border: none;
+  background-color: #4e5c69;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 25%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.topBtn:hover {
+  background-color: #00f8b9;
+  color: #1f2933;
+}
+
+/* HEADER */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: auto;
+  background: #1f2933;
+  font-family: 'Nunito', sans-serif;
+  user-select: none;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  font-size: 2rem;
+}
+header .main {
+  align-items: center;
+  display: -webkit-inline-box;
+  display: inline-flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  flex-grow: 1;
+  width: 100%;
+}
+header a {
+  color: #fff;
+}
+header a:hover {
+  color: #ccc;
+  text-decoration: none;
+}
+
+/* LOGO */
+header .logo {
+  align-items: center;
+  flex-direction: row;
+  color: white;
+  padding-right: 5px;
+  padding-left: 20px;
+  font-size: 0;
+}
+.nopixelLogo {
+  color: #00f8b9;
+  font-size: 2rem;
+  font-weight: 900;
+}
+.nopixelLogo:hover {
+  color: #00b386;
+}
+.vehMods {
+  color: #fff;
+  font-size: 2rem;
+}
+.vehMods:hover {
+  color: #ccc;
+}
+
+/* SEARCH */
+header .search {
+  flex: 1 0 auto;
+}
+header input[type="search"] {
+  background: #cccccc no-repeat;
+  background-image: url('search-icon.svg');
+  background-position: 10px 9px;
+  background-size: 22px;
+
+  border: none;
+  float: right;
+  width: 300px;
+  margin: 15px 20px 15px 0;
+  padding: 10px;
+
+  border-radius: 10px;
+  text-align: left;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: bold;
+  color: #1f2933;
+  outline: none;
+  text-indent: 30px;
+  display: block;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #4e5c69;
+  opacity: 1; /* Firefox */
+  font-style: italic;
+}
+
+/* Carmods */
+#modList {
+  list-style-type: none;
+  padding: 0;
+}
+#modList li a {
+  text-decoration: none;
+  color: white;
+}
+#modList li a:hover:not(.header) {
+  border-radius: 3px;
+  background-color: #4e5c69;
+  text-decoration: none;
+  color: #00f8b9;
+  display: inline;
+}
+
+/* CENTER COLUMN */
+.centercolumn {
+  width: 100%;
+}
+
+/* Search results */
+#searchResultsMessage {
+  color: #00f9b9;
+  font-weight: bold;
+}
+
+/* CARD for content*/
+.card {
+  list-style-type: none;
+  color: white;
+  background-color: #3e4c59;
+  padding: 30px;
+  margin: 92px 20px 20px 20px;
+  border-radius: 15px;
+  border: 20px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.footer {
+  padding: 5px;
+  text-align: center;
+  color: #fff;
+  background: #4e5c69;
+}
+
+/* LINK STYLES
+Link 1 */
+.link1 {
+  color: #00f8b9;
+  font-weight: bold;
+  text-decoration: none;
+}
+.link1:hover {
+  color: #00f8b9;
+  text-decoration: underline;
+}
+/* Link 2 */
+.link2 {
+  color: white;
+  text-decoration: none;
+}
+.link2:hover {
+  color: white;
+  text-decoration: underline;
+}
+/* Link 3 */
+.link3 {
+  font-weight: none;
+  color: white;
+  text-decoration: none;
+}
+.link3:hover {
+  color: white;
+  text-decoration: underline;
+}
+/* Link 4 */
+.link4 {
+  text-align: center;
+  text-decoration: none;
+}
+.link4:hover {
+  text-decoration: underline;
+}
+/* Normal links */
+a {
+  color: white;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+
+/* PHRASES */
+.p {
+  font-size: 18px;
+}
+/* Style for Updates*/
+.p2 {
+  margin-top: 20px;
+  font-weight: bold;
+}
+/* Style for NP Exclusive mods*/
+.p3 {
+  margin: 0px;
+}
+/* Normal phrases */
+p {
+  margin: 5px;
+}
+
+/* OTHER */
+::selection {
+  background-color: #00f8b9;
+  color: #1f2933;
+}
+
+@media only screen and (max-width: 720px) {
+  header .logo {
+    padding-left: 10px;
+  }
+
+  header input[type="search"] {
+    width: 250px;
+  }
+  .card {
+    padding: 15px;
+    padding-top: 20px;
+}
+}
+
+@media only screen and (max-width: 650px) {
+  header input[type="search"] {
+    width: 200px;
+    margin: 13px 10px 13px 0;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  header {
+    font-size: 1.350rem;
+  }
+
+  header input[type="search"] {
+    width: 150px;
+  }
+
+  .menu {
+    display: block;
+    line-height: 80px;
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  header {
+    font-size: 0.9rem;
+  }
+}
