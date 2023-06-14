@@ -5,23 +5,15 @@ body {
   font-family: Arial;
 }
 
-/* width */
+
+/* SCROLLBAR */
 ::-webkit-scrollbar {
   width: 8px;
 }
-
-/* Track */
-::-webkit-scrollbar-track {
-  border-radius: 5px;
-}
- 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #4e5c69; 
   border-radius: 5px;
 }
-
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #00f8b9; 
 }
@@ -43,7 +35,6 @@ body {
   border-radius: 25%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-
 .topBtn:hover {
   background-color: #00f8b9;
   color: #1f2933;
@@ -120,10 +111,18 @@ header input[type="search"] {
   outline: none;
   text-indent: 30px;
   display: block;
+
+  caret-color: #1f2933; /* Text cursor color */
+  -webkit-caret-color: #1f2933; /* For Safari support */
+}
+/* Hide the clear button on the search input */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  display: none;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #4e5c69;
+  color: #1f2933;
   opacity: 1; /* Firefox */
   font-weight: 200;
 }
@@ -172,7 +171,7 @@ header input[type="search"] {
   display: table;
   clear: both;
 }
-
+/* FOOTER */
 .footer {
   position: fixed;
   bottom: 0;
@@ -188,7 +187,7 @@ header input[type="search"] {
 .github-button {
   background-color: #4e5c69;
   padding: 1.5px 3px 0 4px;
-  margin: 1px 0 0 0;
+  margin: 0;
   border: none;
   border-radius: 3px;
   color: white;
@@ -198,11 +197,28 @@ header input[type="search"] {
   cursor: pointer;
   float: left;
   font-weight: bold;
+  user-select: none;
 }
 .github-button:hover {
   background-color: #1f2933;
   text-decoration: none;
 }
+.footer-link {
+  background-color: #4e5c69;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+}
+.footer-link:hover {
+  background-color: #1f2933;
+  text-decoration: none;
+}
+
 
 /* LINK STYLES
 Link 1 */
@@ -234,22 +250,6 @@ Link 1 */
   color: white;
   text-decoration: underline;
 }
-/* Link 4 */
-.link4 {
-  background-color: #4e5c69;
-  border: none;
-  border-radius: 3px;
-  color: white;
-  display: inline-block;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  font-weight: bold;
-}
-.link4:hover {
-  background-color: #1f2933;
-  text-decoration: none;
-}
 /* Normal links */
 a {
   color: white;
@@ -280,11 +280,12 @@ a:hover {
   color: #1f2933;
 }
 
+
+
 @media only screen and (max-width: 720px) {
   header .logo {
     padding-left: 10px;
   }
-
   header input[type="search"] {
     width: 250px;
     margin: 10px 10px 10px 0;
@@ -310,7 +311,6 @@ a:hover {
   header {
     font-size: 1.350rem;
   }
-
   header input[type="search"] {
     width: 150px;
     padding: 5px;
@@ -318,7 +318,6 @@ a:hover {
     background-size: 16px;
     border-radius: 8px;
   }
-
   .card {
     padding: 5px 15px 5px 15px;
     padding-top: 20px;

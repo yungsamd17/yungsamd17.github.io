@@ -58,28 +58,36 @@ function myFunction() {
   messageElement.textContent = "Found " + searchResultsCount + " matching search result(s).";
 }
 
-function handleKeyPress(event) {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    performSearch();
+function handleKeyUp() {
+  var input = document.getElementById("searchInput");
+  var filter = input.value.trim().toUpperCase();
+  
+  if (filter.length >= 2) {
+    myFunction(); // Trigger search functionality as you type
+  } else {
+    clearSearchResults(); // Clear the search results
   }
-}
-
-function performSearch() {
-  var input, filter, searchQuery;
-  input = document.getElementById("searchInput");
-  filter = input.value.trim();
-  searchQuery = encodeURIComponent(filter);
-
-  // Update URL with search query
-  var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + "?search=" + searchQuery;
-  window.location.href = newURL;
 }
 
 function clearSearchInput() {
   var input = document.getElementById("searchInput");
   input.value = "";
-  performSearch(); // Trigger the search functionality with an empty query
+  clearSearchResults(); // Clear the search results
+}
+
+function clearSearchResults() {
+  var liElements = document.querySelectorAll("ul#modList li");
+  liElements.forEach(function (li) {
+    li.style.display = "";
+  });
+
+  var otherElements = document.querySelectorAll("h2, h3, a:not([id='searchInput'])");
+  otherElements.forEach(function (element) {
+    element.style.display = "";
+  });
+
+  var messageElement = document.getElementById("searchResultsMessage");
+  messageElement.textContent = "";
 }
 
 function loadSearchResults() {
@@ -96,7 +104,7 @@ function loadSearchResults() {
 window.onload = function () {
   loadSearchResults();
   var input = document.getElementById("searchInput");
-  input.addEventListener("keypress", handleKeyPress);
+  input.addEventListener("keyup", handleKeyUp);
 };
 
 // Open links in new tab
