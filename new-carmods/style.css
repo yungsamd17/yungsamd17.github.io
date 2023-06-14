@@ -87,12 +87,10 @@ header .logo {
   flex-direction: row;
   color: white;
   padding-right: 5px;
-  padding-left: 20px;
-  font-size: 0;
+  padding-left: 15px;
 }
 .nopixelLogo {
   color: #00f8b9;
-  font-size: 2rem;
   font-weight: 900;
 }
 .nopixelLogo:hover {
@@ -100,7 +98,6 @@ header .logo {
 }
 .vehMods {
   color: #fff;
-  font-size: 2rem;
 }
 .vehMods:hover {
   color: #ccc;
@@ -119,7 +116,7 @@ header input[type="search"] {
   border: none;
   float: right;
   width: 300px;
-  margin: 15px 20px 15px 0;
+  margin: 15px 15px 15px 0;
   padding: 10px;
 
   border-radius: 10px;
@@ -173,7 +170,7 @@ header input[type="search"] {
   color: white;
   background-color: #3e4c59;
   padding: 30px;
-  margin: 92px 20px 20px 20px;
+  margin: 85px 15px 15px 15px;
   border-radius: 15px;
   border: 20px;
 }
@@ -270,17 +267,18 @@ p {
 
   header input[type="search"] {
     width: 250px;
+    margin: 15px 10px 15px 0;
   }
   .card {
     padding: 15px;
     padding-top: 20px;
-}
+    margin: 80px 10px 10px 10px;
+  }
 }
 
 @media only screen and (max-width: 650px) {
   header input[type="search"] {
     width: 200px;
-    margin: 13px 10px 13px 0;
   }
 }
 
@@ -291,6 +289,16 @@ p {
 
   header input[type="search"] {
     width: 150px;
+    padding: 5px;
+    background-position: 10px 6px;
+    background-size: 16px;
+    border-radius: 8px;
+  }
+
+  .card {
+    padding: 15px;
+    padding-top: 20px;
+    margin: 70px 10px 10px 10px;
   }
 
   .menu {
