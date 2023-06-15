@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>⚠️WIP⚠️ | NoPixel Vehicle Mods | Sam</title>
+  <title>NoPixel Vehicle Mods</title>
   <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/nopixel/images/4/4a/Site-favicon.ico" sizes="32x32">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="style.css"/>
@@ -19,7 +19,7 @@
 <header>
   <div class="navbar">
     <div class="logo">
-      <a href="index.html" title="Home">
+      <a href="#" title="NoPixel Vehicle Mods">
         <span class="nopixelLogo">NoPixel</span>
         <span class="vehMods">Vehicle Mods</span>
       </a>
@@ -33,10 +33,10 @@
   <div class="centercolumn">
     <div class="card">
       <span id="searchResultsMessage"></span>
-      <a href="https://pastebin.com/jsvw46cn" class="link1" target="_blank">Pastebin</a>
+      <a href="https://pastebin.com/jsvw46cn" class="link1" target="_blank" title="Current NoPixel Vehicle Mods | Pastebin">Pastebin</a>
       <br>
-      <a href="https://pastebin.com/EERcd3Yh" class="link1" target="_blank">Old Pastebin</a>
-      <h2><a href="https://www.gta5-mods.com/users/GTAWiseGuy" class="link2">GTAWiseGuy</a> Mods:</h2>
+      <a href="https://pastebin.com/EERcd3Yh" class="link1" target="_blank" title="Old NoPixel Vehicle Mods | Pastebin">Old Pastebin</a>
+      <h2><a href="https://www.gta5-mods.com/users/GTAWiseGuy" class="link2" title="GTAWiseGuy's gta5-mods Profile">GTAWiseGuy</a> Mods:</h2>
       <ul id="modList">
       <li><a href="https://www.gta5-mods.com/vehicles/6str-annis-zr380-custom-add-on-tuning" class="link3">Annis ZR380 Custom</a></li>
       <li><a href="https://www.gta5-mods.com/vehicles/6str-benefactor-schwartzer-aggressor-custom-add-on-tuning" class="link3">Benefactor Schwartzer Custom</a></li>
@@ -175,9 +175,42 @@
   </div>
 </div>
 <div class="footer">
-  <a class="github-button" href="https://github.com/yungsamd17/yungsamd17.github.io/tree/main/new-carmods"><i class="fa-brands fa-github"></i> GitHub</a>
-  <p><script>document.write(/\d{4}/.exec(Date())[0])</script> &#8226;&nbsp;Made by <a href="https://www.twitter.com/yungsamd17" class="footer-link">Sam</a><br style="user-select: none;"></p>
+  <a class="github-button" href="https://github.com/yungsamd17/yungsamd17.github.io/tree/main/new-carmods" title="GitHub Repository"><i class="fa-brands fa-github"></i> GitHub</a><button id="updatesBtn" class="updates-button" title="Recent Updates"><i class="fa-solid fa-pen-to-square"></i> Updates</button>
+  <p><script>document.write(/\d{4}/.exec(Date())[0])</script> &#8226;&nbsp;Made by <a href="https://www.twitter.com/yungsamd17" class="footer-link" title="Sam's Twitter">Sam</a><br style="user-select: none;"></p>
 </div>
+  <!-- Updates Modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2 style="font-weight: 900;">Recent Updates</h2>
+      </div>
+      <div class="modal-body">
+        <p class="p2">31/05/2023</p>
+        <ul>
+          <li>Added Mazda 13B Rotory Sound Mod</li>
+          <li>Added 5.2 V10 Sound Mod</li>
+        </ul>
+        <p class="p2">22/05/2023</p>
+        <ul>
+          <li>Removed M-B C63 AMG, Dinka Nexus</li>
+        </ul>
+        <p class="p2">10/05/2023</p>
+        <ul>
+          <li>Added <strong>PD</strong> C7, Mustang and Challenger</li>
+        </ul>
+        <p class="p2">01/05/2023</p>
+        <ul>
+          <li>Added Mobility Scooter</li>
+        </ul>
+        <p class="p2">22/04/2023</p>
+        <ul>
+          <li>Added Dodge Charger R/T '69</li>
+        </ul>
+        <p style="font-weight:bold;" >Only last 5 updates are shown here, <em>for more info on updates check the <a href="https://github.com/yungsamd17/yungsamd17.github.io/commits/main/new-carmods" style="color: white; text-decoration: underline;">repository comits.</a></em></p>
+      </div>
+    </div>
+  </div>
 
 <script>
 // Get the button
@@ -198,6 +231,32 @@ function scrollFunction() {
 function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
+}
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("updatesBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
 }
 </script>
 

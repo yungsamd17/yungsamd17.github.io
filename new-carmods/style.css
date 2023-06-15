@@ -183,14 +183,15 @@ input[type="search"]::-webkit-search-decoration {
 }
 .footer p {
   margin: 0 85px 0 0;
+  padding: 0;
 }
 .github-button {
   background-color: #4e5c69;
   padding: 1.5px 3px 0 4px;
-  margin: 0;
+  margin: 0 0 0 5px;
   border: none;
   border-radius: 3px;
-  color: white;
+  color: #00f8b9;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -203,11 +204,30 @@ input[type="search"]::-webkit-search-decoration {
   background-color: #1f2933;
   text-decoration: none;
 }
+.updates-button {
+  background-color: #4e5c69;
+  padding: 1.5px 3px 0 4px;
+  margin: 0 15px 0 0;
+  border: none;
+  border-radius: 3px;
+  color: #00f8b9;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  float: right;
+  font-weight: bold;
+  user-select: none;
+  font-size: 1rem;
+}
+.updates-button:hover {
+  background-color: #1f2933;
+  text-decoration: none;
+}
 .footer-link {
   background-color: #4e5c69;
   border: none;
   border-radius: 3px;
-  color: white;
   display: inline-block;
   cursor: pointer;
   text-align: center;
@@ -217,6 +237,55 @@ input[type="search"]::-webkit-search-decoration {
 .footer-link:hover {
   background-color: #1f2933;
   text-decoration: none;
+}
+
+/* Updates MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+}
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #3e4c59;
+  margin: auto;
+  padding: 0;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  border-radius: 15px;
+}
+/* The Close Button */
+.close {
+  color: #fff;
+  float: right;
+  font-size: 2rem;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: #00f8b9;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal-header {
+  padding: 2px 16px;
+  background-color: #1f2933;
+  color: white;
+  text-align: center;
+  border-radius: 15px 15px 0 0;
+}
+.modal-body {
+  padding: 2px 16px;
+  color: #fff;
 }
 
 
@@ -298,6 +367,9 @@ a:hover {
   .topBtn {
     bottom: 55px;
     right: 25px;
+  }
+  .updates-button {
+    margin-right: 10px;
   }
 }
 
