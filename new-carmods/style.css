@@ -5,7 +5,6 @@ body {
   font-family: Arial;
 }
 
-
 /* SCROLLBAR */
 ::-webkit-scrollbar {
   width: 8px;
@@ -95,13 +94,11 @@ header input[type="search"] {
   background-image: url('search-icon.svg');
   background-position: 10px 9px;
   background-size: 22px;
-
   border: none;
   float: right;
   width: 300px;
   margin: 15px 15px 15px 0;
   padding: 10px;
-
   border-radius: 10px;
   text-align: left;
   font-size: 1rem;
@@ -111,7 +108,6 @@ header input[type="search"] {
   outline: none;
   text-indent: 30px;
   display: block;
-
   caret-color: #1f2933; /* Text cursor color */
   -webkit-caret-color: #1f2933; /* For Safari support */
 }
@@ -288,7 +284,6 @@ input[type="search"]::-webkit-search-decoration {
   color: #fff;
 }
 
-
 /* LINK STYLES
 Link 1 */
 .link1 {
@@ -328,7 +323,6 @@ a:hover {
   text-decoration: underline;
 }
 
-
 /* PHRASES */
 .p {
   font-size: 18px;
@@ -367,9 +361,6 @@ a:hover {
   .topBtn {
     bottom: 55px;
     right: 25px;
-  }
-  .updates-button {
-    margin-right: 10px;
   }
 }
 

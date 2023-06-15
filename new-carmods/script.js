@@ -37,10 +37,6 @@ function myFunction() {
       }
     }
 
-    // Exclude elements in the rightcolumn div class
-    if (element.closest(".rightcolumn")) {
-      isExcluded = true;
-    }
     // Exclude elements in the footer div class
     if (element.closest(".footer")) {
       isExcluded = true;
@@ -63,16 +59,16 @@ function handleKeyUp() {
   var filter = input.value.trim().toUpperCase();
   
   if (filter.length >= 2) {
-    myFunction(); // Trigger search functionality as you type
+    myFunction(); // Trigger search as you type
   } else {
-    clearSearchResults(); // Clear the search results
+    clearSearchResults(); // Clear search results
   }
 }
 
 function clearSearchInput() {
   var input = document.getElementById("searchInput");
   input.value = "";
-  clearSearchResults(); // Clear the search results
+  clearSearchResults(); // Clear search results
 }
 
 function clearSearchResults() {
@@ -96,7 +92,7 @@ function loadSearchResults() {
   if (searchQuery) {
     var input = document.getElementById("searchInput");
     input.value = decodeURIComponent(searchQuery);
-    myFunction(); // Trigger search functionality
+    myFunction(); // Trigger search
   }
 }
 
