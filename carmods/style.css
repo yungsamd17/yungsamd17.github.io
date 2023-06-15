@@ -4,17 +4,8 @@ body {
   background-color: #1f2933;
   font-family: Arial;
 }
-
-/* SCROLLBAR */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background: #4e5c69; 
-  border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #00f8b9; 
+:root {
+  color-scheme: dark;
 }
 
 .topBtn {
