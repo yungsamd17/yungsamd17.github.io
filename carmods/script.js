@@ -37,8 +37,8 @@ function myFunction() {
       }
     }
 
-    // Exclude elements in the rightcolumn div class
-    if (element.closest(".rightcolumn")) {
+    // Exclude elements in the footer div class
+    if (element.closest(".footer")) {
       isExcluded = true;
     }
 
@@ -52,38 +52,38 @@ function myFunction() {
   var searchResultsCount = document.querySelectorAll("ul#modList li:not([style='display: none;'])").length;
   var messageElement = document.getElementById("searchResultsMessage");
   messageElement.textContent = "Found " + searchResultsCount + " matching search result(s).";
+}
 
-  // Show or hide the clear search button based on search results count
-  var clearButton = document.getElementById("clearSearchButton");
-  if (searchResultsCount > 0) {
-    clearButton.style.display = "block";
+function handleKeyUp() {
+  var input = document.getElementById("searchInput");
+  var filter = input.value.trim().toUpperCase();
+  
+  if (filter.length >= 2) {
+    myFunction(); // Trigger search as you type
   } else {
-    clearButton.style.display = "none";
+    clearSearchResults(); // Clear search results
   }
-}
-
-function handleKeyPress(event) {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    performSearch();
-  }
-}
-
-function performSearch() {
-  var input, filter, searchQuery;
-  input = document.getElementById("searchInput");
-  filter = input.value.trim();
-  searchQuery = encodeURIComponent(filter);
-
-  // Update URL with search query
-  var newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + "?search=" + searchQuery;
-  window.location.href = newURL;
 }
 
 function clearSearchInput() {
   var input = document.getElementById("searchInput");
   input.value = "";
-  performSearch(); // Trigger the search functionality with an empty query
+  clearSearchResults(); // Clear search results
+}
+
+function clearSearchResults() {
+  var liElements = document.querySelectorAll("ul#modList li");
+  liElements.forEach(function (li) {
+    li.style.display = "";
+  });
+
+  var otherElements = document.querySelectorAll("h2, h3, a:not([id='searchInput'])");
+  otherElements.forEach(function (element) {
+    element.style.display = "";
+  });
+
+  var messageElement = document.getElementById("searchResultsMessage");
+  messageElement.textContent = "";
 }
 
 function loadSearchResults() {
@@ -92,10 +92,7 @@ function loadSearchResults() {
   if (searchQuery) {
     var input = document.getElementById("searchInput");
     input.value = decodeURIComponent(searchQuery);
-    myFunction(); // Trigger search functionality
-    document.getElementById("clearSearchButton").style.display = "block"; // Show clear search button
-  } else {
-    document.getElementById("clearSearchButton").style.display = "none"; // Hide clear search button
+    myFunction(); // Trigger search
   }
 }
 
@@ -103,10 +100,7 @@ function loadSearchResults() {
 window.onload = function () {
   loadSearchResults();
   var input = document.getElementById("searchInput");
-  input.addEventListener("keypress", handleKeyPress);
-
-  var clearButton = document.getElementById("clearSearchButton");
-  clearButton.addEventListener("click", clearSearchInput);
+  input.addEventListener("keyup", handleKeyUp);
 };
 
 // Open links in new tab

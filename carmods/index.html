@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>NoPixel Vehicle Mods | Sam</title>
-	<link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/nopixel/images/4/4a/Site-favicon.ico" sizes="32x32">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NoPixel Vehicle Mods</title>
+  <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/nopixel/images/4/4a/Site-favicon.ico" sizes="32x32">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script type="text/javascript" src="script.js" defer></script>
-  <!-- <script type="text/javascript" src="https://livejs.com/live.js"></script> Dev Only -->
+  <link rel="stylesheet" href="style.css"/>
+  <script type="text/javascript" src="script.js" defer></script>
+  <script type="text/javascript" src="https://livejs.com/live.js"></script><!-- Live Preview [Dev Only] -->
 </head>
-
-<button onclick="topFunction()" id="topBtn" class="topBtn" title="Back to top">
-  <i class="fa fa-arrow-up"></i>
-</button>
-
 <body onload="openLinksInNewTab('modList')">
-<div class="header">
-	<h1>LIST OF ALL <a href="https://www.nopixel.net">NoPixel</a> VEHICLE MODS</h1>
-</div>
-<div class="row">
-  <div class="leftcolumn">
-    <div class="topnav">
-      <form>
-        <input type="text" id="searchInput" onkeypress="handleKeyPress(event)" placeholder="Search for mods..." autocomplete="off">
-        <button class="clearSearchButton hideButton" id="clearSearchButton" title="Clear search box"><i class="fa fa-close"></i></button>
-      </form>
+<header>
+  <div class="navbar">
+    <div class="logo">
+      <a href="#" title="NoPixel Vehicle Mods">
+        <span class="nopixelLogo">NoPixel</span>
+        <span class="vehMods">Vehicle Mods</span>
+      </a>
     </div>
+    <div class="search">
+      <input type="search" id="searchInput"class="search-input" placeholder="Search..." autocomplete="off" spellcheck="false"></input>
+    </div>
+  </div>
+</header>
+<div class="row">
+  <div class="centercolumn">
     <div class="card">
       <span id="searchResultsMessage"></span>
-      <a href="https://pastebin.com/jsvw46cn" class="link1" target="_blank">Pastebin</a>
+      <a href="https://pastebin.com/jsvw46cn" class="link1" target="_blank" title="Current NoPixel Vehicle Mods | Pastebin">Pastebin</a>
       <br>
-      <a href="https://pastebin.com/EERcd3Yh" class="link1" target="_blank">Old Pastebin</a>
-      <h2><a href="https://www.gta5-mods.com/users/GTAWiseGuy" class="link2">GTAWiseGuy</a> Mods:</h2>
+      <a href="https://pastebin.com/EERcd3Yh" class="link1" target="_blank" title="Old NoPixel Vehicle Mods | Pastebin">Old Pastebin</a>
+      <h2><a href="https://www.gta5-mods.com/users/GTAWiseGuy" class="link2" title="GTAWiseGuy's gta5-mods Profile">GTAWiseGuy</a> Mods:</h2>
       <ul id="modList">
       <li><a href="https://www.gta5-mods.com/vehicles/6str-annis-zr380-custom-add-on-tuning" class="link3">Annis ZR380 Custom</a></li>
       <li><a href="https://www.gta5-mods.com/vehicles/6str-benefactor-schwartzer-aggressor-custom-add-on-tuning" class="link3">Benefactor Schwartzer Custom</a></li>
@@ -168,81 +168,83 @@
       </ul>
     </div>
   </div>
-  <div class="rightcolumn">
-    <h2>Recent Updates</h2>
-    <p class="p2">31/05/2023</p>
-    <ul>
-      <li>Added Mazda 13B Rotory Sound Mod</li>
-      <li>Added 5.2 V10 Sound Mod</li>
-    </ul>
-    <p class="p2">22/05/2023</p>
-    <ul>
-      <li>Removed M-B C63 AMG, Dinka Nexus</li>
-    </ul>
-    <p class="p2">10/05/2023</p>
-    <ul>
-      <li>Added <strong>PD</strong> C7, Mustang and Challenger</li>
-    </ul>
-    <p class="p2">01/05/2023</p>
-    <ul>
-      <li>Added Mobility Scooter</li>
-    </ul>
-    <p class="p2">22/04/2023</p>
-    <ul>
-      <li>Added Dodge Charger R/T '69</li>
-    </ul>
-    <p class="p2">17/04/2023</p>
-    <ul>
-      <li>Added News Van</li>
-    </ul>
-    <p class="p2">11/04/2023</p>
-    <ul>
-      <li>Added <strong>"Other Mods"</strong> Category</li>
-      <li>Added Rims Pack</li>
-      <li>Added Mapped Tanker trailer</li>
-      <li>Added Purple car backfire</li>
-    </ul>
-    <p class="p2">11/04/2023</p>
-    <ul>
-      <li>Added <strong>"Emergency Vehicles"</strong> Category</li>
-    </ul>
-    <p class="p2">10/04/2023</p>
-    <ul>
-      <li>Added back Bayraktar</li>
-    </ul>
-    <p class="p2">24/03/2023</p>
-    <ul>
-      <li>Added Viper + Sound</li>
-    </ul>
-    <p style="font-style: italic; font-weight:bold;" >Only latest 10 updates shown, for more info on changes and updates check the <a href="https://github.com/yungsamd17/yungsamd17.github.io/commits/main/carmods" style="color: white;">repository comits.</a></p> 
-  </div>
 </div>
+<button onclick="topFunction()" id="topBtn" class="topBtn" title="Back to top">
+  <i class="fa fa-arrow-up"></i>
+</button>
 <div class="footer">
-  <p>Made by <a href="https://www.twitter.com/yungsamd17" class="link4">Sam</a></p>
-  <p><a href="https://github.com/yungsamd17/yungsamd17.github.io/tree/main/carmods" class="link4" ><i class="fa-brands fa-github"></i> GitHub project</a></p>
+  <a class="github-button" href="https://github.com/yungsamd17/yungsamd17.github.io/tree/main/new-carmods" title="GitHub Repository"><i class="fa-brands fa-github"></i> GitHub</a><button id="updatesBtn" class="updates-button" title="Recent Updates"><i class="fa-solid fa-pen-to-square"></i> Updates</button>
+  <p><script>document.write(/\d{4}/.exec(Date())[0])</script> &#8226;&nbsp;Made by <a href="https://www.twitter.com/yungsamd17" class="footer-link" title="Sam's Twitter">Sam</a><br style="user-select: none;"></p>
 </div>
+  <!-- Updates Modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2 style="font-weight: 900;">Recent Updates</h2>
+      </div>
+      <div class="modal-body">
+        <p class="p2">31/05/2023</p>
+        <ul>
+          <li>Added Mazda 13B Rotory Sound Mod</li>
+          <li>Added 5.2 V10 Sound Mod</li>
+        </ul>
+        <p class="p2">22/05/2023</p>
+        <ul>
+          <li>Removed M-B C63 AMG, Dinka Nexus</li>
+        </ul>
+        <p class="p2">10/05/2023</p>
+        <ul>
+          <li>Added <strong>PD</strong> C7, Mustang and Challenger</li>
+        </ul>
+        <p class="p2">01/05/2023</p>
+        <ul>
+          <li>Added Mobility Scooter</li>
+        </ul>
+        <p class="p2">22/04/2023</p>
+        <ul>
+          <li>Added Dodge Charger R/T '69</li>
+        </ul>
+        <p style="font-weight:bold;" >Only last 5 updates are shown, for more info on updates check the <a href="https://github.com/yungsamd17/yungsamd17.github.io/commits/main/new-carmods" style="color: white; text-decoration: underline;"><em>repository comits.</a></em></p>
+      </div>
+    </div>
+  </div>
 
 <script>
-// Get the button
+
+// Back to the top Button
 let mybutton = document.getElementById("topBtn");
-
-// When the user scrolls down 20px from the top of the document, show the button
 window.onscroll = function() {scrollFunction()};
-
 function scrollFunction() {
-  if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
+  if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) { // Defined when scrolled down 70px from the top
     mybutton.style.display = "block";
   } else {
     mybutton.style.display = "none";
   }
 }
-
-// When the user clicks on the button, scroll to the top of the document
+// When clicked on the button, scroll to the top
 function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
-</script>
 
+// Updates Modal
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("updatesBtn");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+span.onclick = function() {
+  modal.style.display = "none";
+}
+// When clicked anywhere outside, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+</script>
 </body>
 </html>
