@@ -135,7 +135,7 @@ body {
   padding-right: 10px;
   text-align: left;
 }
-.card h2 {
+.card h2, h3 {
   margin-left: 5px;
 }
 .card p {
