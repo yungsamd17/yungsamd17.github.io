@@ -1,5 +1,5 @@
 LIST OF ALL NoPixel VEHICLE MODS:
-(Updated 25/06/2023)
+(Updated 04/08/2023)
 
 
 Website: https://yungsamd17.github.io/carmods
@@ -125,6 +125,7 @@ PD Ford Mustang/Regral (5.2 V8 Voodoo) - https://tinyurl.com/y5yr7gkq
 Alfa Romeo Giulia GTAm (2.9 V6) - https://tinyurl.com/2jvwnze5
 Audi A6 (4.0T V8 (EA825) - https://tinyurl.com/ya9d6vxh
 Audi RS7 (M156 6.3L V8) - https://tinyurl.com/2oz3hezx
+BMW M5 CS (S63 TT 4.4L V8) - https://tinyurl.com/837j8hzz
 Buddha's Delorean/Viper/FXX-K EVO (8.4 V10) - https://tinyurl.com/2hmjjusf
 Mercedes-Benz A45 AMG - https://tinyurl.com/yysmj2nv
 Lamborghini Aventador (L539 V12) - https://tinyurl.com/y4bwnqeg
@@ -149,4 +150,4 @@ Mapped Tanker Trailers - https://tinyurl.com/2dqzyoln
 Purple/Blue Car Flames/Backfire - https://tinyurl.com/4ysy7w35
 
 
-(Updated 25/06/2023)
+(Updated 04/08/2023)
