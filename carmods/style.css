@@ -1,7 +1,14 @@
 body {
+  --white: #fff;
+  --black: #000;
+  --main-nopixel: #1f2933;
+  --main-darker-nopixel: #161e25;
+  --main-accent-nopixel: #00f8b9; /* cyan - lime green */
+  --main-accent-nopixel-hover: #008060;
+
   margin: 0;
   padding: 0;
-  background-color: #1f2933;
+  background-color: var(--main-nopixel);
   font-family: Arial;
 }
 :root {
@@ -26,7 +33,7 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .topBtn:hover {
-  background-color: #00f8b9;
+  background-color: var(--main-accent-nopixel);
   color: #1f2933;
 }
 
@@ -69,7 +76,7 @@ header .logo {
   padding-left: 15px;
 }
 .nopixelLogo {
-  color: #00f8b9;
+  color: var(--main-accent-nopixel);
   font-weight: 900;
 }
 .vehMods {
@@ -81,7 +88,7 @@ header .search {
   flex: 1 0 auto;
 }
 header input[type="search"] {
-  background: #cccccc no-repeat;
+  background: white no-repeat;
   background-image: url('src/search-icon.svg');
   background-position: 10px 9px;
   background-size: 22px;
@@ -127,7 +134,7 @@ input[type="search"]::-webkit-search-decoration {
   border-radius: 3px;
   background-color: #4e5c69;
   text-decoration: none;
-  color: #00f8b9;
+  color: var(--main-accent-nopixel);
   display: inline;
 }
 
@@ -178,7 +185,7 @@ input[type="search"]::-webkit-search-decoration {
   margin: 0 0 0 5px;
   border: none;
   border-radius: 3px;
-  color: #00f8b9;
+  color: var(--main-accent-nopixel);
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -197,7 +204,7 @@ input[type="search"]::-webkit-search-decoration {
   margin: 0 15px 0 0;
   border: none;
   border-radius: 3px;
-  color: #00f8b9;
+  color: var(--main-accent-nopixel);
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -259,7 +266,7 @@ input[type="search"]::-webkit-search-decoration {
 }
 .close:hover,
 .close:focus {
-  color: #00f8b9;
+  color: var(--main-accent-nopixel);
   text-decoration: none;
   cursor: pointer;
 }
@@ -278,12 +285,12 @@ input[type="search"]::-webkit-search-decoration {
 /* LINK STYLES
 Link 1 */
 .link1 {
-  color: #00f8b9;
+  color: var(--main-accent-nopixel);
   font-weight: bold;
   text-decoration: none;
 }
 .link1:hover {
-  color: #00f8b9;
+  color: var(--main-accent-nopixel);
   text-decoration: underline;
 }
 /* Link 2 */
@@ -330,7 +337,7 @@ a:hover {
 
 /* OTHER */
 ::selection {
-  background-color: #00f8b9;
+  background-color: var(--main-accent-nopixel);
   color: #1f2933;
 }
 
