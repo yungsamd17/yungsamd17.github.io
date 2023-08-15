@@ -16,23 +16,16 @@ body {
 }
 
 /* Custom Scrollbar */
-/* width */
 ::-webkit-scrollbar {
   width: 10px;
 }
-
-/* Track */
 ::-webkit-scrollbar-track {
   background: var(--main-darker-nopixel); 
 }
- 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: var(--main-accent-nopixel);
   border-radius: 10px;
 }
-
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: var(--main-accent-nopixel-hover);
 }
@@ -266,9 +259,9 @@ input[type="search"]::-webkit-search-decoration {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.6);
 }
 /* Modal Content */
 .modal-content {
