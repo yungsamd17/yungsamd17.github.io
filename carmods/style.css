@@ -177,9 +177,10 @@ input[type="search"]::-webkit-search-decoration {
   color: white;
   background-color: #3e4c59;
   padding: 30px 30px 10px 30px;
-  margin: 85px 15px 45px 15px;
+  margin: 85px auto 45px auto;
   border-radius: 15px;
   border: 20px;
+  max-width: 45%;
 }
 
 .row:after {
@@ -365,6 +366,12 @@ a:hover {
 
 
 
+@media only screen and (max-width: 1000px) {
+  .card {
+    max-width: 60%
+  }
+}
+
 @media only screen and (max-width: 720px) {
   header .logo {
     padding-left: 10px;
@@ -377,6 +384,7 @@ a:hover {
     padding: 5px 15px 5px 15px;
     padding-top: 20px;
     margin: 70px 10px 40px 10px;
+    max-width: 100%
   }
   .topBtn {
     bottom: 55px;
