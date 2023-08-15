@@ -15,6 +15,28 @@ body {
   color-scheme: dark;
 }
 
+/* Custom Scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--main-darker-nopixel); 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--main-accent-nopixel);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--main-accent-nopixel-hover);
+}
+
 .topBtn {
   display: none;
   position: fixed;
