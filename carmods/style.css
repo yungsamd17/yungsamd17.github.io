@@ -106,7 +106,7 @@ header .search {
 }
 header input[type="search"] {
   background: white no-repeat;
-  background-image: url('assets/search-icon.svg');
+  background-image: url('src/search-icon.svg');
   background-position: 10px 9px;
   background-size: 22px;
   border: none;
