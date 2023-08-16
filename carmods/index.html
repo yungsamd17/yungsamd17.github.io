@@ -217,42 +217,5 @@
       </div>
     </div>
   </div>
-
-<script>
-
-// Back to the top Button
-let mybutton = document.getElementById("topBtn");
-window.onscroll = function() {scrollFunction()};
-function scrollFunction() {
-  if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) { // Defined when scrolled down 70px from the top
-    mybutton.style.display = "block";
-  } else {
-    mybutton.style.display = "none";
-  }
-}
-// When clicked on the button, scroll to the top
-function topFunction() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-}
-
-// Updates Modal
-var modal = document.getElementById("myModal");
-var btn = document.getElementById("updatesBtn");
-var span = document.getElementsByClassName("close")[0];
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-span.onclick = function() {
-  modal.style.display = "none";
-}
-// When clicked anywhere outside, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-</script>
 </body>
 </html>
