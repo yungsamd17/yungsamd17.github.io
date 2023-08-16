@@ -298,35 +298,11 @@ input[type="search"]::-webkit-search-decoration {
   color: #fff;
 }
 
-/* LINK STYLES
-Link 1 */
-.link1 {
+/* LINK STYLES */
+.pastebinLink {
   color: var(--main-accent-nopixel);
   font-weight: bold;
   text-decoration: none;
-}
-.link1:hover {
-  color: var(--main-accent-nopixel);
-  text-decoration: underline;
-}
-/* Link 2 */
-.link2 {
-  color: white;
-  text-decoration: none;
-}
-.link2:hover {
-  color: white;
-  text-decoration: underline;
-}
-/* Link 3 */
-.link3 {
-  font-weight: none;
-  color: white;
-  text-decoration: none;
-}
-.link3:hover {
-  color: white;
-  text-decoration: underline;
 }
 /* Normal links */
 a {
