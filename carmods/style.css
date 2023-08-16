@@ -5,6 +5,8 @@ body {
   --main-darker-nopixel: #161e25;
   --main-accent-nopixel: #00f8b9; /* cyan - lime green */
   --main-accent-nopixel-hover: #008060;
+  --secondary-nopixel: #4e5c69;
+  --secondary-nopixel-darker: #3e4c59;
 
   margin: 0;
   padding: 0;
@@ -40,7 +42,7 @@ body {
   height: 50px;
   font-size: 1.3rem;
   border: none;
-  background-color: #4e5c69;
+  background-color: var(--secondary-nopixel);
   color: white;
   cursor: pointer;
   padding: 5px;
@@ -49,7 +51,7 @@ body {
 }
 .topBtn:hover {
   background-color: var(--main-accent-nopixel);
-  color: #1f2933;
+  color: var(--main-nopixel);
 }
 
 /* HEADER */
@@ -58,7 +60,7 @@ header {
   top: 0;
   width: 100%;
   height: auto;
-  background: #1f2933;
+  background: var(--main-nopixel);
   font-family: 'Nunito', sans-serif;
   user-select: none;
   border-radius: 0 0 15px 15px;
@@ -117,12 +119,12 @@ header input[type="search"] {
   font-size: 1rem;
   font-family: inherit;
   font-weight: bold;
-  color: #1f2933;
+  color: var(--main-nopixel);
   outline: none;
   text-indent: 30px;
   display: block;
-  caret-color: #1f2933; /* Text cursor color */
-  -webkit-caret-color: #1f2933; /* For Safari support */
+  caret-color: var(--main-nopixel); /* Text cursor color */
+  -webkit-caret-color: var(--main-nopixel); /* For Safari support */
 }
 /* Hide the clear button on the search input */
 input[type="search"]::-webkit-search-cancel-button,
@@ -131,7 +133,7 @@ input[type="search"]::-webkit-search-decoration {
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #1f2933;
+  color: var(--main-nopixel);
   opacity: 1; /* Firefox */
   font-weight: 200;
 }
@@ -147,7 +149,7 @@ input[type="search"]::-webkit-search-decoration {
 }
 #modList li a:hover:not(.header) {
   border-radius: 3px;
-  background-color: #4e5c69;
+  background-color: var(--secondary-nopixel);
   text-decoration: none;
   color: var(--main-accent-nopixel);
   display: inline;
@@ -160,7 +162,7 @@ input[type="search"]::-webkit-search-decoration {
 
 /* Search results */
 #searchResultsMessage {
-  color: #00f9b9;
+  color: var(--main-accent-nopixel);
   font-weight: bold;
 }
 
@@ -168,7 +170,7 @@ input[type="search"]::-webkit-search-decoration {
 .card {
   list-style-type: none;
   color: white;
-  background-color: #3e4c59;
+  background-color: var(--secondary-nopixel-darker);
   padding: 30px 30px 10px 30px;
   margin: 85px auto 45px auto;
   border-radius: 15px;
@@ -189,14 +191,14 @@ input[type="search"]::-webkit-search-decoration {
   padding: 5px;
   text-align: center;
   color: #fff;
-  background: #4e5c69;
+  background: var(--secondary-nopixel);
 }
 .footer p {
   margin: 0 85px 0 0;
   padding: 0;
 }
 .github-button {
-  background-color: #4e5c69;
+  background-color: var(--secondary-nopixel);
   padding: 1.5px 3px 0 4px;
   margin: 0 0 0 5px;
   border: none;
@@ -211,11 +213,11 @@ input[type="search"]::-webkit-search-decoration {
   user-select: none;
 }
 .github-button:hover {
-  background-color: #1f2933;
+  background-color: var(--main-nopixel);
   text-decoration: none;
 }
 .updates-button {
-  background-color: #4e5c69;
+  background-color: var(--secondary-nopixel);
   padding: 1.5px 3px 0 4px;
   margin: 0 15px 0 0;
   border: none;
@@ -231,11 +233,11 @@ input[type="search"]::-webkit-search-decoration {
   font-size: 1rem;
 }
 .updates-button:hover {
-  background-color: #1f2933;
+  background-color: var(--main-nopixel);
   text-decoration: none;
 }
 .footer-link {
-  background-color: #4e5c69;
+  background-color: var(--secondary-nopixel);
   border: none;
   border-radius: 3px;
   display: inline-block;
@@ -245,7 +247,7 @@ input[type="search"]::-webkit-search-decoration {
   font-weight: bold;
 }
 .footer-link:hover {
-  background-color: #1f2933;
+  background-color: var(--main-nopixel);
   text-decoration: none;
 }
 
@@ -266,7 +268,7 @@ input[type="search"]::-webkit-search-decoration {
 /* Modal Content */
 .modal-content {
   position: relative;
-  background-color: #3e4c59;
+  background-color: var(--secondary-nopixel-darker);
   margin: auto;
   padding: 0;
   width: 80%;
@@ -288,7 +290,7 @@ input[type="search"]::-webkit-search-decoration {
 }
 .modal-header {
   padding: 2px 16px;
-  background-color: #1f2933;
+  background-color: var(--main-nopixel);
   color: white;
   text-align: center;
   border-radius: 15px 15px 0 0;
@@ -312,25 +314,19 @@ a {
 a:hover {
   text-decoration: underline;
 }
-
-/* PHRASES */
-.p {
-  font-size: 18px;
-}
-/* Style for Updates*/
-.p2 {
+.updateModal {
   margin-top: 20px;
   font-weight: bold;
 }
 /* Style for NP Exclusive mods*/
-.p3 {
+.npExclusive {
   margin: 0px;
 }
 
 /* OTHER */
 ::selection {
   background-color: var(--main-accent-nopixel);
-  color: #1f2933;
+  color: var(--main-nopixel);
 }
 
 
