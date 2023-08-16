@@ -1,5 +1,5 @@
 LIST OF ALL NoPixel VEHICLE MODS:
-(Updated 04/08/2023)
+(Updated 16/08/2023)
 
 
 Website: https://yungsamd17.github.io/carmods
@@ -83,6 +83,7 @@ Karin Sultan RS V8 MK2 - https://tinyurl.com/mns9wxfk
 Nagasaki Shopping Kart - https://tinyurl.com/ybpsrxvj
 Obey 8F Widebody - https://tinyurl.com/4u6md89j
 Ubermacht Sentinel SG4 - https://tinyurl.com/4rdshcm5
+Vapid Speedo Express (RHL Delivery Van) - https://tinyurl.com/w6enzmb
 Zircoflow Stratum Custom - https://tinyurl.com/4c3bfewh
 
 Dev/Spawn Cars:
@@ -150,4 +151,4 @@ Mapped Tanker Trailers - https://tinyurl.com/2dqzyoln
 Purple/Blue Car Flames/Backfire - https://tinyurl.com/4ysy7w35
 
 
-(Updated 04/08/2023)
+(Updated 16/08/2023)
