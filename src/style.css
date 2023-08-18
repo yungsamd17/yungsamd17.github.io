@@ -1,16 +1,13 @@
-/* yungsamd17.github.io | Global style */
-
 * {
   box-sizing: border-box;
 }   
 
 body {
   padding: 0;
+  margin: 0 auto;
   background-color: #0e0e10;
   color: #f1f1f1;
   max-width: 700px;
-  padding: 0;
-  margin: 0 auto;
   font-size: 1rem;
   font-family: 'Verdana', sans-serif;
   display: flex;
@@ -29,19 +26,16 @@ a {
 a:hover {
   color: #ff8a80;
 }
-
 .main {
   display: flex;
   flex: 1 0 auto;
   align-items: center;
   width: 100%;
 }
-
 .dark-mode {
   background-color: #f1f1f1;
   color: #0e0e10;
 }
-
 body {
   transition: background-color 0.5s ease, color 0.5s ease;
 }
@@ -59,7 +53,6 @@ body {
 .dark-mode a:hover {
   color: #ff8a80;
 }
-
 .dark-modeBtn {
   position: fixed;
   bottom: 20px;
@@ -83,7 +76,6 @@ body {
 .dark-modeBtn.active #darkModeIcon::before {
   content: "\f186"; /* Moon icon from Font Awesome */
 }
-
 .wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -91,7 +83,6 @@ body {
   width: 100%;
   padding: 10px;
 }
-
 .headerName {
   display: flex;
   align-items: center;
@@ -108,7 +99,6 @@ body {
   color: #b6b6b6;
   margin-left: 0.65vh;
 }
-
 .link-bar {
   margin-left: auto;;
 }
@@ -117,7 +107,6 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-
 .socials {
   margin: 4px;
   display: flex;
@@ -128,7 +117,6 @@ body {
   display: flex;
   margin: 4px;
 }
-
 .card {
   padding: 5px;
   padding-left: 10px;
@@ -142,7 +130,6 @@ body {
   color: #868686;
   margin: 4px;
 }
-
 .footer {
   padding-bottom: 10px;
   color: #868686;
@@ -160,30 +147,24 @@ body {
 }
 
 
-
 @media (max-width: 578px) {
   .wrapper {
     justify-content: center;
     margin-bottom: 10vh;
   }
-  
   .headerName h1 {
     text-align: center;
   }
-
   .link-bar{
     margin: 0;
     margin-top: 10px;
   }
-
   .link-row{
     justify-content: space-between;
   }
-
   .card {
     text-align: center;
   }
-
   .dark-modeBtn {
     bottom: 40px;
   }
