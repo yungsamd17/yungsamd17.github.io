@@ -1,5 +1,5 @@
 <h1><a href="https://yungsamd17.github.io/">My GitHub Page</h1>
 
-<em>This Repository is used for my personal page.</em>
+[![pages-build-deployment](https://github.com/yungsamd17/yungsamd17.github.io/actions/workflows/pages/pages-build-deployment/badge.svg?branch=main&event=deployment_status)](https://github.com/yungsamd17/yungsamd17.github.io/actions/workflows/pages/pages-build-deployment)
 
-![plink](https://user-images.githubusercontent.com/64147848/230789808-1d37b7e0-3491-4ce5-9028-97aea4051b43.gif)
+<em>This Repository is used for my personal page.</em>
