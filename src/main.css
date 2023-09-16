@@ -16,8 +16,8 @@ body {
   min-height: 100vh;
 }
 ::selection {
-    background-color: #ff8a80;
-    color: #18181b;
+  background-color: #ff8a80;
+  color: #18181b;
 }
 a {
   color: inherit;
