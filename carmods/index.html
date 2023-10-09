@@ -1,121 +1,137 @@
 <!DOCTYPE html>
 <html lang="en" translate="no">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Redirecting... NoPixel Vehicle Mods</title>
-  <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/nopixel/images/4/4a/Site-favicon.ico" sizes="32x32">
-  <!--<script type="text/javascript" src="https://livejs.com/live.js"></script>-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Redirecting... NoPixel Vehicle Mods</title>
+    <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/nopixel/images/4/4a/Site-favicon.ico" sizes="32x32">
+    <!--<script type="text/javascript" src="https://livejs.com/live.js"></script>-->
 </head>
 <style type="text/css">
-
 body {
-  margin: 0;
-  padding: 0;
-  background-color: #111117;
-  font-family: Arial;
+    margin: 0;
+    padding: 0;
+    background-color: #111117;
+    font-family: Arial;
 }
+
 :root {
-  color-scheme: dark;
+    color-scheme: dark;
 }
+
 .headerNP {
-  font-weight: 900;
+    font-weight: 900;
 }
+
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
+
 .header {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
 }
+
 .info-text {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+    font-size: 2rem;
+    margin-bottom: 1rem;
 }
+
 .link {
-  font-size: 1.25rem;
+    font-size: 1.25rem;
 }
 
 @media only screen and (max-width: 800px) {
-  .header {
-    font-size: 2.2rem;
-  }
-  .info-text {
-    font-size: 1.7rem;
-  }
-}
-@media only screen and (max-width: 690px) {
-  .header {
-    font-size: 1.75rem;
-  }
-  .info-text {
-    font-size: 1.4rem;
-  }
-}
-@media only screen and (max-width: 550px) {
-  .header {
-    font-size: 1.25rem;
-  }
-  .info-text {
-    font-size: 1.15rem;
-  }
-  .link {
-  font-size: 1rem;
-  }
-}
-@media only screen and (max-width: 400px) {
-  .header {
-    font-size: 1rem;
-  }
-  .info-text {
-    font-size: 0.9rem;
-  }
-  .link {
-  font-size: 0.8rem;
-  }
-}
-
-</style>
-<body>
-<div class="container">
-  <div class="header">
-    <span class="headerNP" style="color: #00f8b9;">NoPixel</span>
-    <span class="headerNP">Vehicle Mods</span>
-    has been moved
-  </div>
-  <div class="info-text">
-    <span id="countdown">Redirecting in 5</span><span id="dots"></span>
-  </div>
-  <p>If it doesn't redirect automaticly, click the link bellow.</p>
-  <div class="link">
-    <a href="https://yungsamd17.github.io/np-carmods">yungsamd17.github.io/np-carmods</a>
-  </div>
-</div>
-<script>
-  const dotsElement = document.getElementById("dots");
-  const countdownElement = document.getElementById("countdown");
-  let countdown = 5;
-  let dotsCount = 0;
-  const startCountdown = () => {
-    countdownElement.textContent = `Redirecting in ${countdown}`;
-    countdown -= 1;
-    if (countdown < 0) {
-      clearInterval(countdownInterval);
-      window.location.href = "https://yungsamd17.github.io/np-carmods";
+    .header {
+        font-size: 2.2rem;
     }
-  };
 
-  const updateDots = () => {
-    dotsCount = (dotsCount + 1) % 4;
-    dotsElement.textContent = ".".repeat(dotsCount);
-  };
+    .info-text {
+        font-size: 1.7rem;
+    }
+}
 
-  const countdownInterval = setInterval(startCountdown, 1000);
-  setInterval(updateDots, 400);
-</script>
+@media only screen and (max-width: 690px) {
+    .header {
+        font-size: 1.75rem;
+    }
+
+    .info-text {
+        font-size: 1.4rem;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .header {
+        font-size: 1.25rem;
+    }
+
+    .info-text {
+        font-size: 1.15rem;
+    }
+
+    .link {
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .header {
+        font-size: 1rem;
+    }
+
+    .info-text {
+        font-size: 0.9rem;
+    }
+
+    .link {
+        font-size: 0.8rem;
+    }
+}
+</style>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="headerNP" style="color: #00f8b9;">NoPixel</span>
+            <span class="headerNP">Vehicle Mods</span>
+            has been moved
+        </div>
+        <div class="info-text">
+            <span id="countdown">Redirecting in 5</span><span id="dots"></span>
+        </div>
+        <p>If it doesn't redirect automaticly, click the link bellow.</p>
+        <div class="link">
+            <a href="https://yungsamd17.github.io/np-carmods">yungsamd17.github.io/np-carmods</a>
+        </div>
+    </div>
+    <script>
+    const dotsElement = document.getElementById("dots");
+    const countdownElement = document.getElementById("countdown");
+    let countdown = 5;
+    let dotsCount = 0;
+    const startCountdown = () => {
+        countdownElement.textContent = `Redirecting in ${countdown}`;
+        countdown -= 1;
+        if (countdown < 0) {
+            clearInterval(countdownInterval);
+            window.location.href = "https://yungsamd17.github.io/np-carmods";
+        }
+    };
+
+    const updateDots = () => {
+        dotsCount = (dotsCount + 1) % 4;
+        dotsElement.textContent = ".".repeat(dotsCount);
+    };
+
+    const countdownInterval = setInterval(startCountdown, 1000);
+    setInterval(updateDots, 400);
+    </script>
 </body>
+
 </html>
