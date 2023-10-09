@@ -27,8 +27,17 @@ window.DownloadApi = {
                 tempLink.href = window.URL.createObjectURL(new Blob([this.response], { type: `text/${url.split(".").pop()}` }));
                 tempLink.download = url.split("/").pop();
                 tempLink.click();
+
+                // Downloaded HTML feedback
+                const downloadMessage = document.createElement("div");
+                const arg = url.split("/").pop().split(".")[0]; // Extracting the argument from the URL
+                downloadMessage.innerHTML = `<div style="margin: 20px"><i class="fa-solid fa-check"></i><span style="font-family: Arial; font-weight: bold"> Downloaded </span><span>${arg}</span></div>`;
+                document.body.appendChild(downloadMessage);
+
+                // Update the title
+                document.title = `Downloaded ${arg}`;
             }
-            if (this.status == 404) error && error(`GitHub File <a href"${url}">${url}</a> does not exist!`);
+            if (this.status == 404) error && error(`GitHub File <a href="${url}">${url}</a> does not exist!`);
         };
         xhttp.onerror = function() { error && error(`GitHub File <a href="${url}">${url}</a> does not exist!`); };
         xhttp.open("GET", url, true);
