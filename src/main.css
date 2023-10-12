@@ -1,17 +1,16 @@
 * {
-    box-sizing: border-box;
+:root {
+    --primary: #0e0e10;
+    --accent: #ff8a80;
+    --primary-text: #f1f1f1;
+    --secondary-text: #868686;
 }
 
 body {
-    --primary-headers: #f1f1f1;
-    --primary: #0e0e10;
-    --secondary: #868686;
-    --accent: #ff8a80;
-
     padding: 0;
     margin: 0 auto;
     background-color: var(--primary);
-    color: var(--primary-headers);
+    color: var(--primary-text);
     max-width: 700px;
     font-size: 1rem;
     font-family: 'Verdana', sans-serif;
@@ -19,6 +18,11 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
 
 ::selection {
@@ -40,61 +44,6 @@ a:hover {
     flex: 1 0 auto;
     align-items: center;
     width: 100%;
-}
-
-.dark-mode {
-    background-color: var(--primary-headers);
-    color: var(--primary);
-}
-
-body {
-    transition: background-color 0.5s ease, color 0.5s ease;
-}
-
-.dark-mode .dark-modeBtn {
-    background-color: var(--primary);
-    color: var(--primary-headers);
-}
-
-.dark-mode p,
-.dark-mode a {
-    color: var(--primary);
-}
-
-.dark-mode .card p {
-    color: var(--primary);
-}
-
-.dark-mode a:hover {
-    color: var(--accent);
-}
-
-.dark-modeBtn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 99;
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-    border: none;
-    background-color: var(--secondary);
-    color: var(--primary);
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 50%;
-    transition: transform 0.5s ease;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.dark-modeBtn:hover {
-    background-color: var(--accent);
-    transition: 0.250s;
-}
-
-.dark-modeBtn.active #darkModeIcon::before {
-    content: "\f186";
-    /* Moon icon from Font Awesome */
 }
 
 .wrapper {
@@ -120,13 +69,11 @@ body {
 .headerName p {
     margin: 0;
     text-align: center;
-    color: var(--secondary);
-    margin-left: 0.65vh;
+    color: var(--secondary-text);
 }
 
 .link-bar {
     margin-left: auto;
-    ;
 }
 
 .link-row {
@@ -139,7 +86,7 @@ body {
     margin: 4px;
     display: flex;
     align-items: center;
-    color: var(--secondary);
+    color: var(--secondary-text);
 }
 
 .socials-logo {
@@ -166,18 +113,19 @@ h3 {
 
 .cardLink p {
     margin: 4px;
+    color: var(--secondary-text);
 }
 
 .footer {
     padding-bottom: 10px;
-    color: var(--secondary);
+    color: var(--secondary-text);
     opacity: .5;
 }
 
 .footer a {
     text-decoration: none;
     text-align: center;
-    color: var(--secondary);
+    color: var(--secondary-text);
 }
 
 .footer a:hover {
@@ -206,9 +154,5 @@ h3 {
 
     .card {
         text-align: center;
-    }
-
-    .dark-modeBtn {
-        bottom: 40px;
     }
 }

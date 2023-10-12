@@ -96,32 +96,6 @@
         </script>
         &#8226;&nbsp;<a href="https://github.com/yungsamd17/yungsamd17.github.io" target="_blank"><i class="fa-brands fa-github"></i> GitHub Repository</a>
     </div>
-    <button onclick="darkmodeFunction()" class="dark-modeBtn">
-        <span id="darkModeIcon" class="fas fa-sun"></span>
-    </button>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Check if dark mode preference is stored in local storage
-        const isDarkMode = localStorage.getItem("darkMode") === "true";
-        const element = document.body;
-        const button = document.querySelector('.dark-modeBtn');
-        // Apply dark mode based on the stored preference
-        if (isDarkMode) {
-            element.classList.add("dark-mode");
-            button.classList.add('active');
-        }
-    });
-
-    function darkmodeFunction() {
-        var element = document.body;
-        var button = document.querySelector('.dark-modeBtn');
-        element.classList.toggle("dark-mode");
-        button.classList.toggle('active');
-        // Store the current dark mode preference in local storage
-        const newDarkModeState = element.classList.contains("dark-mode");
-        localStorage.setItem("darkMode", newDarkModeState);
-    }
-    </script>
 </body>
 
 </html>
