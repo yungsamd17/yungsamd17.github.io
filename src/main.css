@@ -143,6 +143,10 @@ a:hover {
         justify-content: center;
     }
 
+    .header {
+        animation: none;
+    }
+
     .header h1 {
         text-align: center;
     }
@@ -150,6 +154,7 @@ a:hover {
     .link-bar {
         margin: 0;
         margin-top: 10px;
+        animation: none;
     }
 
     .link-row {
@@ -158,5 +163,10 @@ a:hover {
 
     .card {
         text-align: center;
+        animation: none;
+    }
+
+    .footer {
+        animation: none;
     }
 }
