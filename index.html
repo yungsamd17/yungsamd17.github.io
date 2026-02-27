@@ -17,9 +17,7 @@
     <link rel="stylesheet" href="src/main.css">
     <link rel="icon" href="src/assets/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script data-goatcounter="https://yungsamd17.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     <meta name="google-site-verification" content="56-L3iSwypOtQIwMAVZwT51iLhmZTG1h1F88WIN3bGI" />
-    <!--<script type="text/javascript" src="https://livejs.com/live.js"></script>-->
 </head>
 
 <body>
@@ -100,24 +98,21 @@
         © <script>document.write(/\d{4}/.exec(Date())[0])</script> 
         • <a href="https://github.com/yungsamd17/yungsamd17.github.io" target="_blank"><i class="fa-brands fa-github"></i> GitHub Repository</a>
     </div>
-
-    <!-- Age calculator -->
     <script>
     function updateAge() {
-      const birthDate = new Date(2003, 6, 20); // July 20, 2003
+      const birthDate = new Date(2003, 7, 1); // 0-11 month numbering
       const today     = new Date();
       let age = today.getFullYear() - birthDate.getFullYear();
       
-      const birthdayThisYear = new Date(today.getFullYear(), 6, 20);
+      const birthdayThisYear = new Date(today.getFullYear(), 7, 1);
       if (today < birthdayThisYear) {
         age--;
       }
-      
       const ageEl = document.getElementById("age");
       if (ageEl) ageEl.textContent = age;
     }
     updateAge();
     </script>
-
 </body>
+    
 </html>
