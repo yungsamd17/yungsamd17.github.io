@@ -22,6 +22,12 @@ body {
     font-size: 15px;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+}
+
+a, button {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
 ::selection { background: var(--accent); color: var(--bg); }
@@ -87,14 +93,15 @@ h2 {
     margin: 0 0 14px;
 }
 
-.link-list li { line-height: 1; }
+.link-list li { line-height: 1; display: block; }
 
 .link-list a {
-    display: inline-block;
+    display: block;
+    width: 100%;
     font-size: .9rem;
     color: var(--item);
     text-decoration: none;
-    padding: 4px 0;
+    padding: 6px 0;
     transition: color .15s;
 }
 
@@ -107,10 +114,11 @@ h2 {
 /* ── featured links ── */
 .featured-link {
     display: block;
+    width: 100%;
     font-size: .9rem;
     color: var(--item);
     text-decoration: none;
-    padding: 4px 0;
+    padding: 6px 0;
     transition: color .15s;
 }
 
@@ -140,9 +148,10 @@ h2 {
 /* ── page nav buttons ── */
 .nav-btn {
     display: block;
+    width: 100%;
     font-size: .9rem;
     color: var(--item);
-    padding: 4px 0;
+    padding: 6px 0;
     cursor: pointer;
     transition: color .15s;
     background: none;
@@ -165,8 +174,8 @@ h2 {
     cursor: pointer;
     background: none;
     border: none;
-    padding: 0;
-    margin-bottom: 40px;
+    padding: 6px 0;
+    margin-bottom: 34px;
     transition: color .15s;
     font-family: inherit;
 }
@@ -219,9 +228,12 @@ h2 {
 .proj-item { margin-bottom: 20px; }
 
 .proj-item a {
+    display: block;
+    width: 100%;
     font-size: .9rem;
     color: var(--item);
     text-decoration: none;
+    padding: 2px 0;
     transition: color .15s;
 }
 
@@ -248,15 +260,17 @@ h2 {
 }
 
 .all-repos {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
     font-size: .66rem;
     color: var(--lo);
     text-decoration: none;
     letter-spacing: .06em;
     transition: color .15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
     margin-top: 6px;
+    padding: 4px 0;
 }
 
 .all-repos:hover,
