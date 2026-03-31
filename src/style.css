@@ -66,7 +66,7 @@ h2 {
 /* ── home: handle ── */
 .handle {
     font-size: .72rem;
-    color: var(--lo);
+    color: var(--item);
     letter-spacing: .04em;
     display: block;
     margin-bottom: 6px;
