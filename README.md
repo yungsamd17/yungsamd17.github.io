@@ -1,5 +1,11 @@
-# [My Website](https://yungsamd17.github.io)
+# [yungsamd17.github.io](https://yungsamd17.github.io)
 
-This Repository is used for my personal website. Check it out @ [**yungsamd17.github.io**](https://yungsamd17.github.io)
+My personal website — minimal, text-only, no frameworks.
 
-![plink](https://user-images.githubusercontent.com/64147848/230789808-1d37b7e0-3491-4ce5-9028-97aea4051b43.gif)
+Built with vanilla HTML, CSS, and JavaScript. Deployed on GitHub Pages.
+
+## Stack
+
+- HTML · CSS · JS
+- [Inter](https://rsms.me/inter/) — font
+- [Font Awesome](https://fontawesome.com/) — icons
