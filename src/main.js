@@ -1,18 +1,29 @@
 function nav(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('pg-' + page).classList.add('active');
-    window.scrollTo(0, 0);
+    location.hash = (page === 'home') ? '' : page;
 }
 
-// back button support
-history.pushState({ page: 'home' }, '');
-window.addEventListener('popstate', function () {
-    const current = document.querySelector('.page.active');
-    if (current && current.id !== 'pg-home') {
-        nav('home');
-        history.pushState({ page: 'home' }, '');
+function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('pg-' + page);
+    if (target) {
+        target.classList.add('active');
+        window.scrollTo(0, 0);
     }
+}
+
+function getPageFromHash() {
+    const hash = location.hash.replace('#', '').trim();
+    const valid = ['projects', 'about'];
+    return valid.includes(hash) ? hash : 'home';
+}
+
+// Handle hash changes
+window.addEventListener('hashchange', function () {
+    showPage(getPageFromHash());
 });
+
+// Handle initial load
+showPage(getPageFromHash());
 
 function updateAge() {
     const birth = new Date(2003, 7, 1);
