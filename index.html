@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <link rel="stylesheet" href="src/style.css">
     <meta name="google-site-verification" content="56-L3iSwypOtQIwMAVZwT51iLhmZTG1h1F88WIN3bGI" />
 </head>
@@ -26,9 +26,21 @@
 <!-- ══ HOME ══ -->
 <div class="page active" id="pg-home">
 
-    <h1>Sam</h1>
-    <span class="handle">@yungsamd17</span>
-    <p class="tagline">building tools for the web</p>
+    <div class="header">
+        <div>
+            <h1>Sam</h1>
+            <span class="handle">@yungsamd17</span>
+        </div>
+        <div class="header-buttons">
+            <button class="lang-toggle" onclick="toggleLang()" aria-label="Switch language">
+                <i class="fa-solid fa-language"></i>
+            </button>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                <i class="fa-solid fa-desktop"></i>
+            </button>
+        </div>
+    </div>
+    <p class="tagline" data-i18n="tagline">building tools for the web</p>
 
     <ul class="link-list">
         <li><a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a></li>
@@ -46,8 +58,8 @@
     </div>
 
     <div class="gap">
-        <button class="nav-btn" onclick="nav('projects')">Other projects</button>
-        <button class="nav-btn" onclick="nav('about')">About me</button>
+        <button class="nav-btn" onclick="nav('projects')" data-i18n="navProjects">Other projects</button>
+        <button class="nav-btn" onclick="nav('about')" data-i18n="navAbout">About me</button>
     </div>
 
 </div>
@@ -55,36 +67,36 @@
 <!-- ══ PROJECTS ══ -->
 <div class="page" id="pg-projects">
 
-    <button class="back" onclick="nav('home')"><i class="fa-solid fa-arrow-left"></i> back</button>
+    <button class="back" onclick="nav('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">back</span></button>
 
-    <h2>Other projects</h2>
+    <h2 data-i18n="projectsTitle">Other projects</h2>
 
     <div class="proj-item">
-        <a href="https://yungsamd17.github.io/UserScripts/" target="_blank" rel="noopener">UserScripts</a>
-        <p class="proj-desc">Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.</p>
+        <a href="https://yungsamd17.github.io/UserScripts/" target="_blank" rel="noopener" data-i18n="projUserScripts">UserScripts</a>
+        <p class="proj-desc" data-i18n="projUserScriptsDesc">Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.</p>
         <span class="proj-lang">JS</span> <span class="proj-lang">Web</span>
     </div>
 
     <div class="proj-item">
-        <a href="https://s17labs.github.io/tools" target="_blank" rel="noopener">s17 Labs Tools</a>
-        <p class="proj-desc">Fast, privacy-first browser utility tools for creators and developers.</p>
+        <a href="https://s17labs.github.io/tools" target="_blank" rel="noopener" data-i18n="projTools">s17 Labs Tools</a>
+        <p class="proj-desc" data-i18n="projToolsDesc">Fast, privacy-first browser utility tools for creators and developers.</p>
         <span class="proj-lang">Web</span>
     </div>
 
     <div class="proj-item">
-        <a href="https://github.com/yungsamd17/Volume-Control" target="_blank" rel="noopener">Volume Control</a>
-        <p class="proj-desc">Browser extension to push tab volume beyond the default 100% cap.</p>
+        <a href="https://github.com/yungsamd17/Volume-Control" target="_blank" rel="noopener" data-i18n="projVolume">Volume Control</a>
+        <p class="proj-desc" data-i18n="projVolumeDesc">Browser extension to push tab volume beyond the default 100% cap.</p>
         <span class="proj-lang">JS</span>
     </div>
 
     <div class="proj-item">
-        <a href="https://github.com/yungsamd17/BetterDiscordAddons" target="_blank" rel="noopener">BetterDiscord Addons</a>
-        <p class="proj-desc">A collection of plugins and themes for BetterDiscord.</p>
+        <a href="https://github.com/yungsamd17/BetterDiscordAddons" target="_blank" rel="noopener" data-i18n="projBDAddons">BetterDiscord Addons</a>
+        <p class="proj-desc" data-i18n="projBDAddonsDesc">A collection of plugins and themes for BetterDiscord.</p>
         <span class="proj-lang">JS</span> <span class="proj-lang">CSS</span>
     </div>
 
     <a class="all-repos" href="https://github.com/yungsamd17?tab=repositories" target="_blank" rel="noopener">
-        <i class="fa-brands fa-github"></i> view all repositories
+        <i class="fa-brands fa-github"></i> <span data-i18n="viewAll">view all repositories</span>
     </a>
 
 </div>
@@ -92,24 +104,24 @@
 <!-- ══ ABOUT ══ -->
 <div class="page" id="pg-about">
 
-    <button class="back" onclick="nav('home')"><i class="fa-solid fa-arrow-left"></i> back</button>
+    <button class="back" onclick="nav('home')"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">back</span></button>
 
-    <h2>About me</h2>
+    <h2 data-i18n="aboutTitle">About me</h2>
 
-    <p class="about-text">
+    <p class="about-text" data-i18n="aboutText1">
         Hey, I'm <strong>Sam</strong> — a self-taught web developer from <strong>Slovakia</strong>, <span id="age">…</span> years old.
         I build <strong>browser extensions</strong>, <strong>userscripts</strong>, and small tools that make platforms
         like <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>,
         <a href="https://x.com" target="_blank" rel="noopener">X</a>, and
         <a href="https://betterdiscord.app" target="_blank" rel="noopener">BetterDiscord</a> nicer to use.
     </p>
-    <p class="about-text">
+    <p class="about-text" data-i18n="aboutText2">
         I also make <strong>Android apps</strong> <span class="chip"><i class="fa-brands fa-android"></i> Java · Kotlin</span> —
         mostly clean, minimal things like text editors and note apps.
         Under <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a>,
         I focus on lightweight, privacy-first software for the web and mobile.
     </p>
-    <p class="about-text">
+    <p class="about-text" data-i18n="aboutText3">
         You can reach me at <a href="mailto:yungsamd@proton.me">yungsamd@proton.me</a>
         or find me on <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X</a>
         and <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.
@@ -117,6 +129,7 @@
 
 </div>
 
-<script src="src/main.js"></script>
+    <script src="src/translations.js?v=5"></script>
+    <script src="src/main.js?v=5"></script>
 </body>
 </html>

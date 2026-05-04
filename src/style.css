@@ -11,6 +11,16 @@
     --sans: 'Inter', sans-serif;
 }
 
+[data-theme="light"] {
+    --bg:     #e8e8ec;
+    --accent: #ff8a80;
+    --hi:     #1a1a1a;
+    --mid:    #6a6a72;
+    --lo:     #f0f0f0;
+    --dim:    #fafafa;
+    --item:   #4a4a4a;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
@@ -23,6 +33,7 @@ body {
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color .2s, color .2s;
 }
 
 a, button {
@@ -85,6 +96,60 @@ h2 {
     font-weight: 300;
     margin: 0 0 18px;
 }
+
+/* ── header with theme and lang toggle ── */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--item);
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color .15s;
+    font-family: inherit;
+}
+
+.theme-toggle:hover,
+.theme-toggle:active { color: var(--hi); }
+
+.lang-toggle {
+    background: none;
+    border: none;
+    color: var(--item);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color .15s;
+    font-family: inherit;
+    letter-spacing: .04em;
+}
+
+.lang-toggle:hover,
+.lang-toggle:active { color: var(--hi); }
 
 /* ── home: link/nav list ── */
 .link-list {
