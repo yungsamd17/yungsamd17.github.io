@@ -1,0 +1,42 @@
+var translations = {
+    en: {
+        tagline: "building tools for the web",
+        navProjects: "Other projects",
+        navAbout: "About me",
+        back: "back",
+        projectsTitle: "Other projects",
+        projUserScripts: "UserScripts",
+        projUserScriptsDesc: "Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.",
+        projTools: "s17 Labs Tools",
+        projToolsDesc: "Fast, privacy-first browser utility tools for creators and developers.",
+        projVolume: "Volume Control",
+        projVolumeDesc: "Browser extension to push tab volume beyond the default 100% cap.",
+        projBDAddons: "BetterDiscord Addons",
+        projBDAddonsDesc: "A collection of plugins and themes for BetterDiscord.",
+        viewAll: "view all repositories",
+        aboutTitle: "About me",
+        aboutText1: 'Hey, I\'m <strong>Sam</strong> — a self-taught web developer from <strong>Slovakia</strong>, <span id="age">…</span> years old. I build <strong>browser extensions</strong>, <strong>userscripts</strong>, and small tools that make platforms like <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>, <a href="https://x.com" target="_blank" rel="noopener">X</a>, and <a href="https://betterdiscord.app" target="_blank" rel="noopener">BetterDiscord</a> nicer to use.',
+        aboutText2: 'I also make <strong>Android apps</strong> <span class="chip"><i class="fa-brands fa-android"></i> Java · Kotlin</span> — mostly clean, minimal things like text editors and note apps. Under <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a>, I focus on lightweight, privacy-first software for the web and mobile.',
+        aboutText3: 'You can reach me at <a href="mailto:yungsamd@proton.me">yungsamd@proton.me</a> or find me on <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X</a> and <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.'
+    },
+    sk: {
+        tagline: "tvorím nástroje pre web",
+        navProjects: "Iné projekty",
+        navAbout: "O mne",
+        back: "späť",
+        projectsTitle: "Iné projekty",
+        projUserScripts: "UserScripts",
+        projUserScriptsDesc: "Userscripts pre Twitch, X a ďalšie — malé vylepšenia pre lepšie každodenné používanie.",
+        projTools: "s17 Labs Tools",
+        projToolsDesc: "Rýchle nástroje pre prehliadače so zameraním na súkromie pre tvorcov a vývojárov.",
+        projVolume: "Volume Control",
+        projVolumeDesc: "Rozšírenie pre prehliadač umožňujúce zvýšiť hlasitosť karty nad predvolených 100%.",
+        projBDAddons: "BetterDiscord Addons",
+        projBDAddonsDesc: "Kolekcia pluginov a tém pre BetterDiscord.",
+        viewAll: "zobraziť všetky repozitáre",
+        aboutTitle: "O mne",
+        aboutText1: 'Ahoj, volám sa <strong>Sam</strong> — webový vývojár samouk zo <strong>Slovenska</strong>, mám <span id="age">…</span> rokov. Vytváram <strong>rozšírenia pre prehliadače</strong>, <strong>používateľské skripty</strong> a malé nástroje, vďaka ktorým sa platformy ako <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>, <a href="https://x.com" target="_blank" rel="noopener">X</a> a <a href="https://betterdiscord.app" target="_blank" rel="noopener">BetterDiscord</a>.',
+        aboutText2: 'Tiež tvorím <strong>Android aplikácie</strong> <span class="chip"><i class="fa-brands fa-android"></i> Java · Kotlin</span> — väčšinou čisté, minimalistické veci ako textové editory a poznámkové aplikácie. Pod <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a> sa zameriavam na ľahký softvér s dôrazom na súkromie pre web a mobilné zariadenia.',
+        aboutText3: 'Môžete ma kontaktovať na <a href="mailto:yungsamd@proton.me">yungsamd@proton.me</a> alebo ma nájdete na <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X</a> a <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.'
+    }
+};

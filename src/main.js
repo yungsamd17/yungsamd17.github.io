@@ -1,3 +1,4 @@
+// Navigation
 function nav(page) {
     location.hash = (page === 'home') ? '' : page;
 }
@@ -17,12 +18,10 @@ function getPageFromHash() {
     return valid.includes(hash) ? hash : 'home';
 }
 
-// Handle hash changes
 window.addEventListener('hashchange', function () {
     showPage(getPageFromHash());
 });
 
-// Handle initial load
 showPage(getPageFromHash());
 
 function updateAge() {
@@ -35,9 +34,36 @@ function updateAge() {
 }
 updateAge();
 
+// Language toggle
+var languages = ['en', 'sk'];
+var currentLang = localStorage.getItem('lang') || 'en';
+
+function applyLang(lang) {
+    document.documentElement.setAttribute('lang', lang);
+    updateContent(lang);
+    updateAge();
+}
+
+function updateContent(lang) {
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (typeof translations !== 'undefined' && translations[lang] && translations[lang][key]) {
+            el.innerHTML = translations[lang][key];
+        }
+    });
+}
+
+function toggleLang() {
+    var currentIndex = languages.indexOf(currentLang);
+    currentLang = languages[(currentIndex + 1) % languages.length];
+    localStorage.setItem('lang', currentLang);
+    applyLang(currentLang);
+}
+
 // Theme toggle
-const themes = ['light', 'dark'];
-let currentTheme = localStorage.getItem('theme') || 'light';
+var themes = ['light', 'dark'];
+var currentTheme = localStorage.getItem('theme') || 'light';
 
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
@@ -47,15 +73,16 @@ function applyTheme(theme) {
 function updateThemeIcon() {
     const icon = document.querySelector('.theme-toggle i');
     if (!icon) return;
-    const icons = { light: 'fa-moon', dark: 'fa-sun' };
+    var icons = { light: 'fa-moon', dark: 'fa-sun' };
     icon.className = 'fa-solid ' + icons[currentTheme];
 }
 
 function toggleTheme() {
-    const currentIndex = themes.indexOf(currentTheme);
+    var currentIndex = themes.indexOf(currentTheme);
     currentTheme = themes[(currentIndex + 1) % themes.length];
     localStorage.setItem('theme', currentTheme);
     applyTheme(currentTheme);
 }
 
 applyTheme(currentTheme);
+applyLang(currentLang);
