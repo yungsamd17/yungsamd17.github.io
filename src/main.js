@@ -34,3 +34,28 @@ function updateAge() {
     if (el) el.textContent = age;
 }
 updateAge();
+
+// Theme toggle
+const themes = ['light', 'dark'];
+let currentTheme = localStorage.getItem('theme') || 'light';
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    updateThemeIcon();
+}
+
+function updateThemeIcon() {
+    const icon = document.querySelector('.theme-toggle i');
+    if (!icon) return;
+    const icons = { light: 'fa-moon', dark: 'fa-sun' };
+    icon.className = 'fa-solid ' + icons[currentTheme];
+}
+
+function toggleTheme() {
+    const currentIndex = themes.indexOf(currentTheme);
+    currentTheme = themes[(currentIndex + 1) % themes.length];
+    localStorage.setItem('theme', currentTheme);
+    applyTheme(currentTheme);
+}
+
+applyTheme(currentTheme);
