@@ -63,7 +63,7 @@ function toggleLang() {
 
 // Theme toggle
 var themes = ['light', 'dark'];
-var currentTheme = localStorage.getItem('theme') || 'light';
+var currentTheme = localStorage.getItem('theme') || 'dark';
 
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
