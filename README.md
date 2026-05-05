@@ -2,9 +2,8 @@
 
 Welcome to my little corner of the internet! A minimalist portfolio where I showcase the stuff I build — mostly tools to make the web a bit nicer to use.
 
-**Live site:** [yungsamd17.github.io](https://yungsamd17.github.io)
-**Links page:** [yungsamd17.github.io/links](https://yungsamd17.github.io/links)
-**Documentation:** [docs/README.md](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/docs/README.md)
+**Live site:** [yungsamd17.github.io](https://yungsamd17.github.io)<br>
+**Links page:** [yungsamd17.github.io/links](https://yungsamd17.github.io/links)<br>
 
 ---
 
