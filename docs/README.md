@@ -18,7 +18,7 @@ Documentation for [yungsamd17.github.io](https://yungsamd17.github.io) - Sam's p
 
 A simple, clean page that displays all your social links and profiles in one place.
 
-**Live page:** [yungsamd17.github.io/links](https://yungsamd17.github.io/links)
+**Live page:** [yungsamd17.github.io/links](https://yungsamd17.github.io/links)<br>
 **Documentation:** [links/README.md](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/links/README.md)
 
 ---
