@@ -3,6 +3,8 @@
 Welcome to my little corner of the internet! A minimalist portfolio where I showcase the stuff I build — mostly tools to make the web a bit nicer to use.
 
 **Live site:** [yungsamd17.github.io](https://yungsamd17.github.io)
+**Links page:** [yungsamd17.github.io/links](https://yungsamd17.github.io/links)
+**Documentation:** [docs/README.md](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/docs/README.md)
 
 ---
 
@@ -75,12 +77,26 @@ I'm part of, run, and develop for these orgs:
 - 🎮 [Twitch](https://twitch.tv/yungsamd17)
 - 💬 [Discord](https://discord.com/users/402083911053869056)
 - 📧 [Email](mailto:yungsamd@proton.me)
+- 🔗 [All Links](https://yungsamd17.github.io/links)
 
 ---
 
 <p align="center">
-  <sub>Built with ☕, late nights, and a bit too much <a href="https://twitch.tv/yungsamd17">Twitch</a> in the background</sub>
+  <sub>Built with ☕, late nights, and a bit too much <a href="https://yungsamd17.github.io/Twitch-Live/">Twitch</a> in the background</sub>
 </p>
+
+---
+
+<p align="center">
+  <a href="https://ko-fi.com/yungsamd17"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" /></a>
+</p>
+
+---
+
+## Documentation
+
+- **[docs/](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/docs/README.md)** - Website documentation (adding languages, theme system, etc.)
+- **[links/](https://yungsamd17.github.io/links)** - All my social links in one place
 
 ---
 

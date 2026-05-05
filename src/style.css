@@ -112,7 +112,16 @@ h2 {
     letter-spacing: .04em;
     display: block;
     margin-bottom: 6px;
+    text-decoration: none;
 }
+
+a .handle {
+    text-decoration: none;
+    transition: border-color .15s;
+}
+
+a:hover .handle,
+a:active .handle { color: var(--hi); }
 
 /* ── home: tagline ── */
 .tagline {
