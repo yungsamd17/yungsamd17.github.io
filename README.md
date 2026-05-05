@@ -60,8 +60,8 @@ Plus some nice things from the internet:
 
 I'm part of, run, and develop for these orgs:
 
-- 🏢 **[Syntax17 (s17hq)](https://github.com/s17hq)**
-- 🚀 **[s17 Labs (s17labs)](https://github.com/s17labs)**
+- 🏢 **[Syntax17 (s17hq)](https://s17hq.github.io)**
+- 🚀 **[s17 Labs (s17labs)](https://s17labs.github.io)**
   - 🐦 [X/Twitter @s17HQ](https://x.com/s17HQ)
   - 💬 [Discord Server](https://discord.gg/dDGbjKTVH2)
 
