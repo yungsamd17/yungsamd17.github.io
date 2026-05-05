@@ -1,6 +1,7 @@
 var translations = {
     en: {
         tagline: "building tools for the web",
+        taglineAlt: "building bugs for the web",
         navProjects: "Other projects",
         navAbout: "About me",
         back: "back",
@@ -21,6 +22,7 @@ var translations = {
     },
     sk: {
         tagline: "tvorím nástroje pre web",
+        taglineAlt: "tvorím chyby pre web",
         navProjects: "Iné projekty",
         navAbout: "O mne",
         back: "späť",
