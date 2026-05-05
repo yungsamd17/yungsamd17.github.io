@@ -12,7 +12,7 @@
     <meta property="twitter:card" content="summary">
     <meta property="twitter:site" content="Sam @yungsamd17">
     <meta property="twitter:description" content="Web developer">
-    <meta property="og:image" content="https://yungsamd17.github.io/src/assets/logo.png">
+    <meta property="og:image" content="https://yungsamd17.github.io/src/assets/logo.jpg">
     <link rel="icon" href="src/assets/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,29 +71,41 @@
 
     <h2 data-i18n="projectsTitle">Other projects</h2>
 
-    <div class="proj-item">
-        <a href="https://yungsamd17.github.io/UserScripts/" target="_blank" rel="noopener" data-i18n="projUserScripts">UserScripts</a>
+    <a href="https://yungsamd17.github.io/UserScripts/" target="_blank" rel="noopener" class="proj-item">
+        <span class="proj-title" data-i18n="projUserScripts">UserScripts</span>
+        <div class="proj-meta">
+            <span class="proj-badge live">Live</span>
+            <span class="proj-lang">JS</span>
+            <span class="proj-lang">Web</span>
+        </div>
         <p class="proj-desc" data-i18n="projUserScriptsDesc">Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.</p>
-        <span class="proj-lang">JS</span> <span class="proj-lang">Web</span>
-    </div>
+    </a>
 
-    <div class="proj-item">
-        <a href="https://s17labs.github.io/tools" target="_blank" rel="noopener" data-i18n="projTools">s17 Labs Tools</a>
+    <a href="https://s17labs.github.io/tools" target="_blank" rel="noopener" class="proj-item">
+        <span class="proj-title" data-i18n="projTools">s17 Labs Tools</span>
+        <div class="proj-meta">
+            <span class="proj-badge live">Live</span>
+            <span class="proj-lang">Web</span>
+        </div>
         <p class="proj-desc" data-i18n="projToolsDesc">Fast, privacy-first browser utility tools for creators and developers.</p>
-        <span class="proj-lang">Web</span>
-    </div>
+    </a>
 
-    <div class="proj-item">
-        <a href="https://github.com/yungsamd17/Volume-Control" target="_blank" rel="noopener" data-i18n="projVolume">Volume Control</a>
+    <a href="https://github.com/yungsamd17/Volume-Control" target="_blank" rel="noopener" class="proj-item">
+        <span class="proj-title" data-i18n="projVolume">Volume Control</span>
+        <div class="proj-meta">
+            <span class="proj-lang">JS</span>
+        </div>
         <p class="proj-desc" data-i18n="projVolumeDesc">Browser extension to push tab volume beyond the default 100% cap.</p>
-        <span class="proj-lang">JS</span>
-    </div>
+    </a>
 
-    <div class="proj-item">
-        <a href="https://github.com/yungsamd17/BetterDiscordAddons" target="_blank" rel="noopener" data-i18n="projBDAddons">BetterDiscord Addons</a>
+    <a href="https://github.com/yungsamd17/BetterDiscordAddons" target="_blank" rel="noopener" class="proj-item">
+        <span class="proj-title" data-i18n="projBDAddons">BetterDiscord Addons</span>
+        <div class="proj-meta">
+            <span class="proj-lang">JS</span>
+            <span class="proj-lang">CSS</span>
+        </div>
         <p class="proj-desc" data-i18n="projBDAddonsDesc">A collection of plugins and themes for BetterDiscord.</p>
-        <span class="proj-lang">JS</span> <span class="proj-lang">CSS</span>
-    </div>
+    </a>
 
     <a class="all-repos" href="https://github.com/yungsamd17?tab=repositories" target="_blank" rel="noopener">
         <i class="fa-brands fa-github"></i> <span data-i18n="viewAll">view all repositories</span>
@@ -128,6 +140,12 @@
     </p>
 
 </div>
+
+    <div class="footer">
+        <span>© 2023-<span id="year">2026</span> Sam (yungsamd17)</span>
+    </div>
+
+    <div id="page-live" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
     <script src="src/translations.js?v=5"></script>
     <script src="src/main.js?v=5"></script>

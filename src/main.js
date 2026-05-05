@@ -9,7 +9,15 @@ function showPage(page) {
     if (target) {
         target.classList.add('active');
         window.scrollTo(0, 0);
+        updateLiveRegion(page);
     }
+}
+
+function updateLiveRegion(page) {
+    const live = document.getElementById('page-live');
+    if (!live) return;
+    const names = { home: 'Home', projects: 'Projects', about: 'About' };
+    live.textContent = 'Navigated to ' + (names[page] || page) + ' page';
 }
 
 function getPageFromHash() {
@@ -24,6 +32,7 @@ window.addEventListener('hashchange', function () {
 
 showPage(getPageFromHash());
 
+// Util
 function updateAge() {
     const birth = new Date(2003, 7, 1);
     const today = new Date();
@@ -32,7 +41,14 @@ function updateAge() {
     const el = document.getElementById('age');
     if (el) el.textContent = age;
 }
+
+function updateYear() {
+    const el = document.getElementById('year');
+    if (el) el.textContent = new Date().getFullYear();
+}
+
 updateAge();
+updateYear();
 
 // Language toggle
 var languages = ['en', 'sk'];
@@ -63,7 +79,16 @@ function toggleLang() {
 
 // Theme toggle
 var themes = ['light', 'dark'];
-var currentTheme = localStorage.getItem('theme') || 'dark';
+
+function getSystemTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+    }
+    return 'light';
+}
+
+var savedTheme = localStorage.getItem('theme');
+var currentTheme = savedTheme || getSystemTheme();
 
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
