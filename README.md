@@ -83,7 +83,7 @@ I'm part of, run, and develop for these orgs:
 ## Documentation
 
 - **[docs/](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/docs/README.md)** - Website documentation (adding languages, theme system, etc.)
-- **[links/](https://yungsamd17.github.io/links)** - All my social links in one place
+- **[links/](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/links/README.md)** - Links documentation
 
 ---
 
