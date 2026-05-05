@@ -81,24 +81,16 @@ I'm part of, run, and develop for these orgs:
 
 ---
 
-<p align="center">
-  <sub>Built with ☕, late nights, and a bit too much <a href="https://yungsamd17.github.io/Twitch-Live/">Twitch</a> in the background</sub>
-</p>
-
----
-
-<p align="center">
-  <a href="https://ko-fi.com/yungsamd17"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" /></a>
-</p>
-
----
-
 ## Documentation
 
 - **[docs/](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/docs/README.md)** - Website documentation (adding languages, theme system, etc.)
 - **[links/](https://yungsamd17.github.io/links)** - All my social links in one place
 
 ---
+
+<p align="center">
+  <sub>Built with ☕, late nights, and a bit too much <a href="https://yungsamd17.github.io/Twitch-Live/">Twitch</a> in the background</sub>
+</p>
 
 <p align="center">
   <a href="https://ko-fi.com/yungsamd17"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" /></a>
