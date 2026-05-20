@@ -62,11 +62,14 @@ button:focus-visible {
     width: 100%;
     margin: 0 auto;
     padding: 72px 28px 60px;
-    animation: fadein .35s ease both;
     flex: 1;
 }
 
 .page.active { display: block; }
+
+.page.animate {
+    animation: fadein .35s ease both;
+}
 
 @keyframes fadein {
     from { opacity: 0; transform: translateY(8px); }
