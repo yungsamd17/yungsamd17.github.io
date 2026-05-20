@@ -3,10 +3,16 @@ function nav(page) {
     location.hash = (page === 'home') ? '' : page;
 }
 
+let isInitialLoad = true;
+
 function showPage(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const target = document.getElementById('pg-' + page);
     if (target) {
+        // Only add animation class if not initial load
+        if (!isInitialLoad) {
+            target.classList.add('animate');
+        }
         target.classList.add('active');
         window.scrollTo(0, 0);
         updateLiveRegion(page);
@@ -22,7 +28,7 @@ function showSecretPage() {
     if (existing) existing.remove();
     const footer = document.querySelector('.footer');
     const secretHTML = `
-        <div class="page active" id="pg-secret">
+        <div class="page active animate" id="pg-secret">
             <button class="back" onclick="nav('home')"><i class="fa-solid fa-arrow-left"></i> back</button>
             <h2 style="margin-top:40px">🎉 You found the secret page!</h2>
             <p style="margin-top:20px">Now go back to doing something useful.</p>
@@ -49,10 +55,12 @@ function getPageFromHash() {
 }
 
 window.addEventListener('hashchange', function () {
+    isInitialLoad = false;
     showPage(getPageFromHash());
 });
 
 showPage(getPageFromHash());
+isInitialLoad = false;
 
 // Util
 function updateAge() {
