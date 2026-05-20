@@ -360,6 +360,7 @@ a:active .handle { color: var(--hi); }
     display: block;
     margin-bottom: 10px;
     padding: 12px 14px;
+	background: var(--dim);
     border-radius: 8px;
     border: 1.5px solid transparent;
     transition: background-color .15s, border-color .15s, transform .15s, box-shadow .15s;
@@ -368,7 +369,6 @@ a:active .handle { color: var(--hi); }
 }
 
 .proj-item:hover {
-    background: var(--dim);
     border-color: var(--accent);
     transform: translateY(-1px);
     box-shadow: 0 4px 20px rgba(255, 138, 128, 0.15);
