@@ -4,7 +4,7 @@
     --hi:     #e8e8ec;
     --mid:    #6a6a72;
     --lo:     #32323a;
-    --dim:    #2a2a30;
+    --dim:    #2a2a3080;
     --item:   #a0a0a8;
     --focus:  #ff8a80;
 
@@ -18,7 +18,7 @@
     --hi:     #1a1a1a;
     --mid:    #6a6a72;
     --lo:     #c8c8d0;
-    --dim:    #fafafa;
+    --dim:    #fafafa80;
     --item:   #4a4a4a;
     --focus:  #ff8a80;
 }
@@ -306,77 +306,28 @@ a:active .handle { color: var(--hi); }
 }
 
 /* ── projects page ── */
-.proj-item { margin-bottom: 20px; }
 
-.proj-desc {
-    font-size: .82rem;
-    color: var(--mid);
-    font-weight: 300;
-    margin: 3px 0 6px;
-    line-height: 1.65;
-}
-
-.all-repos {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    width: 100%;
-    font-size: .66rem;
-    color: var(--mid);
-    text-decoration: none;
-    letter-spacing: .06em;
-    transition: color .15s;
-    margin-left: 14px;
-    padding: 4px 0;
-}
-
-.all-repos:hover,
-.all-repos:active { color: var(--hi); }
-
-/* ── mobile ── */
-@media (max-width: 480px) {
-    .page { padding: 52px 22px 48px; }
-    .theme-toggle, .lang-toggle { font-size: 1.1rem; width: 32px; height: 32px; }
-}
-
-/* ── footer ── */
-.footer {
-    max-width: 500px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 24px 28px 32px;
-    font-size: .72rem;
-    color: var(--mid);
-    text-align: center;
-    letter-spacing: .03em;
-}
-
-.footer-sep {
-    margin: 0 6px;
-}
-
-/* ── project cards hover & badges ── */
 .proj-item {
     display: block;
     margin-bottom: 10px;
-    padding: 12px 14px;
-	background: var(--dim);
+    padding: 12px 14px 6px;
+    background: var(--dim);
     border-radius: 8px;
-    border: 1.5px solid transparent;
-    transition: background-color .15s, border-color .15s, transform .15s, box-shadow .15s;
+    border: 1px solid var(--lo);
+    transition: background-color .15s, border-color .15s, transform .15s;
     text-decoration: none;
-    color: inherit;
+    color: var(--mid);
 }
 
 .proj-item:hover {
     border-color: var(--accent);
     transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(255, 138, 128, 0.15);
 }
 
 .proj-title {
     display: block;
     font-size: .9rem;
+    font-weight: 500;
     color: var(--item);
     padding: 2px 0;
     transition: color .15s;
@@ -387,12 +338,12 @@ a:active .handle { color: var(--hi); }
 }
 
 .proj-item:hover .proj-lang {
-    color: var(--hi);
-    border-color: var(--hi);
+    color: var(--accent);
+    border-color: var(--accent);
 }
 
 .proj-item:hover .proj-desc {
-    color: var(--hi);
+    color: var(--accent);
 }
 
 .proj-badge {
@@ -424,10 +375,50 @@ a:active .handle { color: var(--hi); }
     border: 1px solid var(--mid);
 }
 
-.proj-meta {
+.proj-desc {
+    font-size: .82rem;
+    color: var(--mid);
+    font-weight: 300;
+    margin: 3px 0 6px;
+    line-height: 1.65;
+}
+
+.all-repos {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin: 4px 0 6px;
-    flex-wrap: wrap;
+    gap: 7px;
+    width: 100%;
+    font-size: .66rem;
+    color: var(--mid);
+    text-decoration: none;
+    letter-spacing: .06em;
+    transition: color .15s;
+    margin-left: 14px;
+    padding: 4px 0;
 }
+
+.all-repos:hover,
+.all-repos:active { color: var(--hi); }
+
+/* ── footer ── */
+.footer {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px 28px 32px;
+    font-size: .72rem;
+    color: var(--mid);
+    text-align: center;
+    letter-spacing: .03em;
+}
+
+.footer-sep {
+    margin: 0 6px;
+}
+
+
+/* ── mobile ── */
+@media (max-width: 480px) {
+    .page { padding: 52px 22px 48px; }
+    .theme-toggle, .lang-toggle { font-size: 1.1rem; width: 32px; height: 32px; }
+	}
