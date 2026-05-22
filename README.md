@@ -47,8 +47,8 @@ Plus some nice things from the internet:
 
 | Project | What it does | Status |
 |---------|--------------|--------|
-| [Twitch Live](https://yungsamd17.github.io/Twitch-Live/) | Your ultimate companion for Twitch users | 🟢 Live |
-| [Koda](https://s17labs.github.io/koda) | Clean and lightweight text editor by s17 Labs | 🟢 Live |
+| [Twitch Live](https://yungsamd17.github.io/Twitch-Live/) | Your ultimate companion for Twitch | 🟢 Live |
+| [Koda](https://s17labs.github.io/koda) | Text editor  for Android by s17 Labs | 🟢 Live |
 | [UserScripts](https://yungsamd17.github.io/UserScripts/) | Twitch, X tweaks & more | 🟢 Live |
 | [s17 Labs Tools](https://s17labs.github.io/tools) | Privacy-first browser utilities | 🟢 Live |
 | [Volume Control](https://github.com/yungsamd17/Volume-Control) | Push tab volume beyond 100% | 📦 Repo only |
