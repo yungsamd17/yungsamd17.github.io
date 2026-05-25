@@ -65,9 +65,8 @@ button:focus-visible {
     flex: 1;
 }
 
-.page.active { display: block; }
-
-.page.animate {
+.page.active {
+    display: block;
     animation: fadein .35s ease both;
 }
 
