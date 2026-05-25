@@ -88,6 +88,8 @@ function applyLang(lang) {
     document.documentElement.setAttribute('lang', lang);
     updateContent(lang);
     updateAge();
+    var sel = document.querySelector('.lang-select-wrap select');
+    if (sel) sel.value = lang;
 }
 
 function updateContent(lang) {
@@ -100,9 +102,8 @@ function updateContent(lang) {
     });
 }
 
-function toggleLang() {
-    var currentIndex = languages.indexOf(currentLang);
-    currentLang = languages[(currentIndex + 1) % languages.length];
+function setLang(lang) {
+    currentLang = lang;
     localStorage.setItem('lang', currentLang);
     applyLang(currentLang);
 }

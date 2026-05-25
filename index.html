@@ -32,9 +32,13 @@
             <a href="links/" class="handle"><span class="handle">@yungsamd17</span></a>
         </div>
         <div class="header-buttons">
-            <button class="lang-toggle" onclick="toggleLang()" aria-label="Switch language">
-                <i class="fa-solid fa-language"></i>
-            </button>
+            <div class="lang-toggle lang-select-wrap">
+                <i class="fa-solid fa-language" style="pointer-events:none"></i>
+                <select onchange="setLang(this.value)" aria-label="Switch language">
+                    <option value="en">English</option>
+                    <option value="sk">Slovak</option>
+                </select>
+            </div>
             <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
                 <i class="fa-solid fa-desktop"></i>
             </button>

@@ -170,6 +170,17 @@ a:active .handle { color: var(--hi); }
 .lang-toggle:hover,
 .lang-toggle:active { color: var(--hi); }
 
+.lang-select-wrap {
+    position: relative;
+}
+
+.lang-select-wrap select {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
 /* ── home: link/nav list ── */
 .link-list {
     list-style: none;
