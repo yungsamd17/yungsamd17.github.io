@@ -41,7 +41,7 @@ yungsamd17.github.io/
 │   ├── translations.js    # Translation strings (en, sk)
 │   └── assets/            # Images and favicon
 │       ├── favicon.ico
-│       └── logo.png
+│       └── logo.jpg
 ├── downloader/            # BetterDiscord plugin/theme downloader tool
 │   ├── index.html
 │   ├── main.js

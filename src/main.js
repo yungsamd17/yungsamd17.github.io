@@ -1,3 +1,11 @@
+// Storage
+function getStorage(key, fallback) {
+    try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; }
+}
+function setStorage(key, value) {
+    try { localStorage.setItem(key, value); } catch {}
+}
+
 // Navigation
 if (history.scrollRestoration) {
     history.scrollRestoration = 'manual';
@@ -15,7 +23,7 @@ function showPage(page) {
     if (target) {
         target.classList.add('active');
         if (!isInitialLoad) {
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'auto' });
         }
         updateLiveRegion(page);
     }
@@ -28,7 +36,7 @@ function showSecretPage() {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const existing = document.getElementById('pg-secret');
     if (existing) existing.remove();
-    const footer = document.querySelector('.footer');
+    const footer = document.querySelector('footer');
     const secretHTML = `
         <div class="page active" id="pg-secret">
             <button class="back" onclick="nav('home')"><i class="fa-solid fa-arrow-left"></i> back</button>
@@ -83,13 +91,13 @@ updateAge();
 updateYear();
 
 // Language toggle
-var currentLang = localStorage.getItem('lang') || 'en';
+let currentLang = getStorage('lang', 'en');
 
 function applyLang(lang) {
     document.documentElement.setAttribute('lang', lang);
     updateContent(lang);
     updateAge();
-    var sel = document.querySelector('.lang-select-wrap select');
+    const sel = document.querySelector('.lang-select-wrap select');
     if (sel) sel.value = lang;
 }
 
@@ -97,7 +105,7 @@ function updateContent(lang) {
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (typeof translations !== 'undefined' && translations[lang] && translations[lang][key]) {
+        if (translations[lang] && translations[lang][key]) {
             el.innerHTML = translations[lang][key];
         }
     });
@@ -105,12 +113,12 @@ function updateContent(lang) {
 
 function setLang(lang) {
     currentLang = lang;
-    localStorage.setItem('lang', currentLang);
+    setStorage('lang', currentLang);
     applyLang(currentLang);
 }
 
 // Theme toggle
-var themes = ['light', 'dark'];
+const themes = ['light', 'dark'];
 
 function getSystemTheme() {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -119,8 +127,8 @@ function getSystemTheme() {
     return 'light';
 }
 
-var savedTheme = localStorage.getItem('theme');
-var currentTheme = savedTheme || getSystemTheme();
+const savedTheme = getStorage('theme');
+let currentTheme = savedTheme || getSystemTheme();
 
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
@@ -130,14 +138,14 @@ function applyTheme(theme) {
 function updateThemeIcon() {
     const icon = document.querySelector('.theme-toggle i');
     if (!icon) return;
-    var icons = { light: 'fa-moon', dark: 'fa-sun' };
+    const icons = { light: 'fa-moon', dark: 'fa-sun' };
     icon.className = 'fa-solid ' + icons[currentTheme];
 }
 
 function toggleTheme() {
-    var currentIndex = themes.indexOf(currentTheme);
+    const currentIndex = themes.indexOf(currentTheme);
     currentTheme = themes[(currentIndex + 1) % themes.length];
-    localStorage.setItem('theme', currentTheme);
+    setStorage('theme', currentTheme);
     applyTheme(currentTheme);
 }
 

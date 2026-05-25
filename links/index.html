@@ -137,7 +137,7 @@
                 </div>
             </a>
 
-            <a href="https://youtube.com/@yungsamd17" class="link-item">
+            <a href="https://youtube.com/@yungsamd17" target="_blank" rel="noopener" class="link-item">
                 <i class="fa-brands fa-youtube"></i>
                 <div class="link-info">
                     <span class="link-platform">YouTube</span>
@@ -193,7 +193,8 @@
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
             return 'light';
         };
-        const savedTheme = localStorage.getItem('theme');
+        let savedTheme;
+        try { savedTheme = localStorage.getItem('theme'); } catch {}
         const currentTheme = savedTheme || getSystemTheme();
         document.documentElement.setAttribute('data-theme', currentTheme);
     </script>

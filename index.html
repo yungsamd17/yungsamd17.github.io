@@ -20,13 +20,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <link rel="stylesheet" href="src/style.css">
     <meta name="google-site-verification" content="56-L3iSwypOtQIwMAVZwT51iLhmZTG1h1F88WIN3bGI" />
+    <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#e8e8ec" media="(prefers-color-scheme: light)">
 </head>
 <body>
+    <a href="#pg-home" class="skip-link">Skip to main content</a>
+    <noscript>This site works best with JavaScript enabled.</noscript>
 
 <!-- ══ HOME ══ -->
 <div class="page active" id="pg-home">
 
-    <div class="header">
+    <header>
         <div>
             <h1>Sam</h1>
             <a href="links/" class="handle"><span class="handle">@yungsamd17</span></a>
@@ -43,7 +47,7 @@
                 <i class="fa-solid fa-desktop"></i>
             </button>
         </div>
-    </div>
+    </header>
     <p class="tagline" data-i18n="tagline" onclick="toggleTagline()">building tools for the web</p>
 
     <ul class="link-list">
@@ -145,9 +149,9 @@
 
 </div>
 
-    <div class="footer">
+    <footer>
         <span>© 2023-<span id="year" onclick="nav('secret')">2026</span> Sam (yungsamd17)</span>
-    </div>
+    </footer>
 
     <div id="page-live" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
