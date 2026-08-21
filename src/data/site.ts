@@ -4,7 +4,7 @@ export const SITE = {
   title: 'Sam @yungsamd17',
   email: 'yungsamd@proton.me',
   url: 'https://yungsamd17.github.io',
-  description: 'Web developer',
+  description: 'Web developer building browser extensions, userscripts, and web tools — Sam (@yungsamd17)',
   birthDate: new Date(2003, 7, 1),
 } as const;
 
