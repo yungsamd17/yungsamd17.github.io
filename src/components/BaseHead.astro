@@ -1,6 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import { SITE } from '../data/site';
+import { SITE, SOCIALS, LINKS } from '../data/site';
 
 interface Props {
   title: string;
@@ -11,6 +11,25 @@ const { title, description = SITE.description } = Astro.props;
 const site = Astro.site ?? SITE.url;
 const canonical = new URL(Astro.url.pathname, site);
 const ogImage = new URL('logo.jpg', site);
+const sameAs = [
+  ...new Set([
+    ...SOCIALS.map((s) => s.href),
+    ...LINKS.filter((l) => l.platform !== 'Email').map((l) => l.href),
+    'https://greasyfork.org/en/users/1136673-yungsamd17',
+  ]),
+];
+const birthDate = `${SITE.birthDate.getFullYear()}-${String(SITE.birthDate.getMonth() + 1).padStart(2, '0')}-${String(SITE.birthDate.getDate()).padStart(2, '0')}`;
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  alternateName: SITE.handle,
+  url: `${SITE.url}/`,
+  email: `mailto:${SITE.email}`,
+  jobTitle: 'Web Developer',
+  birthDate,
+  sameAs,
+};
 ---
 
 <meta charset="utf-8" />
@@ -31,6 +50,7 @@ const ogImage = new URL('logo.jpg', site);
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
+<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
 
 <meta name="generator" content={Astro.generator} />
 <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)" />
