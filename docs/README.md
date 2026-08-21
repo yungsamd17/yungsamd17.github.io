@@ -22,7 +22,7 @@ Documentation for [yungsamd17.github.io](https://yungsamd17.github.io) - Sam's p
 
 | Tool | What it does |
 |------|--------------|
-| [Astro 5](https://astro.build) | Static site framework — zero JS by default |
+| [Astro 7](https://astro.build) | Static site framework — zero JS by default |
 | [Tailwind CSS 4](https://tailwindcss.com) | Utility-first styling with `@theme` tokens |
 | [TypeScript](https://www.typescriptlang.org) | Strict typing across data, i18n and scripts |
 | [@fontsource-variable/inter](https://fontsource.org/fonts/inter) | Self-hosted Inter, no font CDN |
@@ -78,7 +78,7 @@ yungsamd17.github.io/
 
 ### Prerequisites
 
-- **Node.js** 18.17+ or 20.3+ (Astro 5 requirement — LTS recommended)
+- **Node.js** 22+ (Astro 7 requirement — LTS recommended)
 - **npm** (comes with Node)
 
 ### Clone & run locally
