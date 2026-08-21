@@ -49,8 +49,7 @@ yungsamd17.github.io/
 │   │   ├── Footer.astro
 │   │   ├── Icon.astro       # Inline SVG icon set (no icon CDN)
 │   │   ├── LangToggle.astro # Language toggle button
-│   │   ├── ThemeToggle.astro
-│   │   └── ProjectCard.astro
+│   │   └── ThemeToggle.astro
 │   ├── data/
 │   │   └── site.ts          # All content: socials, featured, projects, links
 │   ├── i18n/
@@ -260,7 +259,7 @@ chore: bump astro to latest
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
 
 ---
 
