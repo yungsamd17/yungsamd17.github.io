@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { SITE, PROJECTS } from '../data/site';
+import { t } from '../i18n/ui';
+---
+
+<BaseLayout title={`${t('projectsTitle')} | ${SITE.title}`} description={SITE.description}>
+  <a
+    href="/"
+    class="inline-flex items-center gap-1.5 font-mono text-xs text-low hover:text-hi transition-colors reveal"
+  >
+    <Icon name="arrow-left" size={13} />
+    {t('back')}
+  </a>
+
+  <h1 class="mt-6 mb-6 text-2xl font-semibold tracking-tight reveal" style="--reveal-delay: 0.05s">
+    {t('projectsTitle')}
+  </h1>
+
+  <div class="grid gap-3 mb-8">
+    {PROJECTS.map((project, i) => <ProjectCard project={project} index={i} />)}
+  </div>
+
+  <a
+    href="https://github.com/yungsamd17?tab=repositories"
+    target="_blank"
+    rel="noopener"
+    class="group inline-flex items-center gap-2 font-mono text-xs tracking-wide text-low hover:text-accent transition-colors mb-8 reveal"
+    style="--reveal-delay: 0.3s"
+  >
+    <Icon name="github" size={14} />
+    {t('viewAll')}
+    <span class="group-hover:translate-x-0.5 transition-transform">
+      <Icon name="arrow-up-right" size={12} />
+    </span>
+  </a>
+</BaseLayout>

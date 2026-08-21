@@ -1,0 +1,43 @@
+---
+import Icon from './Icon.astro';
+import { t } from '../i18n/ui';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+
+const items = [
+  { href: '/', label: 'home' },
+  { href: '/projects/', label: 'projects' },
+  { href: '/about/', label: 'about' },
+  { href: '/links/', label: 'links' },
+];
+---
+
+<nav
+  class="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+  aria-label="Main navigation"
+>
+  <div
+    class="card-glass flex items-center gap-1 rounded-full px-2 py-1.5 max-w-[calc(100vw-2rem)] overflow-x-auto"
+  >
+    {
+      items.map((item) => (
+        <a
+          href={item.href}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+          class:list={[
+            'font-mono text-xs tracking-wide rounded-full px-3.5 py-1.5 whitespace-nowrap transition-colors duration-200',
+            isActive(item.href)
+              ? 'bg-accent-soft text-accent'
+              : 'text-mid hover:text-hi',
+          ]}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </div>
+</nav>
+
+<a href="#main" class="skip-link">{t('skipToContent')}</a>

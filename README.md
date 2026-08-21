@@ -17,29 +17,34 @@ I'm **Sam**, a self-taught web developer from Slovakia who likes to build things
 
 ## Tech Stack
 
-Built with the holy trinity of the web — no frameworks, no build tools, just pure:
+Rebuilt in 2026 — static, fast, and framework-powered:
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Astro](https://img.shields.io/badge/Astro-BC52EE?style=flat&logo=astro&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 
-Plus some nice things from the internet:
-- [Inter Font](https://fonts.google.com/specimen/Inter) — because typography matters
-- [Font Awesome](https://fontawesome.com) — icons for days
-- [GitHub Pages](https://pages.github.com) — where this lives
+Plus some nice things under the hood:
+- [Inter Variable](https://fontsource.org/fonts/inter) & [JetBrains Mono](https://fontsource.org/fonts/jetbrains-mono) — self-hosted, no font CDN
+- Inline SVG icon set — no icon CDN either
+- [View Transitions](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) — smooth page morphs
+- [GitHub Pages](https://pages.github.com) + Actions — where this lives
 
 ---
 
 ## Features
 
-- 🌗 **Dark/Light theme** — because your eyes deserve options (now defaults to dark!)
-- 🌍 **Bilingual** — English & Slovak (Ahoj!)
-- 🎨 **Radial gradient background** — subtle but pretty
-- ♿ **Accessible** — aria-live regions, focus styles, semantic HTML
-- 📱 **Mobile-friendly** — looks good on your phone too
-- 🎭 **Project cards with badges** — Live status & language tags
-- 🎂 **Auto-updating age** — I don't have to edit my age every year
-- 📅 **Dynamic copyright** — same for the year, future-proof!
+- 🌗 **System/Light/Dark theme** — follows your OS, no flash on load
+- 🌍 **Bilingual** — English & Slovak (Ahoj!), rendered statically
+- ✨ **View Transitions** — pages morph instead of reloading
+- 🌅 **Aurora backdrop** — drifting gradient glow + film grain
+- 🧊 **Glassmorphism cards** — frosted surfaces, springy hover physics
+- 🎯 **OKLCH color system** — perceptually uniform, wide-gamut tokens
+- ♿ **Accessible** — skip link, focus rings, aria labels, reduced-motion support
+- 📱 **Mobile-friendly** — fluid type, responsive bento layout
+- 🔍 **SEO-ready** — canonical URLs, OG/Twitter tags, JSON-LD, auto sitemap
+- ⚡ **Zero framework JS shipped** — Astro static output, ~5 KB of vanilla TS
+- 🎂 **Auto-updating age & year** — never edit those again
+- 🥚 **All easter eggs preserved** — tagline, console art, `?debug`, secret page
 
 ---
 
@@ -82,8 +87,19 @@ I'm part of, run, and develop for these orgs:
 
 ## Documentation
 
-- **[docs/](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/docs/README.md)** - Website documentation (adding languages, theme system, etc.)
-- **[links/](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/links/README.md)** - Links documentation
+- **[docs/](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/docs/README.md)** - Website documentation (structure, theme system, adding languages, deployment)
+
+---
+
+## Development
+
+```bash
+npm install     # install dependencies
+npm run dev     # dev server at localhost:4321
+npm run build   # production build → dist/
+```
+
+Deploys automatically to GitHub Pages on every push to `main` (see `.github/workflows/deploy.yml`).
 
 ---
 

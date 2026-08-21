@@ -1,0 +1,47 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  hideNav?: boolean;
+  wide?: boolean;
+}
+
+const { title, description, hideNav = false, wide = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" data-mode="system">
+  <head>
+    <BaseHead title={title} description={description} />
+    <script src="../scripts/app.ts"></script>
+  </head>
+  <body class="flex flex-col min-h-dvh">
+    <div class="backdrop" aria-hidden="true">
+      <div class="aurora aurora-a"></div>
+      <div class="aurora aurora-b"></div>
+      <div class="aurora aurora-c"></div>
+    </div>
+
+    {!hideNav && <Header />}
+
+    <main
+      id="main"
+      class:list={[
+        'w-full mx-auto px-6 flex-1',
+        wide ? 'max-w-2xl' : 'max-w-xl',
+        hideNav ? 'pt-10' : 'pt-24',
+      ]}
+    >
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>
