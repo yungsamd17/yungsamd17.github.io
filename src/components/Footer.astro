@@ -2,26 +2,6 @@
 import { SITE } from '../data/site';
 ---
 
-<footer class="max-w-xl mx-auto w-full px-6 pb-10 pt-4">
-  <div
-    class="flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[0.6875rem] tracking-wide text-low"
-  >
-    <p>
-      © 2023–<span class="year">2026</span>
-      <a href="/secret/" class="text-low hover:text-accent transition-colors" title="...?">
-        {SITE.name} ({SITE.handle})
-      </a>
-    </p>
-    <p class="opacity-70">
-      <a
-        href="https://github.com/yungsamd17/yungsamd17.github.io"
-        target="_blank"
-        rel="noopener"
-        class="hover:text-mid transition-colors"
-      >
-        source
-      </a>
-      · built with astro
-    </p>
-  </div>
+<footer class="site-footer">
+  <span>© 2023-<a href="/secret/" class="year-link" title="...?"><span class="year">2026</span></a> {SITE.name} ({SITE.handle})</span>
 </footer>

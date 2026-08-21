@@ -1,6 +1,3 @@
-const MODES = ['system', 'light', 'dark'] as const;
-type Mode = (typeof MODES)[number];
-
 function getStorage(key: string): string | null {
   try {
     return localStorage.getItem(key);
@@ -19,38 +16,25 @@ function systemPrefersDark(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-function applyTheme(mode: Mode) {
-  const dark = mode === 'dark' || (mode === 'system' && systemPrefersDark());
-  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-  document.documentElement.dataset.mode = mode;
-  const btn = document.getElementById('theme-toggle');
-  if (btn) {
-    btn.dataset.mode = mode;
-    btn.setAttribute(
-      'aria-label',
-      `Theme: ${mode} (click to change)`
-    );
-  }
+function currentTheme(): 'light' | 'dark' {
+  return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
 }
 
-function cycleTheme() {
-  const current = (document.documentElement.dataset.mode as Mode) || 'system';
-  const next = MODES[(MODES.indexOf(current) + 1) % MODES.length];
+function applyTheme(theme: 'light' | 'dark') {
+  document.documentElement.dataset.theme = theme;
+}
+
+function toggleTheme() {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
   setStorage('theme', next);
   applyTheme(next);
 }
 
 function initTheme() {
-  const saved = getStorage('theme') as Mode | null;
-  applyTheme(saved ?? 'system');
-  document.getElementById('theme-toggle')?.addEventListener('click', cycleTheme);
+  const saved = getStorage('theme');
+  applyTheme(saved === 'light' ? 'light' : saved === 'dark' ? 'dark' : systemPrefersDark() ? 'dark' : 'light');
+  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
 }
-
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-  if ((document.documentElement.dataset.mode as Mode) === 'system') {
-    applyTheme('system');
-  }
-});
 
 function initLang() {
   const select = document.getElementById('lang-select') as HTMLSelectElement | null;

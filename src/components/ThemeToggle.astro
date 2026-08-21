@@ -6,33 +6,13 @@ import { t } from '../i18n/ui';
 <button
   id="theme-toggle"
   type="button"
-  data-mode="system"
   aria-label={t('themeToggle')}
-  class="card-glass relative size-9 rounded-full grid place-items-center text-mid hover:text-hi hover:border-accent/40"
+  class="theme-toggle"
 >
-  <span class="theme-icon theme-icon-system">
-    <Icon name="monitor" size={15} />
-  </span>
   <span class="theme-icon theme-icon-light">
-    <Icon name="sun" size={15} />
+    <Icon name="moon" size={13} />
   </span>
   <span class="theme-icon theme-icon-dark">
-    <Icon name="moon" size={15} />
+    <Icon name="sun" size={13} />
   </span>
 </button>
-
-<style>
-  .theme-icon {
-    display: none;
-    place-items: center;
-  }
-  [data-mode='system'] .theme-icon-system {
-    display: grid;
-  }
-  [data-mode='light'] .theme-icon-light {
-    display: grid;
-  }
-  [data-mode='dark'] .theme-icon-dark {
-    display: grid;
-  }
-</style>

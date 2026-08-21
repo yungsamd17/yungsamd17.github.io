@@ -1,39 +1,40 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import { SITE, PROJECTS } from '../data/site';
 import { t } from '../i18n/ui';
 ---
 
 <BaseLayout title={`${t('projectsTitle')} | ${SITE.title}`} description={SITE.description}>
-  <a
-    href="/"
-    class="inline-flex items-center gap-1.5 font-mono text-xs text-low hover:text-hi transition-colors reveal"
-  >
-    <Icon name="arrow-left" size={13} />
-    {t('back')}
+  <a href="/" class="back">
+    <Icon name="arrow-left" size={12} />
+    <span data-lang="en">{t('back')}</span>
+    <span data-lang="sk">{t('back', 'sk')}</span>
   </a>
 
-  <h1 class="mt-6 mb-6 text-2xl font-semibold tracking-tight reveal" style="--reveal-delay: 0.05s">
-    {t('projectsTitle')}
-  </h1>
+  <h2><span data-lang="en">{t('projectsTitle')}</span><span data-lang="sk">{t('projectsTitle', 'sk')}</span></h2>
 
-  <div class="grid gap-3 mb-8">
-    {PROJECTS.map((project, i) => <ProjectCard project={project} index={i} />)}
-  </div>
+  {
+    PROJECTS.map((project) => (
+      <a href={project.href} target="_blank" rel="noopener" class="proj-item">
+        <span class="proj-title">{project.title}</span>
+        <div class="proj-meta">
+          {project.live && <span class="proj-badge live">Live</span>}
+          {project.langs.map((lang) => (
+            <span class="proj-lang">{lang}</span>
+          ))}
+        </div>
+        <p class="proj-desc">
+          <span data-lang="en">{project.desc.en}</span>
+          <span data-lang="sk">{project.desc.sk}</span>
+        </p>
+      </a>
+    ))
+  }
 
-  <a
-    href="https://github.com/yungsamd17?tab=repositories"
-    target="_blank"
-    rel="noopener"
-    class="group inline-flex items-center gap-2 font-mono text-xs tracking-wide text-low hover:text-accent transition-colors mb-8 reveal"
-    style="--reveal-delay: 0.3s"
-  >
-    <Icon name="github" size={14} />
-    {t('viewAll')}
-    <span class="group-hover:translate-x-0.5 transition-transform">
-      <Icon name="arrow-up-right" size={12} />
-    </span>
+  <a class="all-repos" href="https://github.com/yungsamd17?tab=repositories" target="_blank" rel="noopener">
+    <Icon name="github" size={11} />
+    <span data-lang="en">{t('viewAll')}</span>
+    <span data-lang="sk">{t('viewAll', 'sk')}</span>
   </a>
 </BaseLayout>

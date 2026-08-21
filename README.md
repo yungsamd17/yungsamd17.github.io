@@ -33,16 +33,14 @@ Plus some nice things under the hood:
 
 ## Features
 
-- 🌗 **System/Light/Dark theme** — follows your OS, no flash on load
+- 🌗 **Dark/Light theme** — follows your OS on first visit, no flash on load
 - 🌍 **Bilingual** — English & Slovak (Ahoj!), rendered statically
-- ✨ **View Transitions** — pages morph instead of reloading
-- 🌅 **Aurora backdrop** — drifting gradient glow + film grain
-- 🧊 **Glassmorphism cards** — frosted surfaces, springy hover physics
-- 🎯 **OKLCH color system** — perceptually uniform, wide-gamut tokens
-- ♿ **Accessible** — skip link, focus rings, aria labels, reduced-motion support
-- 📱 **Mobile-friendly** — fluid type, responsive bento layout
+- ✨ **Real routes** — proper URLs instead of hash navigation, with smooth fades
+- 🎨 **Classic minimal look** — the v1 design you know, now component-driven
+- ♿ **Accessible** — skip link, focus styles, semantic HTML, reduced-motion support
+- 📱 **Mobile-friendly** — looks good on your phone too
 - 🔍 **SEO-ready** — canonical URLs, OG/Twitter tags, JSON-LD, auto sitemap
-- ⚡ **Zero framework JS shipped** — Astro static output, ~5 KB of vanilla TS
+- ⚡ **Zero framework JS shipped** — Astro static output, a few KB of vanilla TS
 - 🎂 **Auto-updating age & year** — never edit those again
 - 🥚 **All easter eggs preserved** — tagline, console art, `?debug`, secret page
 

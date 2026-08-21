@@ -6,82 +6,56 @@ import { t } from '../i18n/ui';
 ---
 
 <BaseLayout title={`${t('aboutTitle')} | ${SITE.title}`} description={SITE.description}>
-  <a
-    href="/"
-    class="inline-flex items-center gap-1.5 font-mono text-xs text-low hover:text-hi transition-colors reveal"
-  >
-    <Icon name="arrow-left" size={13} />
-    {t('back')}
+  <a href="/" class="back">
+    <Icon name="arrow-left" size={12} />
+    <span data-lang="en">{t('back')}</span>
+    <span data-lang="sk">{t('back', 'sk')}</span>
   </a>
 
-  <h1 class="mt-6 mb-6 text-2xl font-semibold tracking-tight reveal" style="--reveal-delay: 0.05s">
-    {t('aboutTitle')}
-  </h1>
+  <h2><span data-lang="en">{t('aboutTitle')}</span><span data-lang="sk">{t('aboutTitle', 'sk')}</span></h2>
 
-  <div class="space-y-4 mb-8 text-[0.95rem] font-light leading-[1.85] text-mid reveal" style="--reveal-delay: 0.1s">
-    <p>
-      <span data-lang="en">
-        Hey, I'm <strong class="font-medium text-hi">Sam</strong> — a self-taught web developer from
-        <strong class="font-medium text-hi">Slovakia</strong>, <span class="age">…</span> years old.
-        I build <strong class="font-medium text-hi">browser extensions</strong>,
-        <strong class="font-medium text-hi">userscripts</strong>, and small tools that make platforms
-        like <a href="https://www.twitch.tv" target="_blank" rel="noopener" class="link-underline hover:text-hi">Twitch</a>,
-        <a href="https://x.com" target="_blank" rel="noopener" class="link-underline hover:text-hi">X</a>, and
-        <a href="https://betterdiscord.app" target="_blank" rel="noopener" class="link-underline hover:text-hi">BetterDiscord</a>
-        nicer to use.
-      </span>
-      <span data-lang="sk">
-        Ahoj, volám sa <strong class="font-medium text-hi">Sam</strong> — webový vývojár samouk zo
-        <strong class="font-medium text-hi">Slovenska</strong>, mám <span class="age">…</span> rokov.
-        Vytváram <strong class="font-medium text-hi">rozšírenia pre prehliadače</strong>,
-        <strong class="font-medium text-hi">používateľské skripty</strong> a malé nástroje, vďaka ktorým sa platformy ako
-        <a href="https://www.twitch.tv" target="_blank" rel="noopener" class="link-underline hover:text-hi">Twitch</a>,
-        <a href="https://x.com" target="_blank" rel="noopener" class="link-underline hover:text-hi">X</a> a
-        <a href="https://betterdiscord.app" target="_blank" rel="noopener" class="link-underline hover:text-hi">BetterDiscord</a>
-        stávajú príjemnejšie na používanie.
-      </span>
-    </p>
+  <p class="about-text">
+    <span data-lang="en">
+      Hey, I'm <strong>Sam</strong> — a self-taught web developer from <strong>Slovakia</strong>, <span class="age">…</span> years old.
+      I build <strong>browser extensions</strong>, <strong>userscripts</strong>, and small tools that make platforms
+      like <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>,
+      <a href="https://x.com" target="_blank" rel="noopener">X</a>, and
+      <a href="https://betterdiscord.app" target="_blank" rel="noopener">BetterDiscord</a> nicer to use.
+    </span>
+    <span data-lang="sk">
+      Ahoj, volám sa <strong>Sam</strong> — webový vývojár samouk zo <strong>Slovenska</strong>, mám <span class="age">…</span> rokov.
+      Vytváram <strong>rozšírenia pre prehliadače</strong>, <strong>používateľské skripty</strong> a malé nástroje, vďaka ktorým sa platformy
+      ako <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>,
+      <a href="https://x.com" target="_blank" rel="noopener">X</a> a
+      <a href="https://betterdiscord.app" target="_blank" rel="noopener">BetterDiscord</a> stávajú príjemnejšie na používanie.
+    </span>
+  </p>
 
-    <p>
-      <span data-lang="en">
-        I also make <strong class="font-medium text-hi">Android apps</strong>
-        <span class="pill align-middle mx-1"><Icon name="android" size={9} /> Java · Kotlin</span> —
-        mostly clean, minimal things like text editors and note apps.
-        Under <a href="https://s17labs.github.io" target="_blank" rel="noopener" class="link-underline hover:text-hi"><strong class="font-medium text-hi">s17 Labs</strong></a>,
-        I focus on lightweight, privacy-first software for the web and mobile.
-      </span>
-      <span data-lang="sk">
-        Tiež tvorím <strong class="font-medium text-hi">Android aplikácie</strong>
-        <span class="pill align-middle mx-1"><Icon name="android" size={9} /> Java · Kotlin</span> —
-        väčšinou čisté, minimalistické veci ako textové editory a poznámkové aplikácie.
-        Pod <a href="https://s17labs.github.io" target="_blank" rel="noopener" class="link-underline hover:text-hi"><strong class="font-medium text-hi">s17 Labs</strong></a>
-        sa zameriavam na ľahký softvér s dôrazom na súkromie pre web a mobilné zariadenia.
-      </span>
-    </p>
+  <p class="about-text">
+    <span data-lang="en">
+      I also make <strong>Android apps</strong> <span class="chip"><Icon name="android" size={9} /> Java · Kotlin</span> —
+      mostly clean, minimal things like text editors and note apps.
+      Under <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a>,
+      I focus on lightweight, privacy-first software for the web and mobile.
+    </span>
+    <span data-lang="sk">
+      Tiež tvorím <strong>Android aplikácie</strong> <span class="chip"><Icon name="android" size={9} /> Java · Kotlin</span> —
+      väčšinou čisté, minimalistické veci ako textové editory a poznámkové aplikácie.
+      Pod <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a>
+      sa zameriavam na ľahký softvér s dôrazom na súkromie pre web a mobilné zariadenia.
+    </span>
+  </p>
 
-    <p>
-      <span data-lang="en">
-        You can reach me at
-        <a href={`mailto:${SITE.email}`} class="link-underline hover:text-hi">{SITE.email}</a>
-        or find me on
-        <a href="https://x.com/yungsamd17" target="_blank" rel="noopener" class="link-underline hover:text-hi">X</a>
-        and
-        <a href="https://github.com/yungsamd17" target="_blank" rel="noopener" class="link-underline hover:text-hi">GitHub</a>.
-      </span>
-      <span data-lang="sk">
-        Môžete ma kontaktovať na
-        <a href={`mailto:${SITE.email}`} class="link-underline hover:text-hi">{SITE.email}</a>
-        alebo ma nájdete na
-        <a href="https://x.com/yungsamd17" target="_blank" rel="noopener" class="link-underline hover:text-hi">X</a>
-        a
-        <a href="https://github.com/yungsamd17" target="_blank" rel="noopener" class="link-underline hover:text-hi">GitHub</a>.
-      </span>
-    </p>
-  </div>
-
-  <div class="flex flex-wrap gap-2 mb-8 reveal" style="--reveal-delay: 0.18s">
-    {['TypeScript', 'JavaScript', 'Java', 'Kotlin', 'CSS'].map((tech) => (
-      <span class="pill">{tech}</span>
-    ))}
-  </div>
+  <p class="about-text">
+    <span data-lang="en">
+      You can reach me at <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      or find me on <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X</a>
+      and <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.
+    </span>
+    <span data-lang="sk">
+      Môžete ma kontaktovať na <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      alebo ma nájdete na <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X</a>
+      a <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.
+    </span>
+  </p>
 </BaseLayout>

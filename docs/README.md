@@ -24,7 +24,7 @@ Documentation for [yungsamd17.github.io](https://yungsamd17.github.io) - Sam's p
 | [Astro 5](https://astro.build) | Static site framework — zero JS by default |
 | [Tailwind CSS 4](https://tailwindcss.com) | Utility-first styling with `@theme` tokens |
 | [TypeScript](https://www.typescript.com) | Strict typing across data, i18n and scripts |
-| [@fontsource-variable](https://fontsource.org/fonts/inter) | Self-hosted Inter & JetBrains Mono |
+| [@fontsource-variable/inter](https://fontsource.org/fonts/inter) | Self-hosted Inter, no font CDN |
 | [GitHub Actions](https://github.com/features/actions) | Build & deploy on every push |
 
 ---
@@ -43,10 +43,8 @@ yungsamd17.github.io/
 │   ├── src/assets/          # Legacy asset path (kept for old links)
 │   └── downloader/          # BetterDiscord downloader tool (vanilla JS)
 ├── src/
-│   ├── assets/
 │   ├── components/
 │   │   ├── BaseHead.astro   # SEO meta, OG tags, no-FOUC theme/lang script
-│   │   ├── Header.astro     # Floating glass pill navigation
 │   │   ├── Footer.astro
 │   │   ├── Icon.astro       # Inline SVG icon set (no icon CDN)
 │   │   ├── LangSelect.astro
@@ -68,7 +66,7 @@ yungsamd17.github.io/
 │   ├── scripts/
 │   │   └── app.ts           # Client JS: theme, lang, age, easter eggs
 │   └── styles/
-│       └── global.css       # Design tokens, aurora backdrop, motion
+│       └── global.css       # Design tokens (v1 look), components, motion
 ├── docs/                    # This documentation
 └── .github/
     ├── FUNDING.yml
@@ -104,29 +102,30 @@ UI labels live in **`src/i18n/ui.ts`**. Edit, save, and the dev server hot-reloa
 
 ## Design System
 
-Tokens are defined once in `src/styles/global.css` and mapped into Tailwind via `@theme inline`:
+The visual design intentionally replicates the original v1 site. Tokens live in `src/styles/global.css` and are mapped into Tailwind via `@theme inline`:
 
-| Token | Purpose |
-|-------|---------|
-| `--bg`, `--raised` | Page & surface backgrounds |
-| `--hi`, `--mid`, `--low` | Text hierarchy |
-| `--accent` | Brand coral (oklch) |
-| `--glass`, `--glass-line` | Glass card surfaces |
-| `--glow-a/b/c` | Aurora backdrop blobs |
+| Token | Value (dark) | Purpose |
+|-------|--------------|---------|
+| `--bg` | `#0e0e10` | Page background |
+| `--accent` | `#ff8a80` | Brand coral |
+| `--hi` | `#e8e8ec` | Primary text |
+| `--mid` | `#6a6a72` | Secondary text |
+| `--lo` | `#32323a` | Borders |
+| `--dim` | `#2a2a3080` | Card backgrounds |
+| `--item` | `#a0a0a8` | Link/text items |
 
-Use them as utilities: `text-mid`, `bg-accent-soft`, `border-line`, `font-mono`, etc.
-Components: `.card-glass`, `.pill`, `.micro-label`, `.link-underline`, `.reveal`.
+Component classes mirror v1: `.page`, `.link-list`, `.featured-link`, `.nav-btn`, `.proj-item`, `.about-text`, `.chip`, `.tag`, plus the radial gradient body background and the 500px column layout.
 
 ---
 
 ## Theme System
 
-Three modes: **system → light → dark** (cycled by the header button).
+Two modes: **light ↔ dark**, defaulting to the OS preference on first visit (same as v1).
 
-1. **No-FOUC:** an inline script in `BaseHead.astro` applies the saved mode before first paint
-2. **CSS:** tokens flip under `[data-theme="light"]`; dark is the default
+1. **No-FOUC:** an inline script in `BaseHead.astro` applies the saved theme before first paint
+2. **CSS:** tokens flip under `[data-theme="light"]`; dark is the markup default
 3. **Persistence:** `localStorage['theme']`
-4. **Live sync:** switching OS theme while in *system* mode updates instantly
+4. **Toggle icon:** moon in light mode, sun in dark mode
 
 ---
 
