@@ -276,6 +276,7 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
   border: none;
   font-family: inherit;
   text-align: left;
+  text-decoration: none;
 }
 
 .nav-btn:hover,
