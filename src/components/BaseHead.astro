@@ -40,18 +40,25 @@ const ogImage = new URL('logo.jpg', site);
 <script is:inline>
   (() => {
     try {
-      let theme = localStorage.getItem('theme');
-      if (theme !== 'light' && theme !== 'dark') {
-        theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      document.documentElement.dataset.theme = theme;
+      let mode = localStorage.getItem('theme');
+      if (mode !== 'light' && mode !== 'dark') mode = 'system';
+      const dark = mode === 'dark' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      document.documentElement.dataset.themeMode = mode;
     } catch {
       document.documentElement.dataset.theme = 'dark';
+      document.documentElement.dataset.themeMode = 'system';
     }
     try {
-      const lang = localStorage.getItem('lang');
-      if (lang === 'sk' || lang === 'en') document.documentElement.lang = lang;
-    } catch {}
+      let lang = localStorage.getItem('lang');
+      if (lang !== 'sk' && lang !== 'en') {
+        const prefs = navigator.languages?.length ? navigator.languages : [navigator.language];
+        lang = prefs.some((l) => l?.toLowerCase().startsWith('sk')) ? 'sk' : 'en';
+      }
+      document.documentElement.lang = lang;
+    } catch {
+      document.documentElement.lang = 'en';
+    }
   })();
 </script>
 

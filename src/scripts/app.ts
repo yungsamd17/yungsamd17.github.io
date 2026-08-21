@@ -1,3 +1,5 @@
+import { t } from '../i18n/ui';
+
 function getStorage(key: string): string | null {
   try {
     return localStorage.getItem(key);
@@ -12,39 +14,77 @@ function setStorage(key: string, value: string) {
   } catch {}
 }
 
+type ThemeMode = 'system' | 'light' | 'dark';
+
+const THEME_ORDER: ThemeMode[] = ['system', 'light', 'dark'];
+
 function systemPrefersDark(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-function currentTheme(): 'light' | 'dark' {
-  return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+function currentLang(): 'en' | 'sk' {
+  return document.documentElement.lang === 'sk' ? 'sk' : 'en';
 }
 
-function applyTheme(theme: 'light' | 'dark') {
-  document.documentElement.dataset.theme = theme;
+function currentThemeMode(): ThemeMode {
+  const mode = document.documentElement.dataset.themeMode;
+  return mode === 'light' || mode === 'dark' ? mode : 'system';
 }
 
-function toggleTheme() {
-  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+function resolveTheme(mode: ThemeMode): 'light' | 'dark' {
+  if (mode !== 'system') return mode;
+  return systemPrefersDark() ? 'dark' : 'light';
+}
+
+function applyTheme(mode: ThemeMode) {
+  document.documentElement.dataset.themeMode = mode;
+  document.documentElement.dataset.theme = resolveTheme(mode);
+}
+
+function cycleTheme() {
+  const next = THEME_ORDER[(THEME_ORDER.indexOf(currentThemeMode()) + 1) % THEME_ORDER.length];
   setStorage('theme', next);
   applyTheme(next);
+  showToast(t(next === 'system' ? 'toastThemeSystem' : next === 'light' ? 'toastThemeLight' : 'toastThemeDark', currentLang()));
 }
 
 function initTheme() {
   const saved = getStorage('theme');
-  applyTheme(saved === 'light' ? 'light' : saved === 'dark' ? 'dark' : systemPrefersDark() ? 'dark' : 'light');
-  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+  applyTheme(saved === 'light' || saved === 'dark' ? saved : 'system');
+  document.getElementById('theme-toggle')?.addEventListener('click', cycleTheme);
 }
 
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (currentThemeMode() === 'system') applyTheme('system');
+});
+
 function initLang() {
-  const select = document.getElementById('lang-select') as HTMLSelectElement | null;
-  if (!select) return;
-  select.value = document.documentElement.lang === 'sk' ? 'sk' : 'en';
-  select.addEventListener('change', () => {
-    const lang = select.value === 'sk' ? 'sk' : 'en';
-    document.documentElement.lang = lang;
-    setStorage('lang', lang);
+  document.getElementById('lang-toggle')?.addEventListener('click', () => {
+    const next = currentLang() === 'sk' ? 'en' : 'sk';
+    document.documentElement.lang = next;
+    setStorage('lang', next);
+    showToast(t(next === 'sk' ? 'toastLangSk' : 'toastLangEn'));
   });
+}
+
+let toastTimer: ReturnType<typeof setTimeout> | undefined;
+
+function showToast(message: string) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    toast.setAttribute('role', 'status');
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+    toastTimer = undefined;
+  }, 2000);
 }
 
 function updateAge() {
@@ -69,7 +109,7 @@ function initTaglineEasterEgg() {
   if (!tagline) return;
   tagline.addEventListener('click', () => {
     if (taglineTimer) return;
-    const lang = document.documentElement.lang === 'sk' ? 'sk' : 'en';
+    const lang = currentLang();
     const alt = lang === 'sk' ? 'tvorím chyby pre web' : 'building bugs for the web';
     const spans = tagline.querySelectorAll<HTMLElement>('[data-lang]');
     const originals = new Map<HTMLElement, string>();
@@ -116,8 +156,11 @@ function initPage() {
 document.addEventListener('astro:before-swap', (event) => {
   clearTimeout(taglineTimer);
   taglineTimer = undefined;
+  clearTimeout(toastTimer);
+  toastTimer = undefined;
   const { newDocument } = event as CustomEvent<{ newDocument: Document }>;
   newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
+  newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;
   newDocument.documentElement.lang = document.documentElement.lang;
 });
 
