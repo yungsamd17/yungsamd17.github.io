@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE, PROJECTS } from '../data/site';
+import { t } from '../i18n/ui';
+---
+
+<BaseLayout title={`${t('projectsTitle')} | ${SITE.title}`} description={SITE.description}>
+  <a href="/" class="back">
+    <Icon name="arrow-left" size={12} />
+    <span data-lang="en">{t('back')}</span>
+    <span data-lang="sk">{t('back', 'sk')}</span>
+  </a>
+
+  <h2><span data-lang="en">{t('projectsTitle')}</span><span data-lang="sk">{t('projectsTitle', 'sk')}</span></h2>
+
+  {
+    PROJECTS.map((project) => (
+      <a href={project.href} target="_blank" rel="noopener" class="proj-item">
+        <span class="proj-title">{project.title}</span>
+        <div class="proj-meta">
+          {project.live && <span class="proj-badge live">Live</span>}
+          {project.langs.map((lang) => (
+            <span class="proj-lang">{lang}</span>
+          ))}
+        </div>
+        <p class="proj-desc">
+          <span data-lang="en">{project.desc.en}</span>
+          <span data-lang="sk">{project.desc.sk}</span>
+        </p>
+      </a>
+    ))
+  }
+
+  <a class="all-repos" href="https://github.com/yungsamd17?tab=repositories" target="_blank" rel="noopener">
+    <Icon name="github" size={11} />
+    <span data-lang="en">{t('viewAll')}</span>
+    <span data-lang="sk">{t('viewAll', 'sk')}</span>
+  </a>
+</BaseLayout>

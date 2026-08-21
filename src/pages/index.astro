@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import LangToggle from '../components/LangToggle.astro';
+import { SITE, SOCIALS, FEATURED } from '../data/site';
+import { t } from '../i18n/ui';
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  url: SITE.url,
+  email: `mailto:${SITE.email}`,
+  sameAs: SOCIALS.map((s) => s.href),
+  jobTitle: 'Web Developer',
+});
+---
+
+<BaseLayout title={SITE.title} description={SITE.description}>
+  <script type="application/ld+json" set:html={jsonLd} />
+
+  <header class="site-header">
+    <div>
+      <h1>{SITE.name}</h1>
+      <a href="/links/" class="handle"><span class="handle">@{SITE.handle}</span></a>
+    </div>
+    <div class="header-buttons">
+      <LangToggle />
+      <ThemeToggle />
+    </div>
+  </header>
+
+  <p class="tagline" data-easter="tagline">
+    <span data-lang="en">{t('tagline')}</span>
+    <span data-lang="sk">{t('tagline', 'sk')}</span>
+  </p>
+
+  <ul class="link-list">
+    {
+      SOCIALS.map((social) => (
+        <li>
+          <a href={social.href} target="_blank" rel="noopener">
+            {social.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="gap">
+    {
+      FEATURED.map((item) => (
+        <a class="featured-link" href={item.href} target="_blank" rel="noopener">
+          {item.title}
+          {item.badge && (
+            <span class="tag">
+              <Icon name="github" size={9} />
+              {item.badge}
+            </span>
+          )}
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="gap">
+    <button class="nav-btn" onclick="location.href='/projects/'">
+      <span data-lang="en">{t('navProjects')}</span>
+      <span data-lang="sk">{t('navProjects', 'sk')}</span>
+    </button>
+    <button class="nav-btn" onclick="location.href='/about/'">
+      <span data-lang="en">{t('navAbout')}</span>
+      <span data-lang="sk">{t('navAbout', 'sk')}</span>
+    </button>
+  </div>
+</BaseLayout>

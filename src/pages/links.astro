@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE, LINKS } from '../data/site';
+import { t } from '../i18n/ui';
+---
+
+<BaseLayout
+  title={`${t('linksTitle')} | ${SITE.title}`}
+  description={t('linksMeta')}
+  standalone
+>
+  <div class="links-header">
+    <h1>{SITE.name}</h1>
+    <span class="handle">@{SITE.handle}</span>
+  </div>
+
+  <div class="links-list">
+    {
+      LINKS.map((link) => (
+        <a
+          href={link.href}
+          target={link.href.startsWith('mailto') ? undefined : '_blank'}
+          rel="noopener"
+          class="link-item"
+        >
+          <Icon name={link.icon} size={17} />
+          <div class="link-info">
+            <span class="link-platform">{link.platform}</span>
+            <span class="link-username">{link.username}</span>
+          </div>
+        </a>
+      ))
+    }
+
+    <a href="/" class="link-item" style="margin-top: 20px;">
+      <Icon name="arrow-left" size={16} />
+      <div class="link-info">
+        <span class="link-platform">{t('linksBack')}</span>
+        <span class="link-username">yungsamd17.github.io</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="links-footer">
+    © 2023–<span class="year">2026</span> {SITE.name} ({SITE.handle})
+  </div>
+</BaseLayout>

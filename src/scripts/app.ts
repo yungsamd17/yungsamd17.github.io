@@ -1,0 +1,167 @@
+import { t } from '../i18n/ui';
+
+function getStorage(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function setStorage(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {}
+}
+
+type ThemeMode = 'system' | 'light' | 'dark';
+
+const THEME_ORDER: ThemeMode[] = ['system', 'light', 'dark'];
+
+function systemPrefersDark(): boolean {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function currentLang(): 'en' | 'sk' {
+  return document.documentElement.lang === 'sk' ? 'sk' : 'en';
+}
+
+function currentThemeMode(): ThemeMode {
+  const mode = document.documentElement.dataset.themeMode;
+  return mode === 'light' || mode === 'dark' ? mode : 'system';
+}
+
+function resolveTheme(mode: ThemeMode): 'light' | 'dark' {
+  if (mode !== 'system') return mode;
+  return systemPrefersDark() ? 'dark' : 'light';
+}
+
+function applyTheme(mode: ThemeMode) {
+  document.documentElement.dataset.themeMode = mode;
+  document.documentElement.dataset.theme = resolveTheme(mode);
+}
+
+function cycleTheme() {
+  const next = THEME_ORDER[(THEME_ORDER.indexOf(currentThemeMode()) + 1) % THEME_ORDER.length];
+  setStorage('theme', next);
+  applyTheme(next);
+  showToast(t(next === 'system' ? 'toastThemeSystem' : next === 'light' ? 'toastThemeLight' : 'toastThemeDark', currentLang()));
+}
+
+function initTheme() {
+  const saved = getStorage('theme');
+  applyTheme(saved === 'light' || saved === 'dark' ? saved : 'system');
+  document.getElementById('theme-toggle')?.addEventListener('click', cycleTheme);
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (currentThemeMode() === 'system') applyTheme('system');
+});
+
+function initLang() {
+  document.getElementById('lang-toggle')?.addEventListener('click', () => {
+    const next = currentLang() === 'sk' ? 'en' : 'sk';
+    document.documentElement.lang = next;
+    setStorage('lang', next);
+    showToast(t(next === 'sk' ? 'toastLangSk' : 'toastLangEn'));
+  });
+}
+
+let toastTimer: ReturnType<typeof setTimeout> | undefined;
+
+function showToast(message: string) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    toast.setAttribute('role', 'status');
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+    toastTimer = undefined;
+  }, 2000);
+}
+
+function updateAge() {
+  document.querySelectorAll('.age').forEach((el) => {
+    const now = new Date();
+    let age = now.getFullYear() - 2003;
+    if (now < new Date(now.getFullYear(), 7, 1)) age--;
+    el.textContent = String(age);
+  });
+}
+
+function updateYear() {
+  document.querySelectorAll('.year').forEach((el) => {
+    el.textContent = String(new Date().getFullYear());
+  });
+}
+
+let taglineTimer: ReturnType<typeof setTimeout> | undefined;
+
+function initTaglineEasterEgg() {
+  const tagline = document.querySelector<HTMLElement>('[data-easter="tagline"]');
+  if (!tagline) return;
+  tagline.addEventListener('click', () => {
+    if (taglineTimer) return;
+    const lang = currentLang();
+    const alt = lang === 'sk' ? 'tvorím chyby pre web' : 'building bugs for the web';
+    const spans = tagline.querySelectorAll<HTMLElement>('[data-lang]');
+    const originals = new Map<HTMLElement, string>();
+    spans.forEach((s) => {
+      originals.set(s, s.textContent ?? '');
+      if (s.dataset.lang === lang) s.textContent = alt;
+    });
+    taglineTimer = setTimeout(() => {
+      spans.forEach((s) => {
+        s.textContent = originals.get(s) ?? '';
+      });
+      taglineTimer = undefined;
+    }, 2000);
+  });
+}
+
+function consoleArt() {
+  if ((window as any).__consoleArt) return;
+  (window as any).__consoleArt = true;
+  console.log('%c🛠️ Welcome to my website!', 'font-size: 20px; font-weight: bold; color: #ff8a80;');
+  console.log('%cThanks for checking out my code.', 'font-size: 14px; color: #6a6a72;');
+  console.log('%cFeel free to reach out: yungsamd@proton.me', 'font-size: 12px; color: #a0a0a8;');
+}
+
+function debugParam() {
+  if ((window as any).__debugApplied) return;
+  if (new URLSearchParams(location.search).get('debug') === 'true') {
+    (window as any).__debugApplied = true;
+    console.log('%c🐛 Debug mode activated!', 'font-size: 16px; color: #4caf50;');
+    document.body.style.border = '3px solid #4caf50';
+  }
+}
+
+function initPage() {
+  initTheme();
+  initLang();
+  updateAge();
+  updateYear();
+  initTaglineEasterEgg();
+  consoleArt();
+  debugParam();
+}
+
+document.addEventListener('astro:before-swap', (event) => {
+  clearTimeout(taglineTimer);
+  taglineTimer = undefined;
+  clearTimeout(toastTimer);
+  toastTimer = undefined;
+  const { newDocument } = event as CustomEvent<{ newDocument: Document }>;
+  newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
+  newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;
+  newDocument.documentElement.lang = document.documentElement.lang;
+});
+
+document.addEventListener('astro:page-load', initPage);

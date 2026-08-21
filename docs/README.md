@@ -3,23 +3,30 @@
 Documentation for [yungsamd17.github.io](https://yungsamd17.github.io) - Sam's personal website.
 
 ## Table of Contents
+- [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
-- [Links Page](#links-page)
-- [Adding a New Language](#adding-a-new-language)
-- [Downloader Tool](#downloader-tool)
-- [Easter Eggs](#easter-eggs)
-- [Commit Message Types](#commit-message-types)
+- [Getting Started](#getting-started)
+- [Content Editing](#content-editing)
+- [Design System](#design-system)
 - [Theme System](#theme-system)
 - [Translation System](#translation-system)
+- [Toasts](#toasts)
+- [Adding a New Language](#adding-a-new-language)
+- [Easter Eggs](#easter-eggs)
+- [Deployment](#deployment)
+- [Commit Message Types](#commit-message-types)
 
 ---
 
-## Links Page
+## Tech Stack
 
-A simple, clean page that displays all your social links and profiles in one place.
-
-**Live page:** [yungsamd17.github.io/links](https://yungsamd17.github.io/links)<br>
-**Documentation:** [links/README.md](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/links/README.md)
+| Tool | What it does |
+|------|--------------|
+| [Astro 5](https://astro.build) | Static site framework — zero JS by default |
+| [Tailwind CSS 4](https://tailwindcss.com) | Utility-first styling with `@theme` tokens |
+| [TypeScript](https://www.typescriptlang.org) | Strict typing across data, i18n and scripts |
+| [@fontsource-variable/inter](https://fontsource.org/fonts/inter) | Self-hosted Inter, no font CDN |
+| [GitHub Actions](https://github.com/features/actions) | Build & deploy on every push |
 
 ---
 
@@ -27,145 +34,201 @@ A simple, clean page that displays all your social links and profiles in one pla
 
 ```
 yungsamd17.github.io/
-├── index.html              # Main HTML file (single-page app)
-├── README.md               # Main repo README
-├── LICENSE                 # MIT License
-├── robots.txt              # SEO robots file
-├── sitemap.xml             # SEO sitemap
-├── .github/               # GitHub config (workflows, etc.)
-├── docs/                  # Documentation (this directory)
-│   └── README.md         # This file
-├── src/                   # Source files
-│   ├── style.css          # Styles (CSS variables, themes, responsive)
-│   ├── main.js           # Main JavaScript (navigation, theme, lang, easter eggs)
-│   ├── translations.js    # Translation strings (en, sk)
-│   └── assets/            # Images and favicon
-│       ├── favicon.ico
-│       └── logo.jpg
-├── downloader/            # BetterDiscord plugin/theme downloader tool
-│   ├── index.html
-│   ├── main.js
-│   ├── downloader.js
-│   └── README.md
-└── links/                 # Social links page
-    ├── index.html          # Links page (uses ../src/style.css)
-    └── README.md          # Links page documentation
+├── astro.config.mjs         # Astro config (site URL, sitemap, Tailwind)
+├── package.json
+├── tsconfig.json
+├── public/                  # Static files served as-is
+│   ├── favicon.ico
+│   ├── logo.jpg
+│   ├── robots.txt
+│   ├── src/assets/          # Legacy asset path (kept for old links)
+│   └── downloader/          # BetterDiscord downloader tool (vanilla JS)
+├── src/
+│   ├── components/
+│   │   ├── BaseHead.astro   # SEO meta, OG tags, no-FOUC theme/lang script
+│   │   ├── Footer.astro
+│   │   ├── Icon.astro       # Inline SVG icon set (no icon CDN)
+│   │   ├── LangToggle.astro # Language toggle button
+│   │   └── ThemeToggle.astro
+│   ├── data/
+│   │   └── site.ts          # All content: socials, featured, projects, links
+│   ├── i18n/
+│   │   └── ui.ts            # UI strings (en / sk)
+│   ├── layouts/
+│   │   └── BaseLayout.astro
+│   ├── pages/
+│   │   ├── index.astro      # Home
+│   │   ├── projects.astro
+│   │   ├── about.astro
+│   │   ├── links.astro      # Link-in-bio page
+│   │   └── 404.astro
+│   ├── scripts/
+│   │   └── app.ts           # Client JS: theme, lang, toasts, age, easter eggs
+│   └── styles/
+│       └── global.css       # Design tokens (v1 look), components, motion
+├── docs/                    # This documentation
+└── .github/
+    ├── FUNDING.yml
+    └── workflows/deploy.yml # Build & deploy to GitHub Pages
 ```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** 18.17+ or 20.3+ (Astro 5 requirement — LTS recommended)
+- **npm** (comes with Node)
+
+### Clone & run locally
+
+```bash
+git clone https://github.com/yungsamd17/yungsamd17.github.io.git
+cd yungsamd17.github.io
+npm install     # install dependencies
+npm run dev     # dev server at localhost:4321 with hot reload
+```
+
+### Production build
+
+```bash
+npm run build      # production build → dist/
+npm run preview    # serve dist/ locally to verify the build
+```
+
+---
+
+## Content Editing
+
+Almost all content lives in **`src/data/site.ts`**:
+
+- `SITE` — name, handle, email, birth date
+- `SOCIALS` — home page social icons
+- `FEATURED` — featured project cards on home
+- `PROJECTS` — cards on `/projects`
+- `LINKS` — rows on `/links`
+
+UI labels and toast messages live in **`src/i18n/ui.ts`**. Edit, save, and the dev server hot-reloads.
+
+---
+
+## Design System
+
+The visual design intentionally replicates the original v1 site. Tokens live in `src/styles/global.css` and are mapped into Tailwind via `@theme inline`:
+
+| Token | Dark | Light | Purpose |
+|-------|------|-------|---------|
+| `--bg` | `#0e0e10` | `#e8e8ec` | Page background |
+| `--accent` | `#ff8a80` | `#ff8a80` | Brand coral |
+| `--hi` | `#e8e8ec` | `#1a1a1a` | Primary text |
+| `--mid` | `#6a6a72` | `#6a6a72` | Secondary text |
+| `--lo` | `#32323a` | `#c8c8d0` | Borders, elevated surfaces |
+| `--dim` | `#2a2a3080` | `#fafafa80` | Card backgrounds |
+| `--item` | `#a0a0a8` | `#4a4a4a` | Link/text items |
+
+Component classes mirror v1: `.page`, `.link-list`, `.featured-link`, `.nav-btn`, `.proj-item`, `.about-text`, `.chip`, `.tag`, plus the radial gradient body background and the 500px column layout.
+
+App-like viewport behavior: `html` gets a definite height and `body` uses `min-height: 100dvh`, so pages fit the visible screen exactly (no browser-toolbar overflow) and only scroll when content genuinely exceeds it.
+
+---
+
+## Theme System
+
+Three modes cycled by the header toggle: **system → light → dark → system**. `system` (monitor icon) is the default and follows the OS preference live.
+
+Two attributes on `<html>` drive everything:
+
+- `data-theme` — the *resolved* theme (`light` / `dark`), used by all CSS tokens
+- `data-theme-mode` — the *chosen* mode (`system` / `light` / `dark`), used for the toggle icon (monitor / sun / moon) and resolution
+
+How it works:
+
+1. **No-FOUC:** an inline script in `BaseHead.astro` reads `localStorage['theme']` and applies the resolved theme before first paint
+2. **CSS:** tokens flip under `[data-theme="light"]`; dark is the markup default
+3. **Persistence:** `localStorage['theme']` stores `'system'`, `'light'` or `'dark'` (older `'light'`/`'dark'` values remain valid)
+4. **Live OS changes:** a `matchMedia('(prefers-color-scheme)')` listener re-resolves while in system mode
+5. **View Transitions:** `astro:before-swap` copies both attributes onto the incoming page so navigation never resets your choice
+
+---
+
+## Translation System
+
+Fully static bilingual rendering — **both languages are in the HTML**, one is hidden by CSS:
+
+```html
+<span data-lang="en">building tools for the web</span>
+<span data-lang="sk">tvorím nástroje pre web</span>
+```
+
+```css
+:root[lang="sk"] [data-lang="en"] { display: none !important; }
+```
+
+Language selection flow:
+
+1. **First visit:** the no-FOUC script in `BaseHead.astro` detects the browser languages (`navigator.languages`) — any Slovak variant picks `sk`, everything else picks `en`
+2. **Manual switch:** the header toggle flips `en` ↔ `sk`
+3. **Persistence:** `localStorage['lang']` always wins over detection on later visits
+
+Switching only sets `<html lang>` + storage — zero content swapping, works without JS after first choice.
+
+---
+
+## Toasts
+
+Manual theme/language changes confirm themselves with a small pill toast (bottom center, auto-hides after 2s):
+
+- Created once by `showToast()` in `app.ts` as `#toast` with `role="status"` for screen readers
+- Styled purely from design tokens (`--lo` background, `--hi` text, `--mid` border), so it automatically matches the active theme
+- Slide-up + fade animation, disabled under `prefers-reduced-motion`
+- **Theme toasts** are localized by the current site language ("Switched to dark theme" / "Prepnuté na tmavú tému")
+- **Language toasts** are fixed in the target language ("Switched to English" / "Prepnuté na slovenčinu")
 
 ---
 
 ## Adding a New Language
 
-The website supports multiple languages using a simple translation system. Currently supports **English (en)** and **Slovak (sk)**.
+Example: French (`fr`).
 
-### Steps to Add a New Language:
+> ⚠️ The header toggle currently assumes two languages (it flips `en` ↔ `sk`). A third language requires turning it into a cycling button or a menu first.
 
-1. **Add translations to `src/translations.js`:**
-
-```javascript
-var translations = {
-    en: {
-        // ... existing English translations
-    },
-    sk: {
-        // ... existing Slovak translations
-    },
-    // Add your new language here:
-    fr: {  // ISO 639-1 language code
-        tagline: "construire des outils pour le web",
-        taglineAlt: "construire des bugs pour le web",
-        navProjects: "Autres projets",
-        navAbout: "À propos",
-        back: "retour",
-        projectsTitle: "Autres projets",
-        projUserScripts: "UserScripts",
-        projUserScriptsDesc: "Scripts utilisateur pour Twitch, X et plus...",
-        // ... add all other keys from the en/sk objects
-    }
-};
-```
-
-2. **Update `src/main.js` - Add the language code to the array:**
-
-```javascript
-var languages = ['en', 'sk', 'fr']; // Add 'fr' (or your language code)
-```
-
-3. **Required translation keys (copy from 'en' object):**
-   - `tagline`, `taglineAlt`
-   - `navProjects`, `navAbout`
-   - `back`
-   - `projectsTitle`
-   - `projUserScripts`, `projUserScriptsDesc`
-   - `projTools`, `projToolsDesc`
-   - `projVolume`, `projVolumeDesc`
-   - `projBDAddons`, `projBDAddonsDesc`
-   - `viewAll`
-   - `aboutTitle`
-   - `aboutText1`, `aboutText2`, `aboutText3`
-
-4. **Test it:** Change `localStorage.setItem('lang', 'fr')` in console, or add a new toggle option.
-
----
-
-## Downloader Tool
-
-The `/downloader/` directory contains a tool for downloading BetterDiscord plugins and themes directly from GitHub.
-
-### How it Works:
-
-1. **URL Structure:** `https://yungsamd17.github.io/downloader/?plugin=PluginName` or `?theme=ThemeName`
-2. **Files:**
-   - `index.html` - Minimal HTML shell
-   - `downloader.js` - API for constructing GitHub raw URLs
-   - `main.js` - Handles the download logic on page load
-
-### Example URLs:
-```
-https://yungsamd17.github.io/downloader/?plugin=SomePlugin
-https://yungsamd17.github.io/downloader/?theme=SomeTheme
-https://yungsamd17.github.io/downloader/?url=https://raw.githubusercontent.com/user/repo/main/file.js
-```
-
-### `downloader.js` API:
-
-```javascript
-window.DownloadApi = {
-    converter: {
-        plugin: arg => `https://raw.githubusercontent.com/yungsamd17/BetterDiscordAddons/main/Plugins/${arg}/${arg}.plugin.js`,
-        theme: arg => `https://raw.githubusercontent.com/yungsamd17/BetterDiscordAddons/main/Themes/${arg}/${arg}.theme.css`,
-        url: arg => /* handles full URLs */
-    },
-    convert: (parameterString, error) => { /* conversion logic */ },
-    download: (url, error) => { /* XHR download logic */ }
-};
-```
+1. **`src/data/site.ts`** — extend the `Locale` type with `'fr'` and add `fr` text to every `desc`
+2. **`src/i18n/ui.ts`** — add a `fr` object with all keys from `en` (including the `toastTheme*` keys)
+3. **`src/styles/global.css`** — extend the hide rules with every new language pair:
+   ```css
+   :root[lang="fr"] [data-lang="en"],
+   :root[lang="en"] [data-lang="fr"],
+   :root[lang="sk"] [data-lang="fr"],
+   :root[lang="fr"] [data-lang="sk"] { display: none !important; }
+   ```
+4. **`src/components/BaseHead.astro`** — extend the browser-language detection (`l?.toLowerCase().startsWith('sk')` → include `'fr'`)
+5. **`src/scripts/app.ts`** — extend `currentLang()` and the toggle handler in `initLang()` to cycle three languages
+6. **Pages with `data-lang` blocks** (`index.astro`, `projects.astro`, `about.astro`, `404.astro`) — duplicate every marked block with `data-lang="fr"`
 
 ---
 
 ## Easter Eggs
 
-The website has a few hidden features for fun:
+All preserved from v1:
 
-### 1. Tagline Click
-- **Action:** Click the "building tools for the web" tagline
-- **Result:** Text temporarily changes to "building bugs for the web" (or Slovak equivalent)
-- **Duration:** 2 seconds, then returns to original language-appropriate text
-- **Code:** `src/main.js` → `window.toggleTagline()`
+1. **Tagline click** — "building tools" ↔ "building bugs" for 2s (`app.ts`)
+2. **Console art** — open DevTools and say hi
+3. **`?debug=true`** — green debug border
 
-### 2. Console Art
-- **Action:** Open browser DevTools (F12)
-- **Result:** See welcome message and contact info in console
-- **Code:** `src/main.js` → Console.log statements
+There is one more. It is not documented here — that would ruin the fun.
 
-### 3. Query Parameters
-- **`?debug=true`** - Adds a green border around the page body (debug mode indicator)
-- **Code:** `src/main.js` → Query param easter eggs section
+---
 
-### 4. Secret Hash Page
-- **Action:** Visit `https://yungsamd17.github.io/#secret`
-- **Result:** Shows a "Found it!" page with a fun message
-- **Code:** `src/main.js` → `showSecretPage()`
+## Deployment
+
+Automatic via **`.github/workflows/deploy.yml`** (official `withastro/action`):
+
+1. Push to `main` or `astro-rebuild` → site builds and deploys
+2. Manual runs possible via **Actions → Deploy to GitHub Pages → Run workflow**
+3. One-time setup: repo **Settings → Pages → Source → GitHub Actions**
+
+Sitemap is generated at `/sitemap-index.xml` by `@astrojs/sitemap`.
 
 ---
 
@@ -189,84 +252,15 @@ fix: correct translation typo in Slovak about text
 style: update project card hover effects
 refactor: remove unused rainbow theme code
 docs: add documentation for language system
-chore: update year in footer automatically
+chore: bump astro to latest
 ```
-
----
-
-## Theme System
-
-The website supports **dark** and **light** themes with system preference detection.
-
-### How it Works:
-
-1. **CSS Variables:** Defined in `:root` (dark) and `[data-theme="light"]`
-2. **Theme Toggle:** Button in header calls `toggleTheme()`
-3. **System Detection:** Uses `prefers-color-scheme` media query on first visit
-4. **Persistence:** Saved to `localStorage` as `'theme'` (`'light'` or `'dark'`)
-
-### Adding a New Theme:
-
-1. **Add CSS variables:**
-```css
-[data-theme="your-theme"] {
-    --bg: #your-bg;
-    --accent: #your-accent;
-    --hi: #your-text;
-    /* ... other variables */
-}
-```
-
-2. **Update JavaScript:**
-```javascript
-var themes = ['light', 'dark', 'your-theme']; // Add to array
-
-// Update icon mapping
-var icons = { light: 'fa-moon', dark: 'fa-sun', your-theme: 'fa-icon' };
-```
-
----
-
-## Translation System
-
-Uses `data-i18n` attributes and a global `translations` object.
-
-### How it Works:
-
-1. **HTML:** Elements have `data-i18n="keyName"` attribute
-2. **JS:** `updateContent(lang)` replaces `innerHTML` with `translations[lang][key]`
-3. **Language Toggle:** Cycles through `languages` array, saves to `localStorage`
-
-### Adding Translation Keys:
-
-```html
-<!-- In HTML -->
-<p data-i18n="myKey">Fallback text</p>
-```
-
-```javascript
-// In translations.js
-en: {
-    myKey: "English text here",
-    // ...
-},
-sk: {
-    myKey: "Slovenský text tu",
-    // ...
-}
-```
-
-### Special Cases:
-- **HTML in translations:** Use `'string with <strong>HTML</strong>'` (single quotes)
-- **Dynamic content:** Age and year are updated via JavaScript functions
-- **Tagline alt text:** Separate `taglineAlt` key for easter egg
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
 
 ---
 
-**Last updated:** May 2026
+**Last updated:** August 2026

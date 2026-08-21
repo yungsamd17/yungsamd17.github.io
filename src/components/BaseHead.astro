@@ -1,0 +1,65 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { SITE } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = SITE.description } = Astro.props;
+const site = Astro.site ?? SITE.url;
+const canonical = new URL(Astro.url.pathname, site);
+const ogImage = new URL('logo.jpg', site);
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="icon" href="/favicon.ico" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE.title} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<meta name="generator" content={Astro.generator} />
+<meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#e8e8ec" media="(prefers-color-scheme: light)" />
+<meta name="google-site-verification" content="56-L3iSwypOtQIwMAVZwT51iLhmZTG1h1F88WIN3bGI" />
+
+<script is:inline>
+  (() => {
+    try {
+      let mode = localStorage.getItem('theme');
+      if (mode !== 'light' && mode !== 'dark') mode = 'system';
+      const dark = mode === 'dark' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      document.documentElement.dataset.themeMode = mode;
+    } catch {
+      document.documentElement.dataset.theme = 'dark';
+      document.documentElement.dataset.themeMode = 'system';
+    }
+    try {
+      let lang = localStorage.getItem('lang');
+      if (lang !== 'sk' && lang !== 'en') {
+        const prefs = navigator.languages?.length ? navigator.languages : [navigator.language];
+        lang = prefs.some((l) => l?.toLowerCase().startsWith('sk')) ? 'sk' : 'en';
+      }
+      document.documentElement.lang = lang;
+    } catch {
+      document.documentElement.lang = 'en';
+    }
+  })();
+</script>
+
+<ClientRouter />
