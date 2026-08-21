@@ -79,6 +79,7 @@ function showToast(message: string) {
     document.body.appendChild(toast);
   }
   toast.textContent = message;
+  void toast.offsetWidth;
   toast.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => {
