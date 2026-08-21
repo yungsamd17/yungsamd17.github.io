@@ -384,10 +384,12 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
 .proj-badge {
   display: inline-flex;
   align-items: center;
-  font-size: .56rem;
+  justify-content: center;
+  font-size: .62rem;
+  line-height: 1;
   font-weight: 500;
   letter-spacing: .04em;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 100px;
   color: var(--mid);
   border: 1px solid var(--mid);
@@ -401,10 +403,12 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
 .proj-lang {
   display: inline-flex;
   align-items: center;
-  font-size: .56rem;
+  justify-content: center;
+  font-size: .62rem;
+  line-height: 1;
   font-weight: 500;
   letter-spacing: .04em;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 100px;
   color: var(--mid);
   border: 1px solid var(--mid);
