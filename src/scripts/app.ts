@@ -113,9 +113,12 @@ function initPage() {
   debugParam();
 }
 
-document.addEventListener('astro:before-swap', () => {
+document.addEventListener('astro:before-swap', (event) => {
   clearTimeout(taglineTimer);
   taglineTimer = undefined;
+  const { newDocument } = event as CustomEvent<{ newDocument: Document }>;
+  newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
+  newDocument.documentElement.lang = document.documentElement.lang;
 });
 
 document.addEventListener('astro:page-load', initPage);

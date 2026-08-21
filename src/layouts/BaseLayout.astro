@@ -23,6 +23,10 @@ const { title, description, standalone = false } = Astro.props;
     <a href="#main" class="skip-link">{t('skipToContent')}</a>
     <noscript>This site works best with JavaScript enabled.</noscript>
 
+    <script>
+      import '../scripts/app';
+    </script>
+
     {
       standalone ? (
         <main id="main" class="links-container">
