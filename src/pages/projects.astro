@@ -3,6 +3,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { SITE, PROJECTS } from '../data/site';
 import { t } from '../i18n/ui';
+
+const LANG_COLORS: Record<string, string> = {
+  JS: '#f1e05a',
+  CSS: '#563d7c',
+  Web: '#38bdf8',
+};
+
+interface RepoStats {
+  stars?: number;
+}
+
+// Build-time GitHub lookup; any failure just hides the stat instead of breaking deploy
+async function fetchStars(slug: string): Promise<RepoStats> {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${slug}`, {
+      headers: { 'User-Agent': 'yungsamd17.github.io', Accept: 'application/vnd.github+json' },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return {};
+    const data = await res.json();
+    return { stars: typeof data.stargazers_count === 'number' ? data.stargazers_count : undefined };
+  } catch {
+    return {};
+  }
+}
+
+const repoSlugs = [...new Set(PROJECTS.map((p) => p.repo).filter((r): r is string => Boolean(r)))];
+const repoEntries = await Promise.all(repoSlugs.map(async (slug) => [slug, await fetchStars(slug)] as const));
+const REPOS = Object.fromEntries(repoEntries);
 ---
 
 <BaseLayout title={`${t('projectsTitle')} | ${SITE.title}`} description={SITE.description}>
@@ -20,8 +49,17 @@ import { t } from '../i18n/ui';
         <span class="proj-title">{project.title}</span>
         <div class="proj-meta">
           {project.live && <span class="proj-badge live">Live</span>}
+          {project.repo && REPOS[project.repo]?.stars !== undefined && (
+            <span class="proj-stat">
+              <Icon name="github" size={10} />
+              {(REPOS[project.repo]?.stars ?? 0).toLocaleString('en-US')}
+            </span>
+          )}
           {project.langs.map((lang) => (
-            <span class="proj-lang">{lang}</span>
+            <span class="proj-lang">
+              <span class="proj-dot" style={`background:${LANG_COLORS[lang] ?? 'var(--mid)'}`} />
+              {lang}
+            </span>
           ))}
         </div>
         <p class="proj-desc">
