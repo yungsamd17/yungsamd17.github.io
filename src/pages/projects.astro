@@ -50,14 +50,13 @@ const REPOS = Object.fromEntries(repoEntries);
         <div class="proj-meta">
           {project.live && <span class="proj-badge live">Live</span>}
           {project.repo && REPOS[project.repo]?.stars !== undefined && (
-            <span class="proj-stat">
-              <Icon name="github" size={10} />
+            <span class="proj-stat" style="--stat-color:#eac54f">
+              <Icon name="star" size={10} />
               {(REPOS[project.repo]?.stars ?? 0).toLocaleString('en-US')}
             </span>
           )}
           {project.langs.map((lang) => (
-            <span class="proj-lang">
-              <span class="proj-dot" style={`background:${LANG_COLORS[lang] ?? 'var(--mid)'}`} />
+            <span class="proj-lang" style={`--lang-color:${LANG_COLORS[lang] ?? 'var(--accent)'}`}>
               {lang}
             </span>
           ))}
