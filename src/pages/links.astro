@@ -17,20 +17,40 @@ import { t } from '../i18n/ui';
 
   <div class="links-list">
     {
-      LINKS.map((link) => (
-        <a
-          href={link.href}
-          target={link.href.startsWith('mailto') ? undefined : '_blank'}
-          rel="noopener"
-          class="link-item"
-        >
-          <Icon name={link.icon} size={17} />
-          <div class="link-info">
-            <span class="link-platform">{link.platform}</span>
-            <span class="link-username">{link.username}</span>
+      LINKS.map((link) =>
+        link.copy ? (
+          <div class="link-item-row">
+            <a
+              href={link.href}
+              target={link.href.startsWith('mailto') ? undefined : '_blank'}
+              rel="noopener"
+              class="link-item"
+            >
+              <Icon name={link.icon} size={17} />
+              <div class="link-info">
+                <span class="link-platform">{link.platform}</span>
+                <span class="link-username">{link.username}</span>
+              </div>
+            </a>
+            <button type="button" class="copy-btn" data-copy={link.copy} aria-label={t('copyEmail')}>
+              <Icon name="copy" size={16} />
+            </button>
           </div>
-        </a>
-      ))
+        ) : (
+          <a
+            href={link.href}
+            target={link.href.startsWith('mailto') ? undefined : '_blank'}
+            rel="noopener"
+            class="link-item"
+          >
+            <Icon name={link.icon} size={17} />
+            <div class="link-info">
+              <span class="link-platform">{link.platform}</span>
+              <span class="link-username">{link.username}</span>
+            </div>
+          </a>
+        )
+      )
     }
 
     <a href="/" class="link-item" style="margin-top: 20px;">

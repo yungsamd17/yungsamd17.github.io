@@ -518,6 +518,38 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
 
 .link-item:hover .link-username { color: var(--accent); }
 
+.link-item-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.link-item-row > .link-item {
+  flex: 1;
+  min-width: 0;
+}
+
+.copy-btn {
+  width: 56px;
+  border-radius: 10px;
+  background: var(--dim);
+  border: 1px solid var(--lo);
+  color: var(--item);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background .15s, border-color .15s, color .15s, transform .15s;
+}
+
+.copy-btn:hover,
+.copy-btn:active {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
 .links-footer {
   text-align: center;
   margin-top: 30px;
