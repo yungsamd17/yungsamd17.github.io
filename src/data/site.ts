@@ -1,3 +1,5 @@
+import type { IconName } from '../icons';
+
 export const SITE = {
   name: 'Sam',
   handle: 'yungsamd17',
@@ -15,7 +17,7 @@ export type LocalizedText = Record<Locale, string>;
 export interface Social {
   label: string;
   href: string;
-  icon: string;
+  icon: IconName;
 }
 
 export const SOCIALS: Social[] = [
@@ -29,7 +31,7 @@ export interface FeaturedLink {
   title: string;
   desc: LocalizedText;
   href: string;
-  icon: string;
+  icon: IconName;
   badge?: string;
 }
 
@@ -117,7 +119,7 @@ export interface LinkItem {
   platform: string;
   username: string;
   href: string;
-  icon: string;
+  icon: IconName;
 }
 
 export const LINKS: LinkItem[] = [
