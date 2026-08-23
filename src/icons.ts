@@ -17,6 +17,7 @@ export const brandIcons = {
 export const strokeIcons = {
   'arrow-left': 'M19 12H5|m12 19-7-7 7-7',
   'arrow-up-right': 'M7 7h10v10|M7 17 17 7',
+  copy: 'M10 8h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2Z|M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2',
   mail: 'M22 7l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7|M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z',
   coffee:
     'M10 2v2|M14 2v2|M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1|M6 2v2',

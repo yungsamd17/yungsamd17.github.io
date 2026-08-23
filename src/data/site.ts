@@ -120,6 +120,7 @@ export interface LinkItem {
   username: string;
   href: string;
   icon: IconName;
+  copy?: string;
 }
 
 export const LINKS: LinkItem[] = [
@@ -130,5 +131,5 @@ export const LINKS: LinkItem[] = [
   { platform: 'YouTube', username: 'yungsamd17', href: 'https://youtube.com/@yungsamd17', icon: 'youtube' },
   { platform: 'Spotify', username: 'yungsamd17', href: 'https://open.spotify.com/user/samuelfackejoff?si=35znygTDQQ6Avm89RWI1zg', icon: 'spotify' },
   { platform: 'Ko-fi', username: 'yungsamd17', href: 'https://ko-fi.com/yungsamd17', icon: 'coffee' },
-  { platform: 'Email', username: 'yungsamd@proton.me', href: 'mailto:yungsamd@proton.me', icon: 'mail' },
+  { platform: 'Email', username: 'yungsamd@proton.me', href: 'mailto:yungsamd@proton.me', icon: 'mail', copy: 'yungsamd@proton.me' },
 ];

@@ -24,6 +24,9 @@ export const UI = {
     toastLangEn: 'Switched to English',
     toastLangSk: 'Prepnuté na slovenčinu',
     langToggle: 'Switch language',
+    copyEmail: 'Copy email address',
+    copiedEmail: 'Email copied to clipboard',
+    copyFailed: 'Could not copy email',
     skipToContent: 'Skip to main content',
   },
   sk: {
@@ -47,6 +50,9 @@ export const UI = {
     toastThemeLight: 'Prepnuté na svetlú tému',
     toastThemeDark: 'Prepnuté na tmavú tému',
     langToggle: 'Zmeniť jazyk',
+    copyEmail: 'Skopírovať e-mailovú adresu',
+    copiedEmail: 'E-mail skopírovaný do schránky',
+    copyFailed: 'E-mail sa nepodarilo skopírovať',
     skipToContent: 'Preskočiť na hlavný obsah',
   },
 } satisfies Record<Locale, Record<string, string>>;

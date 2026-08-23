@@ -53,6 +53,22 @@ function updateToggleLabels() {
   const lang = currentLang();
   document.getElementById('theme-toggle')?.setAttribute('aria-label', t('themeToggle', lang));
   document.getElementById('lang-toggle')?.setAttribute('aria-label', t('langToggle', lang));
+  document.querySelectorAll<HTMLElement>('[data-copy]').forEach((btn) => {
+    btn.setAttribute('aria-label', t('copyEmail', lang));
+  });
+}
+
+function initCopyButtons() {
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+        showToast(t('copiedEmail', currentLang()));
+      } catch {
+        showToast(t('copyFailed', currentLang()));
+      }
+    });
+  });
 }
 
 function initTheme() {
@@ -159,6 +175,7 @@ function initPage() {
   initTheme();
   initLang();
   updateToggleLabels();
+  initCopyButtons();
   updateAge();
   updateYear();
   initTaglineEasterEgg();
