@@ -19,13 +19,8 @@ import { t } from '../i18n/ui';
     {
       LINKS.map((link) =>
         link.copy ? (
-          <div class="link-item-row">
-            <a
-              href={link.href}
-              target={link.href.startsWith('mailto') ? undefined : '_blank'}
-              rel="noopener"
-              class="link-item"
-            >
+          <div class="link-item">
+            <a href={link.href} class="link-main">
               <Icon name={link.icon} size={17} />
               <div class="link-info">
                 <span class="link-platform">{link.platform}</span>
