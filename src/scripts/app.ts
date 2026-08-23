@@ -131,6 +131,30 @@ function updateYear() {
 }
 
 let taglineTimer: ReturnType<typeof setTimeout> | undefined;
+let rainbowTimer: ReturnType<typeof setTimeout> | undefined;
+
+const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+let konamiIndex = 0;
+
+function triggerRainbow() {
+  if (document.documentElement.classList.contains('rainbow')) return;
+  document.documentElement.classList.add('rainbow');
+  showToast(t('toastRainbow', currentLang()));
+  rainbowTimer = setTimeout(() => {
+    document.documentElement.classList.remove('rainbow');
+    rainbowTimer = undefined;
+  }, 8000);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select')) return;
+  const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  konamiIndex = key === KONAMI[konamiIndex] ? konamiIndex + 1 : key === KONAMI[0] ? 1 : 0;
+  if (konamiIndex === KONAMI.length) {
+    konamiIndex = 0;
+    triggerRainbow();
+  }
+});
 
 function initTaglineEasterEgg() {
   const tagline = document.querySelector<HTMLElement>('[data-easter="tagline"]');
@@ -188,6 +212,8 @@ document.addEventListener('astro:before-swap', (event) => {
   taglineTimer = undefined;
   clearTimeout(toastTimer);
   toastTimer = undefined;
+  clearTimeout(rainbowTimer);
+  rainbowTimer = undefined;
   const { newDocument } = event as CustomEvent<{ newDocument: Document }>;
   newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
   newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;
