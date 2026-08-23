@@ -224,7 +224,7 @@ There is one more. It is not documented here — that would ruin the fun.
 
 Automatic via **`.github/workflows/deploy.yml`** (official `withastro/action`):
 
-1. Push to `main` or `astro-rebuild` → site builds and deploys
+1. Push to `main` → site builds and deploys
 2. Manual runs possible via **Actions → Deploy to GitHub Pages → Run workflow**
 3. One-time setup: repo **Settings → Pages → Source → GitHub Actions**
 
