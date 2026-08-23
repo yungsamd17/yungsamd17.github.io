@@ -239,6 +239,10 @@ There is one more. It is not documented here — that would ruin the fun.
 
 `src/pages/og/[slug].png.ts` prerenders 1200×630 share cards (coral accent bar, handle, page title, tagline) for `/`, `/about`, `/projects` and `/links` using sharp. `BaseHead.astro` maps each route to its card and upgrades `twitter:card` to `summary_large_image`; any other route (e.g. `/secret`) falls back to `logo.jpg` + `summary`.
 
+Example — home page card (`docs/assets/og/`):
+
+![OG card example](assets/og/index.png)
+
 Text rendering needs a system font (DejaVu Sans or similar). GitHub Actions' `ubuntu-latest` has one preinstalled; on a bare Linux container without fonts, export `FONTCONFIG_FILE` pointing at a config that includes your font directory.
 
 ---
