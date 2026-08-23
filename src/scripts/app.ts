@@ -1,4 +1,5 @@
 import { t } from '../i18n/ui';
+import { SITE } from '../data/site';
 
 function getStorage(key: string): string | null {
   try {
@@ -91,8 +92,11 @@ function showToast(message: string) {
 function updateAge() {
   document.querySelectorAll('.age').forEach((el) => {
     const now = new Date();
-    let age = now.getFullYear() - 2003;
-    if (now < new Date(now.getFullYear(), 7, 1)) age--;
+    let age = now.getFullYear() - SITE.birthDate.getFullYear();
+    const hadBirthday =
+      now.getMonth() > SITE.birthDate.getMonth() ||
+      (now.getMonth() === SITE.birthDate.getMonth() && now.getDate() >= SITE.birthDate.getDate());
+    if (!hadBirthday) age--;
     el.textContent = String(age);
   });
 }
@@ -111,7 +115,7 @@ function initTaglineEasterEgg() {
   tagline.addEventListener('click', () => {
     if (taglineTimer) return;
     const lang = currentLang();
-    const alt = lang === 'sk' ? 'tvorím chyby pre web' : 'building bugs for the web';
+    const alt = t('taglineAlt', lang);
     const spans = tagline.querySelectorAll<HTMLElement>('[data-lang]');
     const originals = new Map<HTMLElement, string>();
     spans.forEach((s) => {
