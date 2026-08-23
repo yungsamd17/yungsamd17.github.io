@@ -1,18 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="color-scheme" content="dark light" />
 	<title>Downloader</title>
 	<link rel="icon" href="/favicon.ico">
-	<script type="text/javascript" src="downloader.js" defer></script>
-	<script type="text/javascript" src="main.js" defer></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+	<style>
+		:root {
+			color-scheme: dark;
+			--bg: #0e0e10;
+			--hi: #e8e8ec;
+			--mid: #6a6a72;
+			--lo: #32323a;
+			--dim: #2a2a3080;
+			--item: #a0a0a8;
+			--accent: #ff8a80;
+			--ok: #4caf50;
+		}
+
+		@media (prefers-color-scheme: light) {
+			:root {
+				color-scheme: light;
+				--bg: #e8e8ec;
+				--hi: #1a1a1a;
+				--mid: #6a6a72;
+				--lo: #c8c8d0;
+				--dim: #fafafa80;
+				--item: #4a4a4a;
+			}
+		}
+
+		*,
+		*::before,
+		*::after { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			min-height: 100dvh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			background: var(--bg);
+			color: var(--hi);
+			font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+			font-size: 15px;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		.card {
+			width: 100%;
+			max-width: 420px;
+			background: var(--dim);
+			border: 1px solid var(--lo);
+			border-radius: 14px;
+			padding: 26px 24px;
+		}
+
+		h1 {
+			margin: 0 0 4px;
+			font-size: 1.25rem;
+			font-weight: 600;
+			letter-spacing: -.02em;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		h1 svg { color: var(--accent); flex-shrink: 0; }
+
+		.subtitle {
+			margin: 0 0 18px;
+			font-size: .82rem;
+			font-weight: 300;
+			line-height: 1.5;
+			color: var(--mid);
+		}
+
+		.subtitle a { color: inherit; }
+
+		.jobs { display: flex; flex-direction: column; gap: 8px; }
+
+		.job {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 10px 12px;
+			background: var(--bg);
+			border: 1px solid var(--lo);
+			border-radius: 9px;
+			font-size: .86rem;
+		}
+
+		.job .icon {
+			width: 16px;
+			height: 16px;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: var(--mid);
+		}
+
+		.job.ok .icon { color: var(--ok); }
+		.job.notfound .icon,
+		.job.error .icon { color: var(--accent); }
+
+		.job .name {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			color: var(--item);
+		}
+
+		.job.ok .name { color: var(--hi); }
+
+		.job .status { font-size: .72rem; color: var(--mid); flex-shrink: 0; }
+		.job.ok .status { color: var(--ok); }
+		.job.notfound .status,
+		.job.error .status { color: var(--accent); }
+
+		.spinner { animation: spin 1s linear infinite; }
+
+		@keyframes spin {
+			to { transform: rotate(360deg); }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.spinner { animation: none; }
+		}
+
+		.empty {
+			padding: 14px;
+			border: 1px dashed var(--lo);
+			border-radius: 9px;
+			text-align: center;
+			font-size: .84rem;
+			color: var(--mid);
+		}
+
+		.empty code {
+			display: block;
+			margin-top: 8px;
+			font-size: .72rem;
+			color: var(--item);
+			word-break: break-all;
+		}
+
+		.footer {
+			margin-top: 16px;
+			font-size: .68rem;
+			letter-spacing: .04em;
+			color: var(--mid);
+			text-align: center;
+		}
+	</style>
 </head>
 
 <body>
+	<main class="card">
+		<h1>
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+				stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4|M7 10l5 5 5-5|M12 15V3" />
+			</svg>
+			<span id="title">Downloader</span>
+		</h1>
+		<p class="subtitle" id="subtitle"></p>
+		<div class="jobs" id="jobs">
+			<noscript><div class="empty">JavaScript is required for downloads.</div></noscript>
+		</div>
+		<p class="footer">yungsamd17.github.io/downloader</p>
+	</main>
+
+	<script src="downloader.js" defer></script>
+	<script src="main.js" defer></script>
 </body>
 
 </html>
