@@ -27,6 +27,7 @@ export const UI = {
     copyEmail: 'Copy email address',
     copiedEmail: 'Email copied to clipboard',
     copyFailed: 'Could not copy email',
+    toastRainbow: '🌈 Konami mode activated!',
     skipToContent: 'Skip to main content',
   },
   sk: {
@@ -53,6 +54,7 @@ export const UI = {
     copyEmail: 'Skopírovať e-mailovú adresu',
     copiedEmail: 'E-mail skopírovaný do schránky',
     copyFailed: 'E-mail sa nepodarilo skopírovať',
+    toastRainbow: '🌈 Konami režim aktivovaný!',
     skipToContent: 'Preskočiť na hlavný obsah',
   },
 } satisfies Record<Locale, Record<string, string>>;
