@@ -49,6 +49,12 @@ function cycleTheme() {
   showToast(t(next === 'system' ? 'toastThemeSystem' : next === 'light' ? 'toastThemeLight' : 'toastThemeDark', currentLang()));
 }
 
+function updateToggleLabels() {
+  const lang = currentLang();
+  document.getElementById('theme-toggle')?.setAttribute('aria-label', t('themeToggle', lang));
+  document.getElementById('lang-toggle')?.setAttribute('aria-label', t('langToggle', lang));
+}
+
 function initTheme() {
   const saved = getStorage('theme');
   applyTheme(saved === 'light' || saved === 'dark' ? saved : 'system');
@@ -64,6 +70,7 @@ function initLang() {
     const next = currentLang() === 'sk' ? 'en' : 'sk';
     document.documentElement.lang = next;
     setStorage('lang', next);
+    updateToggleLabels();
     showToast(t(next === 'sk' ? 'toastLangSk' : 'toastLangEn'));
   });
 }
@@ -151,6 +158,7 @@ function debugParam() {
 function initPage() {
   initTheme();
   initLang();
+  updateToggleLabels();
   updateAge();
   updateYear();
   initTaglineEasterEgg();
