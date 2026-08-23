@@ -5,21 +5,9 @@ import ThemeToggle from '../components/ThemeToggle.astro';
 import LangToggle from '../components/LangToggle.astro';
 import { SITE, SOCIALS, FEATURED } from '../data/site';
 import { t } from '../i18n/ui';
-
-const jsonLd = JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: SITE.name,
-  url: SITE.url,
-  email: `mailto:${SITE.email}`,
-  sameAs: SOCIALS.map((s) => s.href),
-  jobTitle: 'Web Developer',
-});
 ---
 
 <BaseLayout title={SITE.title} description={SITE.description}>
-  <script type="application/ld+json" set:html={jsonLd} />
-
   <header class="site-header">
     <div>
       <h1>{SITE.name}</h1>
