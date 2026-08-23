@@ -51,7 +51,10 @@ import { t } from '../i18n/ui';
     <a href="/" class="link-item" style="margin-top: 20px;">
       <Icon name="arrow-left" size={16} />
       <div class="link-info">
-        <span class="link-platform">{t('linksBack')}</span>
+        <span class="link-platform">
+          <span data-lang="en">{t('linksBack')}</span>
+          <span data-lang="sk">{t('linksBack', 'sk')}</span>
+        </span>
         <span class="link-username">yungsamd17.github.io</span>
       </div>
     </a>
