@@ -4,12 +4,6 @@ import Icon from '../components/Icon.astro';
 import { SITE, PROJECTS } from '../data/site';
 import { t } from '../i18n/ui';
 
-const LANG_COLORS: Record<string, string> = {
-  JS: '#f1e05a',
-  CSS: '#563d7c',
-  Web: '#38bdf8',
-};
-
 interface RepoStats {
   stars?: number;
 }
@@ -56,9 +50,7 @@ const REPOS = Object.fromEntries(repoEntries);
             </span>
           )}
           {project.langs.map((lang) => (
-            <span class="proj-lang" style={`--lang-color:${LANG_COLORS[lang] ?? 'var(--accent)'}`}>
-              {lang}
-            </span>
+            <span class="proj-lang">{lang}</span>
           ))}
         </div>
         <p class="proj-desc">

@@ -375,11 +375,6 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
 
 .proj-item:hover .proj-title { color: var(--accent); }
 
-.proj-item:hover .proj-lang {
-  color: var(--lang-color, var(--accent));
-  border-color: var(--lang-color, var(--accent));
-}
-
 .proj-item:hover .proj-stat {
   color: var(--stat-color, var(--accent));
   border-color: var(--stat-color, var(--accent));
