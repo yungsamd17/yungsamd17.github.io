@@ -30,8 +30,8 @@ function renderSvg({ title, subtitle }: OgPage): string {
   <rect width="1200" height="630" fill="#0e0e10"/>
   <rect width="1200" height="630" fill="url(#glow)"/>
   <rect x="1.5" y="1.5" width="1197" height="627" rx="24" fill="none" stroke="#32323a" stroke-width="3"/>
-  <rect x="96" y="152" width="10" height="132" rx="5" fill="#ff8a80"/>
-  <text x="134" y="196" font-family="DejaVu Sans, Segoe UI, sans-serif" font-size="38" fill="#a0a0a8">@yungsamd17</text>
+  <rect x="96" y="136" width="10" height="150" rx="5" fill="#ff8a80"/>
+  <text x="134" y="172" font-family="DejaVu Sans, Segoe UI, sans-serif" font-size="38" fill="#a0a0a8">@yungsamd17</text>
   <text x="132" y="282" font-family="DejaVu Sans, Segoe UI, sans-serif" font-size="88" font-weight="bold" fill="#e8e8ec">${esc(title)}</text>
   ${subtitle ? `<text x="136" y="352" font-family="DejaVu Sans, Segoe UI, sans-serif" font-size="33" fill="#6a6a72">${esc(subtitle)}</text>` : ''}
   <text x="1104" y="556" text-anchor="end" font-family="DejaVu Sans, Segoe UI, sans-serif" font-size="26" fill="#6a6a72">yungsamd17.github.io</text>
