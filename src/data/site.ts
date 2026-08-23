@@ -72,12 +72,15 @@ export interface Project {
   desc: LocalizedText;
   langs: string[];
   live?: boolean;
+  /** GitHub slug (owner/repo) used at build time to show live star counts */
+  repo?: string;
 }
 
 export const PROJECTS: Project[] = [
   {
     title: 'UserScripts',
     href: 'https://yungsamd17.github.io/UserScripts/',
+    repo: 'yungsamd17/UserScripts',
     desc: {
       en: 'Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.',
       sk: 'Userscripts pre Twitch, X a ďalšie — malé vylepšenia pre každodenné používanie.',
@@ -88,6 +91,7 @@ export const PROJECTS: Project[] = [
   {
     title: 's17 Labs Tools',
     href: 'https://s17labs.github.io/tools',
+    repo: 's17labs/tools',
     desc: {
       en: 'Fast, privacy-first browser utility tools for creators and developers.',
       sk: 'Rýchle nástroje pre prehliadače so zameraním na súkromie pre tvorcov a vývojárov.',
@@ -98,6 +102,7 @@ export const PROJECTS: Project[] = [
   {
     title: 'Volume Control',
     href: 'https://github.com/yungsamd17/Volume-Control',
+    repo: 'yungsamd17/Volume-Control',
     desc: {
       en: 'Browser extension to push tab volume beyond the default 100% cap.',
       sk: 'Rozšírenie prehliadača na zvýšenie hlasitosti karty nad predvolených 100 %.',
@@ -107,6 +112,7 @@ export const PROJECTS: Project[] = [
   {
     title: 'BetterDiscord Addons',
     href: 'https://github.com/yungsamd17/BetterDiscordAddons',
+    repo: 'yungsamd17/BetterDiscordAddons',
     desc: {
       en: 'A collection of plugins and themes for BetterDiscord.',
       sk: 'Kolekcia pluginov a tém pre BetterDiscord.',
