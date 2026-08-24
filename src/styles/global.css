@@ -105,6 +105,13 @@ select:focus-visible {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* opacity-only: the footer sits flush with the viewport bottom, so a
+   translateY here would create transient scrollable overflow */
+@keyframes fadein-soft {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page,
   .site-footer { animation: none; }
@@ -581,7 +588,7 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
   color: var(--mid);
   text-align: center;
   letter-spacing: .03em;
-  animation: fadein .35s ease both;
+  animation: fadein-soft .35s ease both;
 }
 
 .site-footer .year-link {
