@@ -106,7 +106,8 @@ select:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page { animation: none; }
+  .page,
+  .site-footer { animation: none; }
 }
 
 .sr-only {
@@ -580,6 +581,7 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
   color: var(--mid);
   text-align: center;
   letter-spacing: .03em;
+  animation: fadein .35s ease both;
 }
 
 .site-footer .year-link {
