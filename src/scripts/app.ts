@@ -80,21 +80,21 @@ function initTheme() {
 type AnimDir = 'bottom' | 'top';
 
 function currentAnim(): AnimDir {
-  return document.documentElement.dataset.anim === 'top' ? 'top' : 'bottom';
+  return document.documentElement.dataset.anim === 'bottom' ? 'bottom' : 'top';
 }
 
 function applyAnim(dir: AnimDir) {
-  if (dir === 'top') document.documentElement.dataset.anim = 'top';
+  if (dir === 'bottom') document.documentElement.dataset.anim = 'bottom';
   else delete document.documentElement.dataset.anim;
 }
 
 function initAnim() {
-  applyAnim(getStorage('anim') === 'top' ? 'top' : 'bottom');
+  applyAnim(getStorage('anim') === 'bottom' ? 'bottom' : 'top');
   const toggle = document.getElementById('anim-toggle') as HTMLInputElement | null;
   if (!toggle) return;
-  toggle.checked = currentAnim() === 'top';
+  toggle.checked = currentAnim() === 'bottom';
   toggle.addEventListener('change', () => {
-    const dir: AnimDir = toggle.checked ? 'top' : 'bottom';
+    const dir: AnimDir = toggle.checked ? 'bottom' : 'top';
     setStorage('anim', dir);
     applyAnim(dir);
     showToast(t(dir === 'top' ? 'toastAnimTop' : 'toastAnimBottom', currentLang()));
@@ -243,7 +243,7 @@ document.addEventListener('astro:before-swap', (event) => {
   newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
   newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;
   newDocument.documentElement.lang = document.documentElement.lang;
-  if (currentAnim() === 'top') newDocument.documentElement.dataset.anim = 'top';
+  if (currentAnim() === 'bottom') newDocument.documentElement.dataset.anim = 'bottom';
   else delete newDocument.documentElement.dataset.anim;
 });
 
