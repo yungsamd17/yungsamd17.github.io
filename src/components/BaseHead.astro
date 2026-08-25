@@ -90,6 +90,9 @@ const personSchema = {
     } catch {
       document.documentElement.lang = 'en';
     }
+    try {
+      if (localStorage.getItem('anim') === 'top') document.documentElement.dataset.anim = 'top';
+    } catch {}
   })();
 </script>
 

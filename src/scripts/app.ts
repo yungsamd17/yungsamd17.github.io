@@ -77,6 +77,30 @@ function initTheme() {
   document.getElementById('theme-toggle')?.addEventListener('click', cycleTheme);
 }
 
+type AnimDir = 'bottom' | 'top';
+
+function currentAnim(): AnimDir {
+  return document.documentElement.dataset.anim === 'top' ? 'top' : 'bottom';
+}
+
+function applyAnim(dir: AnimDir) {
+  if (dir === 'top') document.documentElement.dataset.anim = 'top';
+  else delete document.documentElement.dataset.anim;
+}
+
+function initAnim() {
+  applyAnim(getStorage('anim') === 'top' ? 'top' : 'bottom');
+  const toggle = document.getElementById('anim-toggle') as HTMLInputElement | null;
+  if (!toggle) return;
+  toggle.checked = currentAnim() === 'top';
+  toggle.addEventListener('change', () => {
+    const dir: AnimDir = toggle.checked ? 'top' : 'bottom';
+    setStorage('anim', dir);
+    applyAnim(dir);
+    showToast(t(dir === 'top' ? 'toastAnimTop' : 'toastAnimBottom', currentLang()));
+  });
+}
+
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
   if (currentThemeMode() === 'system') applyTheme('system');
 });
@@ -197,6 +221,7 @@ function debugParam() {
 
 function initPage() {
   initTheme();
+  initAnim();
   initLang();
   updateToggleLabels();
   initCopyButtons();
@@ -218,6 +243,8 @@ document.addEventListener('astro:before-swap', (event) => {
   newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
   newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;
   newDocument.documentElement.lang = document.documentElement.lang;
+  if (currentAnim() === 'top') newDocument.documentElement.dataset.anim = 'top';
+  else delete newDocument.documentElement.dataset.anim;
 });
 
 document.addEventListener('astro:page-load', initPage);
