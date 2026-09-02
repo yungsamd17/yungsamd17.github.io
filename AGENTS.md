@@ -20,13 +20,14 @@ built with Astro 7 + Tailwind CSS v4 (via Vite plugin) + TypeScript. Deployed to
 - Pull requests are **optional**. Use one only for risky or multi-step work you want to review
   before landing. When you do open a PR:
   - Title: `type(scope): short imperative summary` (same format as commits).
-  - End the body with an AI attribution line:
+   - End the body with an AI attribution line using your REAL model and agent
+     (do NOT output literal `{model}`/`{agent}` or copy the example):
 
     ```
-    Built with {model} in the {agent} harness.
+    Built with YOUR_MODEL_NAME in the YOUR_AGENT_NAME harness.
     ```
 
-    Example: `Built with ox-alpha in the OpenCode harness.`
+     Example with real values — use your own: `Built with claude-opus-4 in the Claude Code harness.`
 
 - Commit messages: `type(scope): short imperative summary`, lowercase after type, no trailing period.
   Scopes used here: `site`, `pages`, `i18n`, `icons`, `downloader`, `ci`, `docs`.
