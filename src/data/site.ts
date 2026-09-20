@@ -78,15 +78,14 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    title: 'UserScripts',
-    href: 'https://yungsamd17.github.io/UserScripts/',
-    repo: 'yungsamd17/UserScripts',
+    title: 'Singlenote',
+    href: 'https://github.com/yungsamd17/singlenote',
+    repo: 'yungsamd17/singlenote',
     desc: {
-      en: 'Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.',
-      sk: 'Userscripts pre Twitch, X a ďalšie — malé vylepšenia pre každodenné používanie.',
+      en: 'Focus on one note at a time. A minimalist, offline-first Android note app.',
+      sk: 'Sústreď sa vždy len na jednu poznámku. Minimalistická, offline-first Android aplikácia na poznámky.',
     },
-    langs: ['JS', 'Web'],
-    live: true,
+    langs: ['Kotlin', 'Android'],
   },
   {
     title: 's17 Labs Tools',
@@ -108,6 +107,17 @@ export const PROJECTS: Project[] = [
       sk: 'Rozšírenie prehliadača na zvýšenie hlasitosti karty nad predvolených 100 %.',
     },
     langs: ['JS'],
+  },
+  {
+    title: 'UserScripts',
+    href: 'https://yungsamd17.github.io/UserScripts/',
+    repo: 'yungsamd17/UserScripts',
+    desc: {
+      en: 'Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.',
+      sk: 'Userscripts pre Twitch, X a ďalšie — malé vylepšenia pre každodenné používanie.',
+    },
+    langs: ['JS', 'Web'],
+    live: true,
   },
   {
     title: 'BetterDiscord Addons',
