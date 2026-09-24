@@ -39,6 +39,11 @@ built with Astro 7 + Tailwind CSS v4 (via Vite plugin) + TypeScript. Deployed to
   docs(readme): document local development
   ```
 
+- Never add a `Co-authored-by` / `Signed-off-by` trailer for the same identity
+  that authors the commit — a self co-author is a redundant duplicate. Only
+  credit a genuinely different human co-author, and only when asked. No AI
+  co-author trailers in commits either; AI attribution stays only in the PR body.
+
 - Never commit `node_modules/`, `dist/`, or secrets.
 
 ## Build & Verify
