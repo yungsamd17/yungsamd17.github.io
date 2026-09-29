@@ -61,7 +61,9 @@ body {
   font-family: var(--font-sans);
   font-size: 15px;
   min-height: 100%;
-  min-height: 100dvh;
+  /* svh, not dvh: dvh resizes while the Android URL bar animates, which
+     re-lays-out the flex column mid-scroll. svh is the stable small viewport. */
+  min-height: 100svh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
