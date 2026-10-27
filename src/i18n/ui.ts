@@ -3,7 +3,7 @@ import type { Locale } from '../data/site';
 export const UI = {
   en: {
     tagline: 'building tools for the web',
-    taglineAlt: 'building bugs for the web',
+    taglineAlt: 'Perpetual side-project starter',
     navProjects: 'Other projects',
     navAbout: 'About me',
     back: 'back',
@@ -36,7 +36,7 @@ export const UI = {
   },
   sk: {
     tagline: 'tvorím nástroje pre web',
-    taglineAlt: 'tvorím chyby pre web',
+    taglineAlt: 'neustále začínam vedľajšie projekty',
     navProjects: 'Iné projekty',
     navAbout: 'O mne',
     back: 'späť',
@@ -58,6 +58,8 @@ export const UI = {
     toastThemeSystem: 'Prepnuté na systémovú tému',
     toastThemeLight: 'Prepnuté na svetlú tému',
     toastThemeDark: 'Prepnuté na tmavú tému',
+    toastLangEn: 'Switched to English',
+    toastLangSk: 'Prepnuté na slovenčinu',
     langToggle: 'Zmeniť jazyk',
     copyEmail: 'Skopírovať e-mailovú adresu',
     copiedEmail: 'E-mail skopírovaný do schránky',

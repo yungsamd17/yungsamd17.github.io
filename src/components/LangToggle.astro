@@ -3,6 +3,24 @@ import Icon from './Icon.astro';
 import { t } from '../i18n/ui';
 ---
 
-<button id="lang-toggle" type="button" aria-label={t('langToggle')} class="lang-toggle">
-  <Icon name="language" size={16} />
-</button>
+<div class="lang-menu">
+  <button
+    id="lang-toggle"
+    type="button"
+    aria-label={t('langToggle')}
+    title="Switch language"
+    class="lang-toggle"
+    aria-haspopup="menu"
+    aria-expanded="false"
+  >
+    <Icon name="language" size={16} />
+  </button>
+  <div class="menu-panel" role="menu" aria-labelledby="lang-toggle">
+    <button type="button" role="menuitem" class="menu-item" data-lang-value="en" lang="en">
+      English
+    </button>
+    <button type="button" role="menuitem" class="menu-item" data-lang-value="sk" lang="sk">
+      Slovenčina
+    </button>
+  </div>
+</div>

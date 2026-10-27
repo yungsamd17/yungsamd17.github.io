@@ -3,19 +3,41 @@ import Icon from './Icon.astro';
 import { t } from '../i18n/ui';
 ---
 
-<button
-  id="theme-toggle"
-  type="button"
-  aria-label={t('themeToggle')}
-  class="theme-toggle"
->
-  <span class="theme-icon theme-icon-system">
-    <Icon name="monitor" size={16} />
-  </span>
-  <span class="theme-icon theme-icon-light">
-    <Icon name="sun" size={16} />
-  </span>
-  <span class="theme-icon theme-icon-dark">
-    <Icon name="moon" size={16} />
-  </span>
-</button>
+<div class="theme-menu">
+  <button
+    id="theme-toggle"
+    type="button"
+    aria-label={t('themeToggle')}
+    title="Toggle theme"
+    class="theme-toggle"
+    aria-haspopup="menu"
+    aria-expanded="false"
+  >
+    <span class="theme-icon theme-icon-system">
+      <Icon name="monitor" size={16} />
+    </span>
+    <span class="theme-icon theme-icon-light">
+      <Icon name="sun" size={16} />
+    </span>
+    <span class="theme-icon theme-icon-dark">
+      <Icon name="moon" size={16} />
+    </span>
+  </button>
+  <div class="menu-panel" role="menu" aria-labelledby="theme-toggle">
+    <button type="button" role="menuitem" class="menu-item" data-theme-value="light">
+      <Icon name="sun" size={14} />
+      <span data-lang="en">Light</span>
+      <span data-lang="sk">Svetlá</span>
+    </button>
+    <button type="button" role="menuitem" class="menu-item" data-theme-value="dark">
+      <Icon name="moon" size={14} />
+      <span data-lang="en">Dark</span>
+      <span data-lang="sk">Tmavá</span>
+    </button>
+    <button type="button" role="menuitem" class="menu-item" data-theme-value="system">
+      <Icon name="monitor" size={14} />
+      <span data-lang="en">System</span>
+      <span data-lang="sk">Systém</span>
+    </button>
+  </div>
+</div>
