@@ -17,14 +17,12 @@ function setStorage(key: string, value: string) {
 
 type ThemeMode = 'system' | 'light' | 'dark';
 
-const THEME_ORDER: ThemeMode[] = ['system', 'light', 'dark'];
+function currentLang(): 'en' | 'sk' {
+  return document.documentElement.lang === 'sk' ? 'sk' : 'en';
+}
 
 function systemPrefersDark(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-function currentLang(): 'en' | 'sk' {
-  return document.documentElement.lang === 'sk' ? 'sk' : 'en';
 }
 
 function currentThemeMode(): ThemeMode {
@@ -38,15 +36,10 @@ function resolveTheme(mode: ThemeMode): 'light' | 'dark' {
 }
 
 function applyTheme(mode: ThemeMode) {
+  const resolved = resolveTheme(mode);
   document.documentElement.dataset.themeMode = mode;
-  document.documentElement.dataset.theme = resolveTheme(mode);
-}
-
-function cycleTheme() {
-  const next = THEME_ORDER[(THEME_ORDER.indexOf(currentThemeMode()) + 1) % THEME_ORDER.length];
-  setStorage('theme', next);
-  applyTheme(next);
-  showToast(t(next === 'system' ? 'toastThemeSystem' : next === 'light' ? 'toastThemeLight' : 'toastThemeDark', currentLang()));
+  document.documentElement.dataset.theme = resolved;
+  document.documentElement.classList.toggle('dark', resolved === 'dark');
 }
 
 function updateToggleLabels() {
@@ -71,10 +64,43 @@ function initCopyButtons() {
   });
 }
 
+function closeAllMenus() {
+  document.querySelectorAll<HTMLElement>('.menu-panel.open').forEach((p) => p.classList.remove('open'));
+  document.querySelectorAll<HTMLElement>('[aria-expanded="true"]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+}
+
+function toggleMenu(panel: HTMLElement | null) {
+  if (!panel) return;
+  const isOpen = panel.classList.contains('open');
+  closeAllMenus();
+  if (!isOpen) {
+    panel.classList.add('open');
+    const trigger = panel.parentElement?.querySelector<HTMLElement>('button[aria-haspopup="menu"]');
+    trigger?.setAttribute('aria-expanded', 'true');
+  }
+}
+
 function initTheme() {
   const saved = getStorage('theme');
   applyTheme(saved === 'light' || saved === 'dark' ? saved : 'system');
-  document.getElementById('theme-toggle')?.addEventListener('click', cycleTheme);
+
+  const trigger = document.getElementById('theme-toggle') as HTMLElement | null;
+  const panel = trigger?.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
+  trigger?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu(panel);
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-theme-value]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const mode = btn.dataset.themeValue as ThemeMode;
+      setStorage('theme', mode);
+      applyTheme(mode);
+      closeAllMenus();
+      showToast(t(mode === 'system' ? 'toastThemeSystem' : mode === 'light' ? 'toastThemeLight' : 'toastThemeDark', currentLang()));
+    });
+  });
 }
 
 type AnimDir = 'bottom' | 'top';
@@ -105,13 +131,132 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
   if (currentThemeMode() === 'system') applyTheme('system');
 });
 
+document.addEventListener('click', (e) => {
+  const target = e.target as Element | null;
+  if (!target?.closest('.theme-menu, .lang-menu')) closeAllMenus();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAllMenus();
+});
+
+const TAGLINES: Record<'en' | 'sk', [string, string]> = {
+  en: ['building tools for the web', 'Perpetual side-project starter'],
+  sk: ['tvorím nástroje pre web', 'neustále začínam vedľajšie projekty'],
+};
+
+let taglineIndex = 0;
+let taglineAnimate = false;
+let taglineInterval: ReturnType<typeof setTimeout> | undefined;
+let taglineFadeTimer: ReturnType<typeof setTimeout> | undefined;
+let firstRotation = true;
+
+function updateTagline() {
+  const el = document.querySelector<HTMLElement>('[data-tagline]');
+  if (!el) return;
+  el.querySelectorAll<HTMLElement>('span[data-lang]').forEach((span) => {
+    const lang = span.getAttribute('data-lang') as 'en' | 'sk';
+    if (lang in TAGLINES) span.textContent = TAGLINES[lang][taglineIndex];
+  });
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hadAnimation = el.classList.contains('tagline-animate');
+  el.style.opacity = '';
+  el.style.transform = '';
+  el.classList.remove('tagline-animate', 'tagline-fadeout');
+  if (hadAnimation) void el.offsetWidth;
+  if (!reduce && taglineAnimate) el.classList.add('tagline-animate');
+}
+
+function startTaglineRotation() {
+  clearInterval(taglineInterval as any);
+  clearTimeout(taglineInterval as any);
+  clearInterval(taglineFadeTimer as any);
+  clearTimeout(taglineFadeTimer as any);
+  taglineFadeTimer = undefined;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (firstRotation && !reduce) {
+    taglineFadeTimer = setTimeout(() => {
+      const el = document.querySelector<HTMLElement>('[data-tagline]');
+      if (!el) return;
+      el.style.opacity = '1';
+      el.classList.remove('tagline-animate');
+      el.classList.add('tagline-fadeout');
+    }, 3520);
+    taglineInterval = setTimeout(() => {
+      clearInterval(taglineFadeTimer as any);
+      clearTimeout(taglineFadeTimer as any);
+      taglineFadeTimer = undefined;
+      const el = document.querySelector<HTMLElement>('[data-tagline]');
+      if (el) {
+        el.style.transform = 'translateY(5px)';
+        el.classList.remove('tagline-fadeout');
+      }
+      firstRotation = false;
+      taglineIndex = 1;
+      taglineAnimate = true;
+      updateTagline();
+      startTaglineRotation();
+    }, 4000);
+  } else {
+    taglineInterval = setInterval(() => {
+      taglineIndex = (taglineIndex + 1) % 2;
+      taglineAnimate = true;
+      updateTagline();
+    }, 4000) as any;
+  }
+}
+
+function initTagline() {
+  taglineIndex = 0;
+  taglineAnimate = false;
+  firstRotation = true;
+  updateTagline();
+  startTaglineRotation();
+}
+
 function initLang() {
-  document.getElementById('lang-toggle')?.addEventListener('click', () => {
-    const next = currentLang() === 'sk' ? 'en' : 'sk';
-    document.documentElement.lang = next;
-    setStorage('lang', next);
-    updateToggleLabels();
-    showToast(t(next === 'sk' ? 'toastLangSk' : 'toastLangEn'));
+  const trigger = document.getElementById('lang-toggle') as HTMLElement | null;
+  const panel = trigger?.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
+  trigger?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu(panel);
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-lang-value]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const next = btn.dataset.langValue as 'en' | 'sk';
+      if (next !== currentLang()) {
+        const taglineEl = document.querySelector<HTMLElement>('[data-tagline]');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const doSwitch = () => {
+          document.documentElement.lang = next;
+          setStorage('lang', next);
+          updateToggleLabels();
+          taglineIndex = 0;
+          taglineAnimate = !reduce;
+          firstRotation = true;
+          updateTagline();
+          startTaglineRotation();
+        };
+        if (taglineEl && !reduce) {
+          taglineEl.style.opacity = '1';
+          taglineEl.style.transform = 'translateY(0)';
+          taglineEl.classList.remove('tagline-animate');
+          taglineEl.classList.add('tagline-fadeout');
+          setTimeout(() => {
+            taglineEl.style.opacity = '';
+            taglineEl.style.transform = 'translateY(5px)';
+            taglineEl.classList.remove('tagline-fadeout');
+            doSwitch();
+          }, 480);
+        } else {
+          doSwitch();
+        }
+        showToast(t(next === 'sk' ? 'toastLangSk' : 'toastLangEn', next));
+      }
+      closeAllMenus();
+    });
   });
 }
 
@@ -227,6 +372,7 @@ function initPage() {
   initCopyButtons();
   updateAge();
   updateYear();
+  initTagline();
   initTaglineEasterEgg();
   consoleArt();
   debugParam();
@@ -235,6 +381,12 @@ function initPage() {
 document.addEventListener('astro:before-swap', (event) => {
   clearTimeout(taglineTimer);
   taglineTimer = undefined;
+  clearInterval(taglineInterval as any);
+  clearTimeout(taglineInterval as any);
+  taglineInterval = undefined;
+  clearInterval(taglineFadeTimer as any);
+  clearTimeout(taglineFadeTimer as any);
+  taglineFadeTimer = undefined;
   clearTimeout(toastTimer);
   toastTimer = undefined;
   clearTimeout(rainbowTimer);
@@ -243,6 +395,8 @@ document.addEventListener('astro:before-swap', (event) => {
   newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
   newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;
   newDocument.documentElement.lang = document.documentElement.lang;
+  if (document.documentElement.classList.contains('dark')) newDocument.documentElement.classList.add('dark');
+  else newDocument.documentElement.classList.remove('dark');
   if (currentAnim() === 'bottom') newDocument.documentElement.dataset.anim = 'bottom';
   else delete newDocument.documentElement.dataset.anim;
 });
