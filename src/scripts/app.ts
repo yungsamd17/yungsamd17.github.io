@@ -293,12 +293,6 @@ function updateAge() {
   });
 }
 
-function updateYear() {
-  document.querySelectorAll('.year').forEach((el) => {
-    el.textContent = String(new Date().getFullYear());
-  });
-}
-
 let taglineTimer: ReturnType<typeof setTimeout> | undefined;
 let rainbowTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -371,7 +365,6 @@ function initPage() {
   updateToggleLabels();
   initCopyButtons();
   updateAge();
-  updateYear();
   initTagline();
   initTaglineEasterEgg();
   consoleArt();

@@ -66,7 +66,7 @@ yungsamd17.github.io/
 │   │   ├── projects.astro   # Build-time GitHub stars via API
 │   │   ├── about.astro
 │   │   ├── links.astro      # Link-in-bio page (+ copy-email button)
-│   │   ├── secret.astro     # Hidden easter egg (excluded from sitemap)
+│   │   ├── extras.astro     # Experimental/legacy toggles (excluded from sitemap)
 │   │   ├── 404.astro
 │   │   └── og/[slug].png.ts # Dynamic 1200×630 OG share cards (sharp)
 │   ├── scripts/
@@ -237,7 +237,7 @@ There is one more. It is not documented here — that would ruin the fun.
 
 ## Dynamic OG Images
 
-`src/pages/og/[slug].png.ts` prerenders 1200×630 share cards (coral accent bar, handle, page title, tagline) for `/`, `/about`, `/projects` and `/links` using sharp. `BaseHead.astro` maps each route to its card and upgrades `twitter:card` to `summary_large_image`; any other route (e.g. `/secret`) falls back to `logo.jpg` + `summary`.
+`src/pages/og/[slug].png.ts` prerenders 1200×630 share cards (coral accent bar, handle, page title, tagline) for `/`, `/about`, `/projects` and `/links` using sharp. `BaseHead.astro` maps each route to its card and upgrades `twitter:card` to `summary_large_image`; any other route (e.g. `/extras`) falls back to `logo.jpg` + `summary`.
 
 Example — home page card (`docs/assets/og/`):
 

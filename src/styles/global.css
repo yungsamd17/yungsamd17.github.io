@@ -799,7 +799,7 @@ html.rainbow body {
   html.rainbow body { animation: none; }
 }
 
-/* ── secret: experimental lab ── */
+/* ── extras: experimental lab ── */
 .lab-section {
   margin-top: 34px;
   border-top: 1px solid var(--lo);

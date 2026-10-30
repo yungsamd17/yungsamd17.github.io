@@ -41,6 +41,6 @@ Content-Signal: ai-train=no, search=yes, ai-input=no
 
 User-agent: *
 Allow: /
-Disallow: /secret/
+Disallow: /extras/
 
 Sitemap: https://yungsamd17.github.io/sitemap-index.xml

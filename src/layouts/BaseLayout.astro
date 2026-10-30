@@ -3,7 +3,6 @@ import '../styles/global.css';
 import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import interLatinExt from '@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2?url';
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
 import { t } from '../i18n/ui';
 
 interface Props {
@@ -41,12 +40,9 @@ const fontCss = `@font-face{font-family:'Inter Variable';font-style:normal;font-
           <slot />
         </main>
       ) : (
-        <>
-          <main id="main" class="page">
-            <slot />
-          </main>
-          <Footer />
-        </>
+        <main id="main" class="page">
+          <slot />
+        </main>
       )
     }
   </body>

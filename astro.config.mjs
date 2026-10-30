@@ -8,7 +8,7 @@ export default defineConfig({
   compressHTML: false,
   integrations: [
     sitemap({
-      filter: (page) => !page.endsWith('/secret/'),
+      filter: (page) => !page.endsWith('/extras/'),
     }),
   ],
   vite: {

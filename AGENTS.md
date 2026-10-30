@@ -34,7 +34,7 @@ built with Astro 7 + Tailwind CSS v4 (via Vite plugin) + TypeScript. Deployed to
 
   ```
   feat(pages): add projects page
-  fix(i18n): correct Slovak translation of footer text
+  fix(i18n): correct Slovak translation of link text
   chore(ci): bump astro to 7.2.4
   docs(readme): document local development
   ```
@@ -61,13 +61,13 @@ There is no lint/test setup — verify changes visually with `dev`/`preview`.
 ## Architecture
 
 ```
-astro.config.mjs         # site config: sitemap (excludes /secret/), Tailwind vite plugin
+astro.config.mjs         # site config: sitemap (excludes /extras/), Tailwind vite plugin
 src/
   data/site.ts           # central site config: identity, socials, Locale type (en | sk)
   i18n/ui.ts             # UI translations — en/sk keys must stay paired
   layouts/BaseLayout.astro
-  components/            # BaseHead, Footer, Icon, LangToggle, ThemeToggle
-  pages/                 # index, about, projects, links, 404, secret, og/
+  components/            # BaseHead, Icon, LangToggle, ThemeToggle (Footer kept but not rendered)
+  pages/                 # index, about, projects, links, 404, extras, og/
   scripts/app.ts         # client-side JS (theme toggle etc.)
   styles/                # global styles
 scripts/generate-icons.mjs  # prebuild: generates favicon/PWA icons from public/logo.jpg
@@ -85,6 +85,6 @@ Key patterns:
 ## Gotchas
 
 - **Every push to `main` deploys live within ~a minute** — double-check before pushing.
-- `/secret/` is excluded from the sitemap but is still publicly reachable if someone knows the URL.
+- `/extras/` is excluded from the sitemap but is still publicly reachable if someone knows the URL.
 - `compressHTML: false` and `trailingSlash: 'ignore'` in astro.config.mjs are intentional — don't "fix".
 - `public/downloader/` is deliberately framework-free vanilla JS; keep it that way.

@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import { SITE } from '../data/site';
 import { t } from '../i18n/ui';
 ---
 
-<BaseLayout title={`🎉 ${t('secretTitle')}`}>
+<BaseLayout title={`${t('extrasTitle')} | ${SITE.title}`}>
   <a href="/" class="back">
     <Icon name="arrow-left" size={12} />
     <span data-lang="en">{t('back')}</span>
@@ -12,24 +13,24 @@ import { t } from '../i18n/ui';
   </a>
 
   <h2>
-    🎉 <span data-lang="en">{t('secretTitle')}</span><span data-lang="sk">{t('secretTitle', 'sk')}</span>
+    <span data-lang="en">{t('extrasTitle')}</span><span data-lang="sk">{t('extrasTitle', 'sk')}</span>
   </h2>
 
   <p class="about-text">
-    <span data-lang="en">{t('secretText')}</span>
-    <span data-lang="sk">{t('secretText', 'sk')}</span>
+    <span data-lang="en">{t('extrasText')}</span>
+    <span data-lang="sk">{t('extrasText', 'sk')}</span>
   </p>
 
   <div class="lab-section">
     <h3 class="lab-title">
-      <span data-lang="en">{t('secretLab')}</span>
-      <span data-lang="sk">{t('secretLab', 'sk')}</span>
+      <span data-lang="en">{t('extrasLab')}</span>
+      <span data-lang="sk">{t('extrasLab', 'sk')}</span>
     </h3>
     <label class="switch-row">
       <input type="checkbox" id="anim-toggle" role="switch" />
       <span>
-        <span data-lang="en">{t('secretAnimLabel')}</span>
-        <span data-lang="sk">{t('secretAnimLabel', 'sk')}</span>
+        <span data-lang="en">{t('extrasAnimLabel')}</span>
+        <span data-lang="sk">{t('extrasAnimLabel', 'sk')}</span>
       </span>
       <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
     </label>
