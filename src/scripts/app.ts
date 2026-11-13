@@ -140,10 +140,44 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeAllMenus();
 });
 
+// Android Chrome can drop the tab favicon when returning with the system back
+// gesture (history/bfcache restore does not always repaint it). Re-pointing the
+// icon links forces the browser to re-read and display them again.
+let iconBust = false;
+let iconRefreshTimer: ReturnType<typeof setTimeout> | undefined;
+
+function refreshFavicon() {
+  iconBust = !iconBust;
+  document.querySelectorAll<HTMLLinkElement>('link[rel="icon"], link[rel="apple-touch-icon"]').forEach((link) => {
+    const base = link.dataset.baseHref ?? link.getAttribute('href');
+    if (!base) return;
+    link.dataset.baseHref = base;
+    const url = new URL(base, location.href);
+    if (iconBust) url.searchParams.set('r', '2');
+    link.setAttribute('href', url.href);
+  });
+}
+
+function scheduleFaviconRefresh() {
+  if (iconRefreshTimer) return;
+  iconRefreshTimer = setTimeout(() => {
+    iconRefreshTimer = undefined;
+    refreshFavicon();
+  }, 150);
+}
+
+window.addEventListener('popstate', scheduleFaviconRefresh);
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) scheduleFaviconRefresh();
+});
+
 const TAGLINES: Record<'en' | 'sk', [string, string]> = {
   en: ['building tools for the web', 'Perpetual side-project starter'],
   sk: ['tvorím nástroje pre web', 'neustále začínam vedľajšie projekty'],
 };
+
+const TAGLINE_INTERVAL_MS = 8000;
+const TAGLINE_FADE_MS = 480;
 
 let taglineIndex = 0;
 let taglineAnimate = false;
@@ -181,7 +215,7 @@ function startTaglineRotation() {
       el.style.opacity = '1';
       el.classList.remove('tagline-animate');
       el.classList.add('tagline-fadeout');
-    }, 3520);
+    }, TAGLINE_INTERVAL_MS - TAGLINE_FADE_MS);
     taglineInterval = setTimeout(() => {
       clearInterval(taglineFadeTimer as any);
       clearTimeout(taglineFadeTimer as any);
@@ -196,13 +230,13 @@ function startTaglineRotation() {
       taglineAnimate = true;
       updateTagline();
       startTaglineRotation();
-    }, 4000);
+    }, TAGLINE_INTERVAL_MS);
   } else {
     taglineInterval = setInterval(() => {
       taglineIndex = (taglineIndex + 1) % 2;
       taglineAnimate = true;
       updateTagline();
-    }, 4000) as any;
+    }, TAGLINE_INTERVAL_MS) as any;
   }
 }
 

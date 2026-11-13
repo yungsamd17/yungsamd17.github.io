@@ -226,7 +226,8 @@ a:hover.handle,
 }
 
 .tagline-animate {
-  animation: tagline-cycle 4s ease-in-out both;
+  /* keep in sync with TAGLINE_INTERVAL_MS in src/scripts/app.ts */
+  animation: tagline-cycle 8s ease-in-out both;
 }
 
 @keyframes tagline-fadeout {

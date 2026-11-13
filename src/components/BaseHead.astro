@@ -46,9 +46,12 @@ const personSchema = {
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
-<link rel="icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
+<link rel="icon" href="/favicon.ico?v=2" sizes="any" data-astro-transition-persist="favicon-ico" />
+<link rel="icon" href="/favicon-32x32.png?v=2" type="image/png" sizes="32x32" data-astro-transition-persist="favicon-32" />
+<link rel="icon" href="/icon-192.png?v=2" type="image/png" sizes="192x192" data-astro-transition-persist="icon-192" />
+<link rel="icon" href="/icon-512.png?v=2" type="image/png" sizes="512x512" data-astro-transition-persist="icon-512" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180" data-astro-transition-persist="apple-touch-icon" />
+<link rel="manifest" href="/site.webmanifest?v=2" data-astro-transition-persist="webmanifest" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <meta property="og:type" content="website" />
