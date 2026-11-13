@@ -215,7 +215,6 @@ a:hover.handle,
   color: var(--mid);
   font-weight: 300;
   margin: 0 0 18px;
-  cursor: pointer;
   min-height: 40px;
 }
 
@@ -241,6 +240,25 @@ a:hover.handle,
 
 @media (prefers-reduced-motion: reduce) {
   .tagline-animate { animation: none; }
+}
+
+/* ── language switch fade ── */
+.page,
+.links-container {
+  transition: opacity .18s ease;
+}
+
+html.lang-switching .page,
+html.lang-switching .links-container {
+  /* animation: none drops the finished `fadein ... both` fill that would
+     otherwise pin opacity to 1 and cancel the fade */
+  animation: none;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page,
+  .links-container { transition: none; }
 }
 
 /* ── header ── */

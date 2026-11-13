@@ -3,7 +3,6 @@ import type { Locale } from '../data/site';
 export const UI = {
   en: {
     tagline: 'building tools for the web',
-    taglineAlt: 'Perpetual side-project starter',
     navProjects: 'Other projects',
     navAbout: 'About me',
     back: 'back',
@@ -36,7 +35,6 @@ export const UI = {
   },
   sk: {
     tagline: 'tvorím nástroje pre web',
-    taglineAlt: 'neustále začínam vedľajšie projekty',
     navProjects: 'Iné projekty',
     navAbout: 'O mne',
     back: 'späť',

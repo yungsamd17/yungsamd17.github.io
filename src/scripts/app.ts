@@ -214,6 +214,8 @@ function initTagline() {
   startTaglineRotation();
 }
 
+let langSwitchTimer: ReturnType<typeof setTimeout> | undefined;
+
 function initLang() {
   const trigger = document.getElementById('lang-toggle') as HTMLElement | null;
   const panel = trigger?.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
@@ -226,32 +228,32 @@ function initLang() {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const next = btn.dataset.langValue as 'en' | 'sk';
-      if (next !== currentLang()) {
-        const taglineEl = document.querySelector<HTMLElement>('[data-tagline]');
+      if (next !== currentLang() && !langSwitchTimer) {
+        const root = document.documentElement;
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const doSwitch = () => {
-          document.documentElement.lang = next;
+          root.lang = next;
           setStorage('lang', next);
           updateToggleLabels();
           taglineIndex = 0;
-          taglineAnimate = !reduce;
+          // leave the tagline un-animated so it is already visible while the
+          // page fades back in; rotation restarts with the first cycle
+          taglineAnimate = false;
           firstRotation = true;
           updateTagline();
           startTaglineRotation();
         };
-        if (taglineEl && !reduce) {
-          taglineEl.style.opacity = '1';
-          taglineEl.style.transform = 'translateY(0)';
-          taglineEl.classList.remove('tagline-animate');
-          taglineEl.classList.add('tagline-fadeout');
-          setTimeout(() => {
-            taglineEl.style.opacity = '';
-            taglineEl.style.transform = 'translateY(5px)';
-            taglineEl.classList.remove('tagline-fadeout');
-            doSwitch();
-          }, 480);
-        } else {
+        if (reduce) {
           doSwitch();
+        } else {
+          root.classList.add('lang-switching');
+          langSwitchTimer = setTimeout(() => {
+            doSwitch();
+            requestAnimationFrame(() => {
+              root.classList.remove('lang-switching');
+              langSwitchTimer = undefined;
+            });
+          }, 180);
         }
         showToast(t(next === 'sk' ? 'toastLangSk' : 'toastLangEn', next));
       }
@@ -293,7 +295,6 @@ function updateAge() {
   });
 }
 
-let taglineTimer: ReturnType<typeof setTimeout> | undefined;
 let rainbowTimer: ReturnType<typeof setTimeout> | undefined;
 
 const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -318,28 +319,6 @@ document.addEventListener('keydown', (e) => {
     triggerRainbow();
   }
 });
-
-function initTaglineEasterEgg() {
-  const tagline = document.querySelector<HTMLElement>('[data-easter="tagline"]');
-  if (!tagline) return;
-  tagline.addEventListener('click', () => {
-    if (taglineTimer) return;
-    const lang = currentLang();
-    const alt = t('taglineAlt', lang);
-    const spans = tagline.querySelectorAll<HTMLElement>('[data-lang]');
-    const originals = new Map<HTMLElement, string>();
-    spans.forEach((s) => {
-      originals.set(s, s.textContent ?? '');
-      if (s.dataset.lang === lang) s.textContent = alt;
-    });
-    taglineTimer = setTimeout(() => {
-      spans.forEach((s) => {
-        s.textContent = originals.get(s) ?? '';
-      });
-      taglineTimer = undefined;
-    }, 2000);
-  });
-}
 
 function consoleArt() {
   if ((window as any).__consoleArt) return;
@@ -366,14 +345,14 @@ function initPage() {
   initCopyButtons();
   updateAge();
   initTagline();
-  initTaglineEasterEgg();
   consoleArt();
   debugParam();
 }
 
 document.addEventListener('astro:before-swap', (event) => {
-  clearTimeout(taglineTimer);
-  taglineTimer = undefined;
+  clearTimeout(langSwitchTimer);
+  langSwitchTimer = undefined;
+  document.documentElement.classList.remove('lang-switching');
   clearInterval(taglineInterval as any);
   clearTimeout(taglineInterval as any);
   taglineInterval = undefined;
