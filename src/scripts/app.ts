@@ -95,6 +95,10 @@ function initTheme() {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const mode = btn.dataset.themeValue as ThemeMode;
+      if (mode === currentThemeMode()) {
+        closeAllMenus();
+        return;
+      }
       setStorage('theme', mode);
       applyTheme(mode);
       closeAllMenus();
