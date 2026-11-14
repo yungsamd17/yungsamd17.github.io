@@ -5,8 +5,8 @@ import { t } from '../i18n/ui';
 
 <div class="lang-menu">
   <button
-    id="lang-toggle"
     type="button"
+    data-lang-toggle
     aria-label={t('langToggle')}
     title="Switch language"
     class="lang-toggle"
@@ -15,7 +15,7 @@ import { t } from '../i18n/ui';
   >
     <Icon name="language" size={16} />
   </button>
-  <div class="menu-panel" role="menu" aria-labelledby="lang-toggle">
+  <div class="menu-panel" role="menu" aria-label={t('langToggle')}>
     <button type="button" role="menuitem" class="menu-item" data-lang-value="en" lang="en">
       English
     </button>

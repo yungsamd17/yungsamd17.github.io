@@ -44,8 +44,8 @@ function applyTheme(mode: ThemeMode) {
 
 function updateToggleLabels() {
   const lang = currentLang();
-  document.getElementById('theme-toggle')?.setAttribute('aria-label', t('themeToggle', lang));
-  document.getElementById('lang-toggle')?.setAttribute('aria-label', t('langToggle', lang));
+  document.querySelectorAll('[data-theme-toggle]').forEach((el) => el.setAttribute('aria-label', t('themeToggle', lang)));
+  document.querySelectorAll('[data-lang-toggle]').forEach((el) => el.setAttribute('aria-label', t('langToggle', lang)));
   document.querySelectorAll<HTMLElement>('[data-copy]').forEach((btn) => {
     btn.setAttribute('aria-label', t('copyEmail', lang));
   });
@@ -53,10 +53,20 @@ function updateToggleLabels() {
 
 function initCopyButtons() {
   document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    let copiedTimer: ReturnType<typeof setTimeout> | undefined;
     btn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(btn.dataset.copy ?? '');
         showToast(t('copiedEmail', currentLang()));
+        // morph the icon into a check for two seconds
+        btn.classList.add('copied');
+        btn.setAttribute('aria-label', t('copiedEmail', currentLang()));
+        clearTimeout(copiedTimer);
+        copiedTimer = setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.setAttribute('aria-label', t('copyEmail', currentLang()));
+          copiedTimer = undefined;
+        }, 2000);
       } catch {
         showToast(t('copyFailed', currentLang()));
       }
@@ -84,11 +94,14 @@ function initTheme() {
   const saved = getStorage('theme');
   applyTheme(saved === 'light' || saved === 'dark' ? saved : 'system');
 
-  const trigger = document.getElementById('theme-toggle') as HTMLElement | null;
-  const panel = trigger?.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
-  trigger?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu(panel);
+  // The classic header and the redesign toolbar each render a toggle, so bind
+  // every instance instead of a single ID.
+  document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((trigger) => {
+    const panel = trigger.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu(panel);
+    });
   });
 
   document.querySelectorAll<HTMLElement>('[data-theme-value]').forEach((btn) => {
@@ -129,6 +142,197 @@ function initAnim() {
     applyAnim(dir);
     showToast(t(dir === 'top' ? 'toastAnimTop' : 'toastAnimBottom', currentLang()));
   });
+}
+
+/* ── experimental: redesign ── */
+
+function currentRedesign(): boolean {
+  return document.documentElement.dataset.redesign === 'on';
+}
+
+function applyRedesign(on: boolean) {
+  if (on) document.documentElement.dataset.redesign = 'on';
+  else delete document.documentElement.dataset.redesign;
+}
+
+function initRedesign() {
+  applyRedesign(getStorage('redesign') === 'on');
+  history.scrollRestoration = currentRedesign() ? 'manual' : 'auto';
+  const toggle = document.getElementById('redesign-toggle') as HTMLInputElement | null;
+  if (!toggle) return;
+  toggle.checked = currentRedesign();
+  toggle.addEventListener('change', () => {
+    applyRedesign(toggle.checked);
+    history.scrollRestoration = toggle.checked ? 'manual' : 'auto';
+    setStorage('redesign', toggle.checked ? 'on' : 'off');
+    showToast(t(toggle.checked ? 'toastRedesignOn' : 'toastRedesignOff', currentLang()));
+  });
+}
+
+/* ── experimental: page load text animations ── */
+
+function textAnimDisabled(): boolean {
+  return document.documentElement.dataset.textanim === 'off';
+}
+
+function applyTextAnim(disabled: boolean) {
+  if (disabled) document.documentElement.dataset.textanim = 'off';
+  else delete document.documentElement.dataset.textanim;
+}
+
+function initTextAnim() {
+  applyTextAnim(getStorage('textanim') === 'off');
+  const toggle = document.getElementById('textanim-toggle') as HTMLInputElement | null;
+  if (!toggle) return;
+  toggle.checked = !textAnimDisabled();
+  toggle.addEventListener('change', () => {
+    const disabled = !toggle.checked;
+    applyTextAnim(disabled);
+    setStorage('textanim', disabled ? 'off' : 'on');
+    showToast(t(disabled ? 'toastTextAnimOff' : 'toastTextAnimOn', currentLang()));
+  });
+}
+
+/* ── experimental: hide the snack bar ── */
+
+function applyToastHidden(hidden: boolean) {
+  if (hidden) document.documentElement.dataset.toast = 'off';
+  else delete document.documentElement.dataset.toast;
+}
+
+function initToastToggle() {
+  applyToastHidden(getStorage('toast') === 'off');
+  const toggle = document.getElementById('toast-toggle') as HTMLInputElement | null;
+  if (!toggle) return;
+  toggle.checked = toastHidden();
+  toggle.addEventListener('change', () => {
+    applyToastHidden(toggle.checked);
+    setStorage('toast', toggle.checked ? 'off' : 'on');
+    // hidden toasts suppress their own confirmation by design
+    showToast(t(toggle.checked ? 'toastToastOff' : 'toastToastOn', currentLang()));
+  });
+}
+
+/* ── redesign: smooth scroll-to-top, contribution reveal ── */
+
+function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function scrollToTopSmooth() {
+  if (window.scrollY <= 0) return;
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+}
+
+// Keep the outgoing scroll offset for a moment after the swap so the trip back
+// to the top reads as a smooth scroll instead of an instant jump.
+let navScrollY = 0;
+
+function initContributions() {
+  document.querySelectorAll<HTMLElement>('[data-contrib-grid]').forEach((grid) => {
+    if (grid.dataset.shown) return;
+    const reveal = () => {
+      grid.dataset.shown = 'true';
+    };
+    // failsafe: never leave the graph invisible if the observer never fires
+    window.setTimeout(reveal, 3000);
+    if (!('IntersectionObserver' in window)) {
+      reveal();
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        // one frame later so the transition from the hidden state actually runs
+        requestAnimationFrame(reveal);
+      },
+      { threshold: 0.2, rootMargin: '0px 0px 120px 0px' }
+    );
+    observer.observe(grid);
+  });
+}
+
+/* One shared, viewport-anchored tooltip for the contribution graph. Being
+   fixed-position and clamped keeps it off the page edges (no sideways scroll)
+   and its solid background never lets the cells show through. */
+let contribTipAbort: AbortController | undefined;
+
+function initContributionTooltip() {
+  const tip = document.querySelector<HTMLElement>('[data-contrib-tip]');
+  if (!tip) return;
+
+  contribTipAbort?.abort();
+  contribTipAbort = new AbortController();
+  const { signal } = contribTipAbort;
+
+  let visible = false;
+
+  const cellFrom = (target: EventTarget | null) =>
+    target instanceof Element
+      ? (target.closest('.rd-contrib-cell:not([data-empty])') as HTMLElement | null)
+      : null;
+
+  const place = (cell: HTMLElement) => {
+    const lang = currentLang();
+    const text = (lang === 'sk' ? cell.dataset.tipSk : cell.dataset.tipEn) ?? cell.dataset.tipEn;
+    if (!text) return;
+
+    tip.textContent = text;
+    tip.dataset.open = 'true';
+    tip.style.visibility = 'hidden';
+    tip.style.left = '0px';
+    tip.style.top = '0px';
+
+    const w = tip.offsetWidth;
+    const h = tip.offsetHeight;
+    const rect = cell.getBoundingClientRect();
+    const pad = 8;
+    const center = rect.left + rect.width / 2;
+    const left = Math.min(Math.max(center, pad + w / 2), window.innerWidth - pad - w / 2);
+    const above = rect.top - h - 8;
+    const top = above >= pad ? above : Math.min(rect.bottom + 8, window.innerHeight - pad - h);
+
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+    tip.style.visibility = '';
+    visible = true;
+  };
+
+  const hide = () => {
+    if (!visible) return;
+    visible = false;
+    delete tip.dataset.open;
+    tip.textContent = '';
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-contrib-grid]').forEach((grid) => {
+    grid.addEventListener('pointerover', (event) => {
+      const cell = cellFrom(event.target);
+      if (cell) place(cell);
+    });
+    grid.addEventListener('pointerout', (event) => {
+      if (event.pointerType === 'touch') return;
+      const cell = cellFrom(event.target);
+      if (!cell) return;
+      // moving straight onto a neighbouring day should just update the tip
+      if (cellFrom(event.relatedTarget)) return;
+      hide();
+    });
+  });
+
+  window.addEventListener('scroll', hide, { passive: true, signal });
+  window.addEventListener('resize', hide, { signal });
+  window.addEventListener('blur', hide, { signal });
+  // tapping anywhere outside the graph dismisses the touch tooltip
+  document.addEventListener(
+    'pointerdown',
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element) || !target.closest('[data-contrib-grid]')) hide();
+    },
+    { signal }
+  );
 }
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
@@ -255,11 +459,12 @@ function initTagline() {
 let langSwitchTimer: ReturnType<typeof setTimeout> | undefined;
 
 function initLang() {
-  const trigger = document.getElementById('lang-toggle') as HTMLElement | null;
-  const panel = trigger?.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
-  trigger?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu(panel);
+  document.querySelectorAll<HTMLElement>('[data-lang-toggle]').forEach((trigger) => {
+    const panel = trigger.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu(panel);
+    });
   });
 
   document.querySelectorAll<HTMLElement>('[data-lang-value]').forEach((btn) => {
@@ -302,7 +507,12 @@ function initLang() {
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined;
 
+function toastHidden(): boolean {
+  return document.documentElement.dataset.toast === 'off';
+}
+
 function showToast(message: string) {
+  if (toastHidden()) return;
   let toast = document.getElementById('toast');
   if (!toast) {
     toast = document.createElement('div');
@@ -378,16 +588,26 @@ function debugParam() {
 function initPage() {
   initTheme();
   initAnim();
+  initRedesign();
+  initTextAnim();
+  initToastToggle();
+  // The redesign always lands at the top of a page, including history
+  // navigations, so the browser's own scroll restoration is turned off.
+  if (currentRedesign()) history.scrollRestoration = 'manual';
   initLang();
   updateToggleLabels();
   initCopyButtons();
   updateAge();
   initTagline();
+  initContributions();
+  initContributionTooltip();
+  if (currentRedesign()) window.setTimeout(scrollToTopSmooth, 0);
   consoleArt();
   debugParam();
 }
 
 document.addEventListener('astro:before-swap', (event) => {
+  navScrollY = window.scrollY;
   clearTimeout(langSwitchTimer);
   langSwitchTimer = undefined;
   document.documentElement.classList.remove('lang-switching');
@@ -409,6 +629,25 @@ document.addEventListener('astro:before-swap', (event) => {
   else newDocument.documentElement.classList.remove('dark');
   if (currentAnim() === 'bottom') newDocument.documentElement.dataset.anim = 'bottom';
   else delete newDocument.documentElement.dataset.anim;
+  if (currentRedesign()) newDocument.documentElement.dataset.redesign = 'on';
+  else delete newDocument.documentElement.dataset.redesign;
+  if (textAnimDisabled()) newDocument.documentElement.dataset.textanim = 'off';
+  else delete newDocument.documentElement.dataset.textanim;
+  if (toastHidden()) newDocument.documentElement.dataset.toast = 'off';
+  else delete newDocument.documentElement.dataset.toast;
+});
+
+document.addEventListener('astro:after-swap', () => {
+  const y = navScrollY;
+  navScrollY = 0;
+  if (y <= 0 || !currentRedesign()) return;
+  if (prefersReducedMotion()) {
+    window.scrollTo(0, 0);
+    return;
+  }
+  // put the new page back where the old one was, then glide to the top
+  window.scrollTo(0, y);
+  requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
 });
 
 document.addEventListener('astro:page-load', initPage);

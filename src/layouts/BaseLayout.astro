@@ -3,7 +3,9 @@ import '../styles/global.css';
 import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import interLatinExt from '@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2?url';
 import BaseHead from '../components/BaseHead.astro';
-import { t } from '../i18n/ui';
+import SiteToolbar from '../components/SiteToolbar.astro';
+import Footer from '../components/Footer.astro';
+import { t, type UIKey } from '../i18n/ui';
 
 interface Props {
   title: string;
@@ -12,6 +14,16 @@ interface Props {
 }
 
 const { title, description, standalone = false } = Astro.props;
+
+// Breadcrumb labels for the experimental toolbar, keyed by route
+const CRUMBS: Record<string, UIKey> = {
+  '/projects': 'crumbProjects',
+  '/links': 'crumbLinks',
+  '/extras': 'crumbExtras',
+  '/404': 'crumbNotFound',
+};
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const crumbKey = CRUMBS[pathname];
 
 // Preloaded + font-display:optional = no fallback-font flash, no swap reflow
 const fontCss = `@font-face{font-family:'Inter Variable';font-style:normal;font-display:optional;font-weight:100 900;src:url('${interLatinExt}')format('woff2-variations');unicode-range:U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
@@ -34,6 +46,8 @@ const fontCss = `@font-face{font-family:'Inter Variable';font-style:normal;font-
       import '../scripts/app';
     </script>
 
+    <SiteToolbar crumbKey={crumbKey} />
+
     {
       standalone ? (
         <main id="main" class="links-container">
@@ -45,5 +59,7 @@ const fontCss = `@font-face{font-family:'Inter Variable';font-style:normal;font-
         </main>
       )
     }
+
+    <Footer />
   </body>
 </html>

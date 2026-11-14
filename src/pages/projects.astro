@@ -1,14 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import { SITE, PROJECTS } from '../data/site';
+import { SITE, PROJECTS, FEATURED } from '../data/site';
 import { t } from '../i18n/ui';
 
 interface RepoStats {
   stars?: number;
 }
 
-// Build-time GitHub lookup; any failure just hides the stat instead of breaking deploy
 async function fetchStars(slug: string): Promise<RepoStats> {
   try {
     const res = await fetch(`https://api.github.com/repos/${slug}`, {
@@ -23,7 +22,11 @@ async function fetchStars(slug: string): Promise<RepoStats> {
   }
 }
 
-const repoSlugs = [...new Set(PROJECTS.map((p) => p.repo).filter((r): r is string => Boolean(r)))];
+// Featured projects to also show on the projects page (Twitch Live, Koda) — excluding s17 Labs org
+const FEATURED_PROJECTS = FEATURED.filter((f) => f.title !== 's17 Labs' && f.projectIcon);
+const allProjects = [...FEATURED_PROJECTS, ...PROJECTS];
+
+const repoSlugs = [...new Set(allProjects.map((p) => p.repo).filter((r): r is string => Boolean(r)))];
 const repoEntries = await Promise.all(repoSlugs.map(async (slug) => [slug, await fetchStars(slug)] as const));
 const REPOS = Object.fromEntries(repoEntries);
 ---
@@ -35,31 +38,77 @@ const REPOS = Object.fromEntries(repoEntries);
     <span data-lang="sk">{t('back', 'sk')}</span>
   </a>
 
-  <h2><span data-lang="en">{t('projectsTitle')}</span><span data-lang="sk">{t('projectsTitle', 'sk')}</span></h2>
+  <h2 class="page-title">
+    <span data-lang="en">{t('projectsTitle')}</span>
+    <span data-lang="sk">{t('projectsTitle', 'sk')}</span>
+  </h2>
 
-  {
-    PROJECTS.map((project) => (
-      <a href={project.href} target="_blank" rel="noopener" class="proj-item">
-        <span class="proj-title">{project.title}</span>
-        <div class="proj-meta">
-          {project.live && <span class="proj-badge live">Live</span>}
-          {project.repo && REPOS[project.repo]?.stars !== undefined && (
-            <span class="proj-stat" style="--stat-color:#eac54f">
-              <Icon name="star" size={10} />
-              {(REPOS[project.repo]?.stars ?? 0).toLocaleString('en-US')}
-            </span>
-          )}
-          {project.langs.map((lang) => (
-            <span class="proj-lang">{lang}</span>
-          ))}
-        </div>
-        <p class="proj-desc">
-          <span data-lang="en">{project.desc.en}</span>
-          <span data-lang="sk">{project.desc.sk}</span>
-        </p>
-      </a>
-    ))
-  }
+  <div class="proj-grid">
+    {
+      allProjects.map((project) => {
+        const stars = (project.repo ? REPOS[project.repo]?.stars : undefined) ?? 0;
+        // projectIcon is the image path (for redesign); icon can be IconName or path
+        const iconPath = project.projectIcon ?? (project.icon?.startsWith('/') ? project.icon : undefined);
+        const hasIcon = Boolean(iconPath);
+        const accent = project.accent;
+        const repoUrl = project.repo ? `https://github.com/${project.repo}` : undefined;
+        // The card itself opens the first available link: site, then GitHub.
+        const href = project.site ?? repoUrl;
+        return (
+          <div class="proj-item" data-rd-only={project.projectIcon ? '' : undefined} style={`--accent:${accent}`}>
+            <a class="proj-overlay" href={href} target="_blank" rel="noopener" aria-label={project.title} />
+            <div class="proj-icon-wrap">
+              {hasIcon ? (
+                <img class="proj-icon" src={iconPath} alt="" loading="lazy" decoding="async" width="48" height="48" />
+              ) : (
+                <span class="proj-mono">{project.title.charAt(0)}</span>
+              )}
+            </div>
+            <div class="proj-content">
+              <h3 class="proj-title">
+                {project.title}
+                {stars >= 3 && (
+                  <span class="proj-stat" title={`${stars.toLocaleString('en-US')} ${t('githubStars')}`}>
+                    <Icon name="star-filled" size={10} />
+                    {stars.toLocaleString('en-US')}
+                    <span class="sr-only">
+                      {' '}
+                      {t('githubStars')}
+                    </span>
+                  </span>
+                )}
+              </h3>
+              <div class="proj-links">
+                {project.site && (
+                  <a class="proj-link" href={project.site} target="_blank" rel="noopener">
+                    <span data-lang="en">{t('projSite')}</span>
+                    <span data-lang="sk">{t('projSite', 'sk')}</span>
+                    <Icon name="arrow-up-right" size={10} />
+                  </a>
+                )}
+                {repoUrl && (
+                  <a class="proj-link" href={repoUrl} target="_blank" rel="noopener">
+                    <span data-lang="en">{t('projGitHub')}</span>
+                    <span data-lang="sk">{t('projGitHub', 'sk')}</span>
+                    <Icon name="arrow-up-right" size={10} />
+                  </a>
+                )}
+              </div>
+              <p class="proj-desc">
+                <span data-lang="en">{project.desc.en}</span>
+                <span data-lang="sk">{project.desc.sk}</span>
+              </p>
+              <div class="proj-meta">
+                {(project.langs ?? []).map((lang) => (
+                  <span class="proj-lang">{lang}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
 
   <a class="all-repos" href="https://github.com/yungsamd17?tab=repositories" target="_blank" rel="noopener">
     <Icon name="github" size={11} />

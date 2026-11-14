@@ -64,6 +64,9 @@ await png(await roundAvatar(512), 512, 'public/icon-512.png');
 
 await png(await roundOnBackground(180), 180, 'public/apple-touch-icon.png');
 
+// Profile avatar for the experimental hero (CSS crops it to a circle)
+await sharp(SOURCE).resize(128, 128).jpeg({ quality: 84, progressive: true }).toFile('public/avatar.jpg');
+
 // Maskable variant: logo scaled into the ~80% safe zone on the brand background
 await png(await roundOnBackground(512, 0.78), 512, 'public/icon-maskable.png');
 

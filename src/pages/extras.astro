@@ -26,11 +26,39 @@ import { t } from '../i18n/ui';
       <span data-lang="en">{t('extrasLab')}</span>
       <span data-lang="sk">{t('extrasLab', 'sk')}</span>
     </h3>
+
+    <label class="switch-row">
+      <input type="checkbox" id="redesign-toggle" role="switch" />
+      <span>
+        <span data-lang="en">{t('extrasRedesignLabel')}</span>
+        <span data-lang="sk">{t('extrasRedesignLabel', 'sk')}</span>
+      </span>
+      <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
+    </label>
+
+    <label class="switch-row">
+      <input type="checkbox" id="textanim-toggle" role="switch" />
+      <span>
+        <span data-lang="en">{t('extrasTextAnimLabel')}</span>
+        <span data-lang="sk">{t('extrasTextAnimLabel', 'sk')}</span>
+      </span>
+      <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
+    </label>
+
     <label class="switch-row">
       <input type="checkbox" id="anim-toggle" role="switch" />
       <span>
         <span data-lang="en">{t('extrasAnimLabel')}</span>
         <span data-lang="sk">{t('extrasAnimLabel', 'sk')}</span>
+      </span>
+      <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
+    </label>
+
+    <label class="switch-row">
+      <input type="checkbox" id="toast-toggle" role="switch" />
+      <span>
+        <span data-lang="en">{t('extrasToastLabel')}</span>
+        <span data-lang="sk">{t('extrasToastLabel', 'sk')}</span>
       </span>
       <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
     </label>

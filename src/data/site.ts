@@ -32,7 +32,16 @@ export interface FeaturedLink {
   desc: LocalizedText;
   href: string;
   icon: IconName;
-  badge?: string;
+  /** Languages/tech used */
+  langs?: string[];
+  /** Project icon for the experimental redesign (public path) */
+  projectIcon?: string;
+  /** Glow accent color for the experimental redesign */
+  accent?: string;
+  /** Live site URL (for projects page) */
+  site?: string;
+  /** GitHub slug (owner/repo) for star count */
+  repo?: string;
 }
 
 export const FEATURED: FeaturedLink[] = [
@@ -43,7 +52,12 @@ export const FEATURED: FeaturedLink[] = [
       sk: 'Váš ultimátny spoločník pre Twitch — živé kanály na prvý pohľad.',
     },
     href: 'https://yungsamd17.github.io/Twitch-Live/',
+    site: 'https://yungsamd17.github.io/Twitch-Live/',
+    repo: 'yungsamd17/Twitch-Live',
     icon: 'twitch',
+    langs: ['Web', 'JS', 'Twitch', 'Extension'],
+    projectIcon: '/projects/twitch-live.png',
+    accent: '#8531ff',
   },
   {
     title: 'Koda',
@@ -52,82 +66,99 @@ export const FEATURED: FeaturedLink[] = [
       sk: 'Čistý, minimalistický textový editor pre Android od s17 Labs.',
     },
     href: 'https://s17labs.github.io/koda',
+    site: 'https://s17labs.github.io/koda',
+    repo: 's17labs/koda',
     icon: 'android',
+    langs: ['Kotlin', 'Android', 'Editor'],
+    projectIcon: '/projects/koda.png',
+    accent: '#0146c0',
   },
   {
     title: 's17 Labs',
     desc: {
-      en: 'Lightweight, privacy-first software for the web and mobile.',
-      sk: 'Ľahký softvér s dôrazom na súkromie pre web a mobil.',
+      en: 'GitHub Org - Lightweight, privacy-first software for the web and mobile.',
+      sk: 'GitHub Org - Ľahký softvér s dôrazom na súkromie pre web a mobil.',
     },
     href: 'https://s17labs.github.io',
+    site: 'https://s17labs.github.io',
     icon: 'flask',
-    badge: 'org',
+    projectIcon: '/projects/s17-labs.png',
+    accent: '#f53f35',
   },
 ];
 
 export interface Project {
   title: string;
-  href: string;
   desc: LocalizedText;
   langs: string[];
-  live?: boolean;
-  /** GitHub slug (owner/repo) used at build time to show live star counts */
+  /** Card icon (public path). Falls back to a monogram tile when omitted. */
+  icon?: string;
+  /** Card glow color, sampled from the project's icon */
+  accent: string;
+  /** GitHub slug (owner/repo) → GitHub link + build-time star count */
   repo?: string;
+  /** Live site URL → "Site" link */
+  site?: string;
 }
 
 export const PROJECTS: Project[] = [
   {
     title: 'Singlenote',
-    href: 'https://github.com/yungsamd17/singlenote',
+    icon: '/projects/singlenote.png',
     repo: 'yungsamd17/singlenote',
+    accent: '#a78bfa',
     desc: {
       en: 'Focus on one note at a time. A minimalist, offline-first Android note app.',
       sk: 'Sústreď sa vždy len na jednu poznámku. Minimalistická, offline-first Android aplikácia na poznámky.',
     },
-    langs: ['Kotlin', 'Android'],
+    langs: ['Kotlin', 'Android', 'Notes'],
   },
   {
     title: 's17 Labs Tools',
-    href: 'https://s17labs.github.io/tools',
+    icon: '/projects/s17-labs.png',
     repo: 's17labs/tools',
+    site: 'https://s17labs.github.io/tools',
+    accent: '#f53f35',
     desc: {
       en: 'Fast, privacy-first browser utility tools for creators and developers.',
       sk: 'Rýchle nástroje pre prehliadače so zameraním na súkromie pre tvorcov a vývojárov.',
     },
-    langs: ['Web'],
+    langs: ['Astro', 'TypeScript', 'Tools'],
     live: true,
   },
   {
     title: 'Volume Control',
-    href: 'https://github.com/yungsamd17/Volume-Control',
+    icon: '/projects/volume-control.png',
     repo: 'yungsamd17/Volume-Control',
+    accent: '#1a74ea',
     desc: {
       en: 'Browser extension to push tab volume beyond the default 100% cap.',
       sk: 'Rozšírenie prehliadača na zvýšenie hlasitosti karty nad predvolených 100 %.',
     },
-    langs: ['JS'],
+    langs: ['JS', 'Extension', 'Chrome'],
   },
   {
     title: 'UserScripts',
-    href: 'https://yungsamd17.github.io/UserScripts/',
+    icon: '/projects/userscripts.jpg',
     repo: 'yungsamd17/UserScripts',
+    site: 'https://yungsamd17.github.io/UserScripts/',
+    accent: '#d57d59',
     desc: {
       en: 'Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.',
       sk: 'Userscripts pre Twitch, X a ďalšie — malé vylepšenia pre každodenné používanie.',
     },
-    langs: ['JS', 'Web'],
+    langs: ['JS', 'Web', 'Userscripts'],
     live: true,
   },
   {
     title: 'BetterDiscord Addons',
-    href: 'https://github.com/yungsamd17/BetterDiscordAddons',
     repo: 'yungsamd17/BetterDiscordAddons',
+    accent: '#8b9ef5',
     desc: {
       en: 'A collection of plugins and themes for BetterDiscord.',
       sk: 'Kolekcia pluginov a tém pre BetterDiscord.',
     },
-    langs: ['JS', 'CSS'],
+    langs: ['JS', 'CSS', 'BetterDiscord'],
   },
 ];
 

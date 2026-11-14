@@ -28,7 +28,10 @@ import { t } from '../i18n/ui';
               </div>
             </a>
             <button type="button" class="copy-btn" data-copy={link.copy} aria-label={t('copyEmail')}>
-              <Icon name="copy" size={16} />
+              <span class="copy-icon-wrap">
+                <Icon name="copy" size={16} />
+                <Icon name="check" size={16} />
+              </span>
             </button>
           </div>
         ) : (

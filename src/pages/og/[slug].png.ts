@@ -9,7 +9,6 @@ interface OgPage {
 
 const PAGES: OgPage[] = [
   { slug: 'index', title: 'Sam @yungsamd17', subtitle: 'building tools for the web' },
-  { slug: 'about', title: 'About me', subtitle: 'self-taught web developer from Slovakia' },
   { slug: 'projects', title: 'Other projects', subtitle: 'browser extensions, userscripts, and web tools' },
   { slug: 'links', title: 'Links', subtitle: 'all socials and profiles in one place' },
 ];

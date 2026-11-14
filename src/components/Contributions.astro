@@ -1,0 +1,96 @@
+---
+import { SITE } from '../data/site';
+import { t } from '../i18n/ui';
+import { fetchContributions } from '../lib/contributions';
+
+const data = await fetchContributions(SITE.handle);
+const label = `${data ? `GitHub contributions, ${data.from} to ${data.to}` : 'GitHub contributions'}`;
+// Narrow screens hide the oldest columns instead of scrolling the calendar.
+const recentFrom = data ? Math.max(0, data.weeks.length - 26) : 0;
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const shortDate = (iso: string) => {
+  const [, month, day] = iso.split('-');
+  return `${MONTHS[Number(month) - 1]} ${Number(day)}`;
+};
+const totalLabel = data ? data.total.toLocaleString('en-US') : '';
+---
+
+{
+  data && (
+    <section class="rd-contrib-section">
+      <h2 class="rd-head">
+        <span class="rd-head-text">
+          <span data-lang="en">{t('contribTitle')}</span>
+          <span data-lang="sk">{t('contribTitle', 'sk')}</span>
+          <span class="rd-head-sep" aria-hidden="true">
+            {' / '}
+          </span>
+          <span class="rd-head-total">{totalLabel}</span>{' '}
+          <span data-lang="en">{t('contribYear')}</span>
+          <span data-lang="sk">{t('contribYear', 'sk')}</span>
+        </span>
+        <a class="rd-head-link" href={`https://github.com/${SITE.handle}`} target="_blank" rel="noopener">
+          @{SITE.handle}
+        </a>
+      </h2>
+
+      <div class="rd-contrib" role="img" aria-label={label}>
+        <div class="rd-contrib-days" aria-hidden="true">
+          <span style="grid-row: 2">Mon</span>
+          <span style="grid-row: 4">Wed</span>
+          <span style="grid-row: 6">Fri</span>
+        </div>
+
+        <div class="rd-contrib-main">
+          <div class="rd-contrib-months" aria-hidden="true">
+            {data.months.map((month) => {
+              const visibleCount = Math.min(26, data.weeks.length);
+              const p = (month.col / data.weeks.length) * 100;
+              const mp = ((month.col - recentFrom) / visibleCount) * 100;
+              return (
+                <span
+                  style={`--p:${p}%;--mp:${mp}%`}
+                  data-old={month.col < recentFrom ? '' : undefined}
+                >
+                  {month.label}
+                </span>
+              );
+            })}
+          </div>
+
+          <div class="rd-contrib-grid" data-contrib-grid>
+            {data.weeks.map((week, col) =>
+              week.map((day) => {
+                if (!day) {
+                  return (
+                    <span
+                      class="rd-contrib-cell"
+                      data-empty
+                      data-old={col < recentFrom ? '' : undefined}
+                      aria-hidden="true"
+                    />
+                  );
+                }
+                const dateLabel = shortDate(day.date);
+                return (
+                  <span
+                    class="rd-contrib-cell"
+                    data-level={day.level}
+                    data-old={col < recentFrom ? '' : undefined}
+                    style={`--d:${(data.weeks.length - 1 - col) * 6}ms`}
+                    data-tip-en={`${day.count} ${day.count === 1 ? 'contribution' : 'contributions'} on ${dateLabel}`}
+                    data-tip-sk={`${day.count} ${day.count === 1 ? 'príspevok' : 'príspevkov'} · ${dateLabel}`}
+                    aria-hidden="true"
+                  />
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-contrib-tip" data-contrib-tip aria-hidden="true" />
+    </section>
+  )
+}

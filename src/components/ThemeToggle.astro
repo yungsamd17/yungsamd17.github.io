@@ -5,8 +5,8 @@ import { t } from '../i18n/ui';
 
 <div class="theme-menu">
   <button
-    id="theme-toggle"
     type="button"
+    data-theme-toggle
     aria-label={t('themeToggle')}
     title="Toggle theme"
     class="theme-toggle"
@@ -23,7 +23,7 @@ import { t } from '../i18n/ui';
       <Icon name="moon" size={16} />
     </span>
   </button>
-  <div class="menu-panel" role="menu" aria-labelledby="theme-toggle">
+  <div class="menu-panel" role="menu" aria-label={t('themeToggle')}>
     <button type="button" role="menuitem" class="menu-item" data-theme-value="light">
       <Icon name="sun" size={14} />
       <span data-lang="en">Light</span>
