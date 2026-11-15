@@ -45,7 +45,6 @@ yungsamd17.github.io/
 │   ├── site.webmanifest
 │   ├── logo.jpg             # OG image fallback for unlisted routes
 │   ├── robots.txt
-│   ├── src/assets/          # Legacy asset path (kept for old links)
 │   └── downloader/          # BetterDiscord downloader tool (vanilla JS)
 ├── src/
 │   ├── components/
