@@ -10,8 +10,11 @@ interface RepoStats {
 
 async function fetchStars(slug: string): Promise<RepoStats> {
   try {
+    const headers: Record<string, string> = { 'User-Agent': 'yungsamd17.github.io', Accept: 'application/vnd.github+json' };
+    const token = (import.meta as any).env?.GITHUB_TOKEN ?? (typeof process !== 'undefined' ? process.env?.GITHUB_TOKEN : undefined);
+    if (token) headers.Authorization = `Bearer ${token}`;
     const res = await fetch(`https://api.github.com/repos/${slug}`, {
-      headers: { 'User-Agent': 'yungsamd17.github.io', Accept: 'application/vnd.github+json' },
+      headers,
       signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return {};
@@ -51,17 +54,18 @@ const REPOS = Object.fromEntries(repoEntries);
         const iconPath = project.projectIcon ?? (project.icon?.startsWith('/') ? project.icon : undefined);
         const hasIcon = Boolean(iconPath);
         const accent = project.accent;
+        const mono = project.mono ?? project.title.charAt(0);
         const repoUrl = project.repo ? `https://github.com/${project.repo}` : undefined;
         // The card itself opens the first available link: site, then GitHub.
         const href = project.site ?? repoUrl;
         return (
-          <div class="proj-item" data-rd-only={project.projectIcon ? '' : undefined} style={`--accent:${accent}`}>
+          <div class="proj-item" data-rd-only={project.projectIcon ? '' : undefined} data-repo={project.repo} style={`--accent:${accent}${project.iconBg ? `;--icon-bg:${project.iconBg}` : ''}`}>
             <a class="proj-overlay" href={href} target="_blank" rel="noopener" aria-label={project.title} />
             <div class="proj-icon-wrap">
               {hasIcon ? (
                 <img class="proj-icon" src={iconPath} alt="" loading="lazy" decoding="async" width="48" height="48" />
               ) : (
-                <span class="proj-mono">{project.title.charAt(0)}</span>
+                <span class="proj-mono">{mono}</span>
               )}
             </div>
             <div class="proj-content">
@@ -99,6 +103,12 @@ const REPOS = Object.fromEntries(repoEntries);
                 <span data-lang="sk">{project.desc.sk}</span>
               </p>
               <div class="proj-meta">
+                {project.archived && (
+                  <span class="proj-lang proj-lang-archived">
+                    <span data-lang="en">{t('archiveBadge')}</span>
+                    <span data-lang="sk">{t('archiveBadge', 'sk')}</span>
+                  </span>
+                )}
                 {(project.langs ?? []).map((lang) => (
                   <span class="proj-lang">{lang}</span>
                 ))}

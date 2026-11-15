@@ -100,10 +100,27 @@ const personSchema = {
     // Experimental options need to land on <html> before first paint so the
     // redesign never flashes the classic layout.
     try {
-      if (localStorage.getItem('redesign') === 'on') document.documentElement.dataset.redesign = 'on';
+      if (localStorage.getItem('redesign') !== 'off') document.documentElement.dataset.redesign = 'on';
+    } catch {}
+    // The redesign owns scroll restoration manually; tell the browser early so
+    // a reload (e.g. mobile pull-to-refresh) never restores a stale offset.
+    try {
+      if (localStorage.getItem('redesign') === 'on') {
+        history.scrollRestoration = 'manual';
+        // Hide the page until the remembered scroll offset is restored, so a
+        // stale position never flashes on screen during a reload.
+        document.documentElement.style.visibility = 'hidden';
+        setTimeout(() => { document.documentElement.style.visibility = ''; }, 300);
+      }
     } catch {}
     try {
-      if (localStorage.getItem('textanim') === 'off') document.documentElement.dataset.textanim = 'off';
+      if (localStorage.getItem('textanim') !== 'on') document.documentElement.dataset.textanim = 'off';
+    } catch {}
+    try {
+      if (localStorage.getItem('toast') !== 'on') document.documentElement.dataset.toast = 'off';
+    } catch {}
+    try {
+      if (localStorage.getItem('pageglow') !== 'on') document.documentElement.dataset.pageglow = 'off';
     } catch {}
   })();
 </script>

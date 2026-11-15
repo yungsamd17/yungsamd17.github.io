@@ -6,12 +6,22 @@ import LangToggle from '../components/LangToggle.astro';
 import Contributions from '../components/Contributions.astro';
 import { SITE, SOCIALS, FEATURED } from '../data/site';
 import { t } from '../i18n/ui';
+
+// Render the age at build time so it is already in the HTML on first paint —
+// no "…" placeholder that pops in once the client script runs. app.ts only
+// corrects it if the value goes stale (birthday rolled over on a cached page).
+const now = new Date();
+let age = now.getFullYear() - SITE.birthDate.getFullYear();
+const hadBirthday =
+  now.getMonth() > SITE.birthDate.getMonth() ||
+  (now.getMonth() === SITE.birthDate.getMonth() && now.getDate() >= SITE.birthDate.getDate());
+if (!hadBirthday) age--;
 ---
 
 <BaseLayout title={SITE.title} description={SITE.description}>
   <header class="site-header">
     <div class="identity">
-      <img class="avatar" src="/avatar.jpg" alt={SITE.name} width="64" height="64" decoding="async" />
+      <img class="avatar" src="/avatar.jpg" alt={SITE.name} width="64" height="64" decoding="async" data-avatar />
       <div class="identity-text">
         <h1>{SITE.name}</h1>
         <a href="/links/" class="handle">@{SITE.handle}</a>
@@ -30,14 +40,14 @@ import { t } from '../i18n/ui';
   <section class="about-section">
     <p class="about-text">
       <span data-lang="en">
-        Hey, I'm <strong>Sam</strong> — a self-taught web developer from <strong>Slovakia</strong>, <span class="age">…</span> years old.
+        Hey, I'm <strong>Sam</strong>, a self-taught web developer from <strong>Slovakia</strong>, <span class="age">{age}</span> years old.
         I build <strong>browser extensions</strong>, <strong>userscripts</strong>, and small tools that make platforms
         like <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>,
         <a href="https://x.com" target="_blank" rel="noopener">X</a>, and
         <a href="https://betterdiscord.app" target="_blank" rel="noopener">BetterDiscord</a> nicer to use.
       </span>
       <span data-lang="sk">
-        Ahoj, volám sa <strong>Sam</strong> — webový vývojár samouk zo <strong>Slovenska</strong>, mám <span class="age">…</span> rokov.
+        Ahoj, volám sa <strong>Sam</strong>, webový vývojár samouk zo <strong>Slovenska</strong>, mám <span class="age">{age}</span> rokov.
         Vytváram <strong>rozšírenia pre prehliadače</strong>, <strong>používateľské skripty</strong> a malé nástroje, vďaka ktorým sa platformy
         ako <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>,
         <a href="https://x.com" target="_blank" rel="noopener">X</a> a
@@ -47,14 +57,12 @@ import { t } from '../i18n/ui';
 
     <p class="about-text">
       <span data-lang="en">
-        I also make <strong>Android apps</strong> —
-        mostly clean, minimal things like text editors and note apps.
+        I also make <strong>Android apps</strong>, mostly clean, minimal things like text editors and note apps.
         Under <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a>,
         I focus on lightweight, privacy-first software for the web and mobile.
       </span>
       <span data-lang="sk">
-        Tiež tvorím <strong>Android aplikácie</strong> —
-        väčšinou čisté, minimalistické veci ako textové editory a poznámkové aplikácie.
+        Tiež tvorím <strong>Android aplikácie</strong>, väčšinou čisté, minimalistické veci ako textové editory a poznámkové aplikácie.
         Pod <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a>
         sa zameriavam na ľahký softvér s dôrazom na súkromie pre web a mobilné zariadenia.
       </span>
@@ -62,12 +70,12 @@ import { t } from '../i18n/ui';
 
     <p class="about-text">
       <span data-lang="en">
-        You can reach me at <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-        or find me on <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X</a>
+        The best way to get in contact with me is <a href={`mailto:${SITE.email}`}>Email</a>,
+        or you can find me on <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X</a>
         and <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.
       </span>
       <span data-lang="sk">
-        Môžete ma kontaktovať na <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        Najlepší spôsob, ako ma kontaktovať, je <a href={`mailto:${SITE.email}`}>e-mail</a>,
         alebo ma nájdete na <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X</a>
         a <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.
       </span>
@@ -80,7 +88,7 @@ import { t } from '../i18n/ui';
     <a class="rd-head-link" href="/links/">
       <span data-lang="en">{t('allLinks')}</span>
       <span data-lang="sk">{t('allLinks', 'sk')}</span>
-      <Icon name="arrow-up-right" size={11} />
+      <Icon name="arrow-right" size={11} />
     </a>
   </h2>
 
@@ -90,7 +98,7 @@ import { t } from '../i18n/ui';
         <li>
           <a href={social.href} target="_blank" rel="noopener">
             {social.label}
-            <Icon name="arrow-up-right" size={12} class="card-arrow" />
+            <Icon name="arrow-up-right" size={14} class="card-arrow" />
           </a>
         </li>
       ))
@@ -104,7 +112,7 @@ import { t } from '../i18n/ui';
       <a class="rd-head-link" href="/projects/">
         <span data-lang="en">{t('allProjects')}</span>
         <span data-lang="sk">{t('allProjects', 'sk')}</span>
-        <Icon name="arrow-up-right" size={11} />
+        <Icon name="arrow-right" size={11} />
       </a>
     </h2>
     {

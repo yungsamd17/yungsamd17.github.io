@@ -3,6 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
 import { t } from '../i18n/ui';
+
+const OPTIONS = [
+  { id: 'redesign-toggle', label: 'extrasRedesignLabel', desc: 'extrasRedesignDesc' },
+  { id: 'textanim-toggle', label: 'extrasTextAnimLabel', desc: 'extrasTextAnimDesc' },
+  { id: 'anim-toggle', label: 'extrasAnimLabel', desc: 'extrasAnimDesc' },
+  { id: 'toast-toggle', label: 'extrasToastLabel', desc: 'extrasToastDesc' },
+  { id: 'pageglow-toggle', label: 'extrasPageGlowLabel', desc: 'extrasPageGlowDesc' },
+] as const;
 ---
 
 <BaseLayout title={`${t('extrasTitle')} | ${SITE.title}`}>
@@ -12,55 +20,42 @@ import { t } from '../i18n/ui';
     <span data-lang="sk">{t('back', 'sk')}</span>
   </a>
 
-  <h2>
-    <span data-lang="en">{t('extrasTitle')}</span><span data-lang="sk">{t('extrasTitle', 'sk')}</span>
-  </h2>
+  <header class="extras-header">
+    <h1 class="extras-title">
+      <span data-lang="en">{t('extrasTitle')}</span>
+      <span data-lang="sk">{t('extrasTitle', 'sk')}</span>
+    </h1>
+    <p class="extras-lede">
+      <span data-lang="en">{t('extrasText')}</span>
+      <span data-lang="sk">{t('extrasText', 'sk')}</span>
+    </p>
+  </header>
 
-  <p class="about-text">
-    <span data-lang="en">{t('extrasText')}</span>
-    <span data-lang="sk">{t('extrasText', 'sk')}</span>
-  </p>
-
-  <div class="lab-section">
-    <h3 class="lab-title">
+  <section class="extras-group">
+    <h2 class="extras-group-title">
       <span data-lang="en">{t('extrasLab')}</span>
       <span data-lang="sk">{t('extrasLab', 'sk')}</span>
-    </h3>
+    </h2>
 
-    <label class="switch-row">
-      <input type="checkbox" id="redesign-toggle" role="switch" />
-      <span>
-        <span data-lang="en">{t('extrasRedesignLabel')}</span>
-        <span data-lang="sk">{t('extrasRedesignLabel', 'sk')}</span>
-      </span>
-      <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
-    </label>
-
-    <label class="switch-row">
-      <input type="checkbox" id="textanim-toggle" role="switch" />
-      <span>
-        <span data-lang="en">{t('extrasTextAnimLabel')}</span>
-        <span data-lang="sk">{t('extrasTextAnimLabel', 'sk')}</span>
-      </span>
-      <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
-    </label>
-
-    <label class="switch-row">
-      <input type="checkbox" id="anim-toggle" role="switch" />
-      <span>
-        <span data-lang="en">{t('extrasAnimLabel')}</span>
-        <span data-lang="sk">{t('extrasAnimLabel', 'sk')}</span>
-      </span>
-      <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
-    </label>
-
-    <label class="switch-row">
-      <input type="checkbox" id="toast-toggle" role="switch" />
-      <span>
-        <span data-lang="en">{t('extrasToastLabel')}</span>
-        <span data-lang="sk">{t('extrasToastLabel', 'sk')}</span>
-      </span>
-      <span class="switch-ui" aria-hidden="true"><span class="switch-thumb"></span></span>
-    </label>
-  </div>
+    <div class="extras-options">
+      {
+        OPTIONS.map((option) => (
+          <label class="opt">
+            <span class="opt-copy">
+              <span class="opt-label">
+                <span data-lang="en">{t(option.label)}</span>
+                <span data-lang="sk">{t(option.label, 'sk')}</span>
+              </span>
+              <span class="opt-desc">
+                <span data-lang="en">{t(option.desc)}</span>
+                <span data-lang="sk">{t(option.desc, 'sk')}</span>
+              </span>
+            </span>
+            <input type="checkbox" id={option.id} role="switch" />
+            <span class="switch-ui" aria-hidden="true"><span class="switch-thumb" /></span>
+          </label>
+        ))
+      }
+    </div>
+  </section>
 </BaseLayout>

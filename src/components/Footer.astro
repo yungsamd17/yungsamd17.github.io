@@ -1,7 +1,13 @@
 ---
 import { SITE } from '../data/site';
+
+// Build-time year so the footer never shows a stale number that swaps in later
+// (app.ts still corrects it silently if a cached page is opened after New Year).
+const year = new Date().getFullYear();
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const onLinks = path === '/links';
 ---
 
 <footer class="site-footer">
-  <span>© 2023-<a href="/extras/" class="year-link" title="...?"><span class="year">2026</span></a> {SITE.name} ({SITE.handle})</span>
+  <span>© 2023-<a href="/extras/" class="year-link" title="...?"><span class="year">{year}</span></a> {SITE.name} ({onLinks ? <span>{SITE.handle}</span> : <a href="/links/">{SITE.handle}</a>})</span>
 </footer>

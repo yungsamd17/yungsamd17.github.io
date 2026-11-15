@@ -1,10 +1,11 @@
 ---
 import { SITE } from '../data/site';
 import { t } from '../i18n/ui';
-import { fetchContributions } from '../lib/contributions';
+import { fetchContributions, contributionSignature } from '../lib/contributions';
 
 const data = await fetchContributions(SITE.handle);
-const label = `${data ? `GitHub contributions, ${data.from} to ${data.to}` : 'GitHub contributions'}`;
+const sig = data ? contributionSignature(data) : '';
+const chartLabel = data ? `GitHub contributions, ${data.from} to ${data.to}` : 'GitHub contributions';
 // Narrow screens hide the oldest columns instead of scrolling the calendar.
 const recentFrom = data ? Math.max(0, data.weeks.length - 26) : 0;
 
@@ -35,7 +36,7 @@ const totalLabel = data ? data.total.toLocaleString('en-US') : '';
         </a>
       </h2>
 
-      <div class="rd-contrib" role="img" aria-label={label}>
+      <div class="rd-contrib" role="img" aria-label={chartLabel}>
         <div class="rd-contrib-days" aria-hidden="true">
           <span style="grid-row: 2">Mon</span>
           <span style="grid-row: 4">Wed</span>
@@ -59,7 +60,12 @@ const totalLabel = data ? data.total.toLocaleString('en-US') : '';
             })}
           </div>
 
-          <div class="rd-contrib-grid" data-contrib-grid>
+          <div
+            class="rd-contrib-grid"
+            data-contrib-grid
+            data-contrib-sig={sig}
+            data-contrib-key="home"
+          >
             {data.weeks.map((week, col) =>
               week.map((day) => {
                 if (!day) {
@@ -77,6 +83,7 @@ const totalLabel = data ? data.total.toLocaleString('en-US') : '';
                   <span
                     class="rd-contrib-cell"
                     data-level={day.level}
+                    data-date={day.date}
                     data-old={col < recentFrom ? '' : undefined}
                     style={`--d:${(data.weeks.length - 1 - col) * 6}ms`}
                     data-tip-en={`${day.count} ${day.count === 1 ? 'contribution' : 'contributions'} on ${dateLabel}`}

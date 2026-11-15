@@ -206,8 +206,7 @@ h2 {
 }
 
 a:hover .handle,
-a:hover.handle,
-.handle:hover { color: var(--hi); }
+a:hover.handle { color: var(--hi); }
 
 /* ── home: tagline ── */
 .tagline {
@@ -551,6 +550,19 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
   border: 1px solid var(--mid);
 }
 
+.proj-lang.proj-lang-archived {
+  color: #9a6700;
+  border-color: #9a6700;
+  background: color-mix(in oklab, #9a6700 12%, transparent);
+}
+
+html[data-redesign] .proj-lang.proj-lang-archived {
+  color: #9a6700;
+  border: 0;
+  box-shadow: inset 0 0 0 1px #9a6700;
+  background: color-mix(in oklab, #9a6700 14%, transparent);
+}
+
 .proj-item:hover .proj-badge.live {
   color: #4caf50;
   border: 1px solid #4caf50;
@@ -637,6 +649,15 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
   color: var(--item);
 }
 
+.links-intro {
+  max-width: 34ch;
+  margin: 10px auto 0;
+  color: var(--mid);
+  font-size: .82rem;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
 .links-list {
   display: flex;
   flex-direction: column;
@@ -712,7 +733,8 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
 .copy-btn:hover,
 .copy-btn:active { color: var(--accent); }
 
-/* the copy icon morphs into a check for a moment after a successful copy */
+/* the copy icon morphs into a check for a moment after a successful copy:
+   a straight cross-fade with a slight scale, no twisting/rotation */
 .copy-icon-wrap {
   display: grid;
   place-items: center;
@@ -723,27 +745,23 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
   width: 16px;
   height: 16px;
   transition:
-    opacity .18s ease,
-    scale .22s cubic-bezier(.23, 1, .32, 1),
-    rotate .22s ease;
+    opacity .16s ease,
+    scale .16s ease;
 }
 
 .copy-icon-wrap > svg:last-child {
   opacity: 0;
-  scale: .4;
-  rotate: -45deg;
+  scale: .82;
 }
 
 .copy-btn.copied .copy-icon-wrap > svg:first-child {
   opacity: 0;
-  scale: .4;
-  rotate: 45deg;
+  scale: .82;
 }
 
 .copy-btn.copied .copy-icon-wrap > svg:last-child {
   opacity: 1;
   scale: 1;
-  rotate: 0deg;
 }
 
 .copy-btn.copied { color: var(--hi); }
@@ -774,7 +792,14 @@ html[data-theme-mode="dark"] .theme-icon-dark { display: grid; }
   cursor: pointer;
 }
 
-.site-footer .year-link:hover { color: var(--hi); }
+.site-footer .year-link:hover,
+.site-footer a:hover { color: var(--hi); }
+
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 .skip-link {
   position: absolute;
@@ -850,41 +875,106 @@ html.rainbow body {
   html.rainbow body { animation: none; }
 }
 
-/* ── extras: experimental lab ── */
-.lab-section {
-  margin-top: 34px;
-  border-top: 1px solid var(--lo);
-  padding-top: 16px;
+/* ── experimental: fixed page accent glow on the viewport ── */
+html[data-pageglow="off"] body {
+  background-image: none;
 }
 
-.lab-title {
-  font-size: .56rem;
+/* ── extras: experimental lab ── */
+.extras-header { margin-bottom: 26px; }
+
+.extras-title {
+  margin: 0 0 8px;
+  font-size: clamp(1.4rem, 5vw, 1.75rem);
+  letter-spacing: -.03em;
+  color: var(--hi);
+}
+
+.extras-lede {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--mid);
+  font-size: .88rem;
+  font-weight: 300;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.extras-group { margin-top: 30px; }
+
+.extras-group + .extras-group {
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 1px solid var(--lo);
+}
+
+.extras-group-title {
+  margin: 0 0 12px;
+  font-size: .62rem;
   font-weight: 500;
-  letter-spacing: .08em;
+  letter-spacing: .09em;
   text-transform: uppercase;
   color: var(--mid);
-  margin: 0 0 10px;
 }
 
-.switch-row {
+.extras-group-note {
+  margin: -2px 0 18px;
+  max-width: 48ch;
+  color: var(--mid);
+  font-size: .8rem;
+  font-weight: 300;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.extras-options {
+  display: grid;
+  gap: 8px;
+}
+
+/* one option = a card with a label, a short description and a switch */
+.opt {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  padding: 3px 0;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--dim);
+  border: 1px solid var(--lo);
   cursor: pointer;
-  font-size: .9rem;
-  line-height: 1.4;
-  color: var(--item);
-  transition: color .15s;
+  transition: border-color .15s, background-color .15s;
 }
 
-.switch-row + .switch-row { margin-top: 8px; }
+.opt:hover { border-color: color-mix(in oklab, var(--mid) 35%, var(--lo)); }
 
-.switch-row:hover { color: var(--hi); }
+.opt:has(input:checked) {
+  border-color: color-mix(in oklab, var(--accent) 35%, var(--lo));
+}
 
-.switch-row input {
+.opt-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.opt-label {
+  color: var(--hi);
+  font-size: .9rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.opt-desc {
+  color: var(--mid);
+  font-size: .78rem;
+  font-weight: 300;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.opt input {
   position: absolute;
   opacity: 0;
   width: 1px;
@@ -892,42 +982,51 @@ html.rainbow body {
   pointer-events: none;
 }
 
+/* switch: fixed 46×26 at every breakpoint, thumb 20 */
 .switch-ui {
   flex-shrink: 0;
   position: relative;
-  width: 30px;
-  height: 17px;
+  width: 46px;
+  height: 26px;
   border-radius: 100px;
-  background: var(--lo);
-  border: 1px solid var(--mid);
-  transition: background-color .15s, border-color .15s;
+  background: color-mix(in oklab, var(--mid) 22%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--mid) 35%, transparent);
+  transition: background-color .18s ease, box-shadow .18s ease;
 }
 
 .switch-thumb {
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 11px;
-  height: 11px;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: var(--item);
-  transition: transform .15s ease, background-color .15s;
+  background: var(--hi);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .35);
+  transition:
+    transform .18s cubic-bezier(.23, 1, .32, 1),
+    background-color .18s ease;
 }
 
-.switch-row input:checked ~ .switch-ui {
+.opt input:checked ~ .switch-ui {
   background: var(--accent);
-  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
 }
 
-.switch-row input:checked ~ .switch-ui .switch-thumb {
-  transform: translateX(13px);
+.opt input:checked ~ .switch-ui .switch-thumb {
+  transform: translateX(20px);
   background: var(--bg);
 }
 
-.switch-row input:focus-visible ~ .switch-ui {
+.opt input:focus-visible ~ .switch-ui {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .opt { padding: 12px 14px; gap: 12px; }
+  .opt-label { font-size: .86rem; }
+  .opt-desc { font-size: .75rem; }
 }
 
 /* ── konami easter egg ── */
@@ -1093,6 +1192,41 @@ html[data-redesign] .avatar {
   border-radius: 50%;
   object-fit: cover;
   background: var(--bg);
+  cursor: pointer;
+  transition: scale .12s;
+}
+
+html[data-redesign] .avatar:active { scale: .94; }
+
+/* easter egg: falling profile pictures */
+.avatar-drop {
+  position: fixed;
+  top: -96px;
+  z-index: 120;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: .8;
+  filter: saturate(.85);
+  animation:
+    avatar-fall linear forwards,
+    avatar-fade linear forwards;
+}
+
+@keyframes avatar-fall {
+  from { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  to { transform: translateY(calc(100vh + 192px)) rotate(var(--rot, 0deg)); }
+}
+
+/* fades out while falling; fully transparent once past ~75% of the screen */
+@keyframes avatar-fade {
+  0% { opacity: .8; }
+  70% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-drop { animation: none; opacity: 0; }
 }
 
 html[data-redesign] .handle { display: none; }
@@ -1222,6 +1356,11 @@ html[data-redesign] .card-arrow {
   color: var(--mid);
 }
 
+html[data-redesign] .link-item .card-arrow {
+  width: 16px;
+  height: 16px;
+}
+
 /* ── home: socials ── */
 html[data-redesign] .link-list {
   display: grid;
@@ -1251,6 +1390,22 @@ html[data-redesign] .link-list a:active { color: var(--item); }
 /* press down like a physical button — same in every state */
 html[data-redesign] .link-list a:active { scale: .97; }
 
+/* ── shared card glow (projects + featured) ── */
+html[data-redesign] .proj-item,
+html[data-redesign] .featured-link {
+  background-image:
+    radial-gradient(
+      237px circle at 17% -35%,
+      color-mix(in oklab, var(--accent) 22%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      120px circle at 100% 100%,
+      color-mix(in oklab, var(--accent) 6%, transparent),
+      transparent 70%
+    );
+}
+
 /* ── home: featured ── */
 html[data-redesign] .featured-link {
   position: relative;
@@ -1261,11 +1416,6 @@ html[data-redesign] .featured-link {
   margin-bottom: 8px;
   padding: 12px 14px;
   border-radius: 14px;
-  background-image: radial-gradient(
-    180px circle at 40px 40px,
-    color-mix(in oklab, var(--accent) 16%, transparent),
-    transparent 72%
-  );
   color: var(--item);
   transition: color .18s, scale .12s;
 }
@@ -1281,7 +1431,7 @@ html[data-redesign] .featured-icon-wrap {
   border-radius: 12px;
   overflow: hidden;
   background: color-mix(in oklab, var(--accent) 16%, transparent);
-  box-shadow: 0 10px 26px -12px color-mix(in oklab, var(--accent) 90%, transparent);
+  box-shadow: none;
 }
 
 html[data-redesign] .featured-icon {
@@ -1380,11 +1530,6 @@ html[data-redesign] .proj-item {
   overflow: hidden;
   padding: 13px;
   border-radius: 16px;
-  background-image: radial-gradient(
-    140px circle at 40px 40px,
-    color-mix(in oklab, var(--accent) 22%, transparent),
-    transparent 72%
-  );
   color: var(--mid);
   transition: scale .12s;
 }
@@ -1400,8 +1545,8 @@ html[data-redesign] .proj-icon-wrap {
   height: 48px;
   border-radius: 12px;
   overflow: hidden;
-  background: color-mix(in oklab, var(--accent) 16%, transparent);
-  box-shadow: 0 10px 26px -12px color-mix(in oklab, var(--accent) 90%, transparent);
+  background: var(--icon-bg, color-mix(in oklab, var(--accent) 16%, transparent));
+  box-shadow: none;
 }
 
 html[data-redesign] .proj-icon {
@@ -1578,8 +1723,15 @@ html[data-redesign] .links-container {
 }
 
 html[data-redesign] .links-list {
-  max-width: 560px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  max-width: 720px;
   margin: 0 auto;
+}
+
+@media (min-width: 620px) {
+  html[data-redesign] .links-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 html[data-redesign] .links-header { margin-bottom: 26px; }
@@ -1587,6 +1739,22 @@ html[data-redesign] .links-header { margin-bottom: 26px; }
 html[data-redesign] .links-header h1 {
   font-size: 1.4rem;
   letter-spacing: -.02em;
+}
+
+/* the links page keeps its handle + intro even though the home hero hides it */
+html[data-redesign] .links-header .handle {
+  display: block;
+  margin: 2px 0 0;
+  color: var(--mid);
+  font-size: .78rem;
+}
+
+html[data-redesign] .links-intro {
+  max-width: 38ch;
+  margin-top: 10px;
+  color: var(--mid);
+  font-size: .8rem;
+  line-height: 1.55;
 }
 
 html[data-redesign] .link-item {
@@ -1608,19 +1776,21 @@ html[data-redesign] .link-item:hover .link-username,
 html[data-redesign] .link-item:focus-visible .link-username,
 html[data-redesign] .link-item:active .link-username { color: var(--mid); }
 
-/* the copy button presses on its own, not the whole card */
-html[data-redesign] .link-item:active:not(:has(.copy-btn:active)) { scale: .98; }
+/* A plain link card presses as a whole. The email card is different: it only
+   presses when its own link is pressed — never when the copy button is, since
+   Chrome applies :active to the card (not the button) after a tap on touch. */
+html[data-redesign] .link-item:active:not(:has(.copy-btn)) { scale: .98; }
+
+html[data-redesign] .link-item:has(.copy-btn):active:has(.link-main:active) { scale: .98; }
 
 html[data-redesign] .copy-btn {
-  transition: color .15s, scale .12s;
+  transition: color .15s;
+  transform: translateX(4px);
 }
 
 html[data-redesign] .copy-btn:hover { color: var(--mid); }
 
-html[data-redesign] .copy-btn:active {
-  color: var(--hi);
-  scale: .88;
-}
+html[data-redesign] .copy-btn:active { color: var(--hi); }
 
 html[data-redesign] .copy-btn.copied { color: var(--hi); }
 
@@ -1669,11 +1839,11 @@ html[data-redesign] .rd-contrib-main {
   min-width: 0;
 }
 
-/* soft fade marking the graph's clipped left edge */
+/* soft fade marking the graph's clipped left edge (months included) */
 html[data-redesign] .rd-contrib-main::after {
   content: "";
   position: absolute;
-  top: 22px;
+  top: 0;
   bottom: 0;
   left: 0;
   z-index: 3;
@@ -1733,7 +1903,33 @@ html[data-redesign] .rd-contrib-grid[data-shown="true"] .rd-contrib-cell {
   scale: 1;
 }
 
-html[data-redesign] .rd-contrib-cell[data-empty] { background: transparent; }
+/* a cached calendar is already known: no staggered reveal, no transitions */
+html[data-redesign] .rd-contrib-grid[data-instant] .rd-contrib-cell { transition: none; }
+
+/* GitHub-like focus: hovering/clicking a cell dims every other date. */
+html[data-redesign] .rd-contrib-grid:has(.rd-contrib-cell:hover) .rd-contrib-cell {
+  transition-delay: 0ms;
+  transition-duration: .15s;
+}
+
+html[data-redesign] .rd-contrib-grid[data-shown="true"]:has(.rd-contrib-cell:hover) .rd-contrib-cell:not(:hover) {
+  opacity: .32 !important;
+}
+
+html[data-redesign] .rd-contrib-cell:hover {
+  outline: 1px solid var(--hi);
+  outline-offset: 1px;
+  z-index: 2;
+}
+
+html[data-redesign] .rd-contrib-cell[data-empty] { background: var(--gh0); }
+
+html[data-redesign] .rd-contrib-cell[data-empty][data-past-empty] { background: var(--rd-surf); }
+
+/* future days that haven't happened yet are dimmed (tomorrow stays bright) */
+html[data-redesign] .rd-contrib-grid[data-shown="true"] .rd-contrib-cell[data-future] {
+  opacity: .25;
+}
 html[data-redesign] .rd-contrib-cell[data-level="1"] { background: var(--gh1); }
 html[data-redesign] .rd-contrib-cell[data-level="2"] { background: var(--gh2); }
 html[data-redesign] .rd-contrib-cell[data-level="3"] { background: var(--gh3); }
@@ -1746,7 +1942,6 @@ html[data-redesign] .rd-contrib-tip {
   top: 0;
   left: 0;
   z-index: 90;
-  display: none;
   transform: translateX(-50%);
   padding: 5px 9px;
   border-radius: 6px;
@@ -1758,9 +1953,30 @@ html[data-redesign] .rd-contrib-tip {
   line-height: 1.2;
   white-space: nowrap;
   pointer-events: none;
+  opacity: 0;
+  scale: .92;
+  visibility: hidden;
+  /* the offset glides between neighbouring dates; visibility waits for the
+     fade-out so dismissing is animated too */
+  transition:
+    left .19s cubic-bezier(.23, 1, .32, 1),
+    top .19s cubic-bezier(.23, 1, .32, 1),
+    opacity .14s ease,
+    scale .19s cubic-bezier(.23, 1, .32, 1),
+    visibility 0s linear .16s;
 }
 
-html[data-redesign] .rd-contrib-tip[data-open="true"] { display: block; }
+html[data-redesign] .rd-contrib-tip[data-open="true"] {
+  opacity: 1;
+  scale: 1;
+  visibility: visible;
+  transition:
+    left .19s cubic-bezier(.23, 1, .32, 1),
+    top .19s cubic-bezier(.23, 1, .32, 1),
+    opacity .12s ease,
+    scale .19s cubic-bezier(.23, 1, .32, 1),
+    visibility 0s;
+}
 
 /* On narrow screens the full year would shrink the cells to dots, so the
    oldest columns drop out instead of scrolling. */
@@ -1792,7 +2008,8 @@ html[data-redesign] .rd-contrib-tip[data-open="true"] { display: block; }
 html[data-textanim="off"] .page,
 html[data-textanim="off"] .links-container,
 html[data-textanim="off"] .page > *,
-html[data-textanim="off"] .links-container > * {
+html[data-textanim="off"] .links-container > *,
+html[data-textanim="off"] .site-footer {
   animation: none !important;
 }
 
