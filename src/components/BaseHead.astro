@@ -105,7 +105,7 @@ const personSchema = {
     // The redesign owns scroll restoration manually; tell the browser early so
     // a reload (e.g. mobile pull-to-refresh) never restores a stale offset.
     try {
-      if (localStorage.getItem('redesign') === 'on') {
+      if (localStorage.getItem('redesign') !== 'off') {
         history.scrollRestoration = 'manual';
         // Hide the page until the remembered scroll offset is restored, so a
         // stale position never flashes on screen during a reload.
@@ -120,7 +120,7 @@ const personSchema = {
       if (localStorage.getItem('toast') !== 'on') document.documentElement.dataset.toast = 'off';
     } catch {}
     try {
-      if (localStorage.getItem('pageglow') !== 'on') document.documentElement.dataset.pageglow = 'off';
+      if (localStorage.getItem('pageglow') === 'off') document.documentElement.dataset.pageglow = 'off';
     } catch {}
   })();
 </script>

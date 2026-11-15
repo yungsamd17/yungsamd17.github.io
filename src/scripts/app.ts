@@ -254,14 +254,16 @@ function applyPageGlowDisabled(disabled: boolean) {
 }
 
 function initPageGlow() {
-  applyPageGlowDisabled(getStorage('pageglow') !== 'on');
+  // The switch reads "Page accent glow", so checked = the glow is visible.
+  applyPageGlowDisabled(getStorage('pageglow') === 'off');
   const toggle = document.getElementById('pageglow-toggle') as HTMLInputElement | null;
   if (!toggle) return;
-  toggle.checked = pageGlowDisabled();
+  toggle.checked = !pageGlowDisabled();
   toggle.addEventListener('change', () => {
-    applyPageGlowDisabled(toggle.checked);
-    setStorage('pageglow', toggle.checked ? 'off' : 'on');
-    showToast(t(toggle.checked ? 'toastPageGlowOff' : 'toastPageGlowOn', currentLang()));
+    const enabled = toggle.checked;
+    applyPageGlowDisabled(!enabled);
+    setStorage('pageglow', enabled ? 'on' : 'off');
+    showToast(t(enabled ? 'toastPageGlowOn' : 'toastPageGlowOff', currentLang()));
   });
 }
 
