@@ -1482,15 +1482,19 @@ html[data-redesign] .proj-stat {
   display: inline-block;
   vertical-align: baseline;
   margin-left: 8px;
-  padding-left: 13px;
-  padding-top: 0;
-  padding-bottom: 0;
   border: 0;
   background: none;
   color: var(--mid);
   font-size: .7rem;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
+  height: .7rem;
+  padding-left: 16px;
+}
+
+html[data-redesign] .proj-item:hover .proj-stat,
+html[data-redesign] .proj-item:focus-within .proj-stat {
+  color: var(--mid);
 }
 
 html[data-redesign] .proj-item:hover .proj-stat,
@@ -1501,8 +1505,9 @@ html[data-redesign] .proj-item:focus-within .proj-stat {
 html[data-redesign] .proj-stat svg {
   position: absolute;
   left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: -2.85px;
+  width: .75rem;
+  height: .75rem;
   color: #e3b341;
 }
 
