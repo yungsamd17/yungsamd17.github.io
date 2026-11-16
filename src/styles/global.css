@@ -846,11 +846,13 @@ html[data-redesign] .proj-lang.proj-lang-archived {
 
 .skip-link:focus { top: 0; }
 
-/* ── toast ── */
+/* ── toast ──
+   Sits on the toolbar row: the top edge lines up with the top of the toolbar's
+   handle text and toggle icons. */
 .toast {
   position: fixed;
   left: 50%;
-  top: 28px;
+  top: 21px;
   transform: translate(-50%, -12px);
   background: var(--hi);
   color: var(--bg);
