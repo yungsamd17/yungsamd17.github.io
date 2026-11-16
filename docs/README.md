@@ -208,6 +208,7 @@ How it works:
 3. **Persistence:** `localStorage['theme']` stores `'system'`, `'light'` or `'dark'` (older `'light'`/`'dark'` values remain valid)
 4. **Live OS changes:** a `matchMedia('(prefers-color-scheme)')` listener re-resolves while in system mode
 5. **View Transitions:** `astro:before-swap` copies both attributes onto the incoming page so navigation never resets your choice
+6. **Synchronized fade:** `applyTheme()` adds `.theme-transition` to `<html>` before switching, which gives every element the same colour transition (`--theme-transition`, 300ms, no stagger) so the whole page changes together instead of some parts snapping. The class is removed afterwards so hover/press transitions keep their own timings.
 
 ---
 

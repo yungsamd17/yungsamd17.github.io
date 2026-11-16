@@ -20,6 +20,8 @@
   --lo: #32323a;
   --dim: #2a2a3080;
   --item: #a0a0a8;
+  /* keep in sync with THEME_TRANSITION_MS in src/scripts/app.ts */
+  --theme-transition: 300ms;
 }
 
 [data-theme="light"] {
@@ -70,6 +72,25 @@ body {
   transition: background-color .2s, color .2s;
   display: flex;
   flex-direction: column;
+}
+
+/* ── theme change: every surface moves on one shared clock ──
+   Switching the theme used to leave some elements snapping while others
+   faded (each component had its own duration, and the ones without a
+   transition did not move at all). For the length of a switch, applyTheme()
+   puts .theme-transition on <html>; this rule then gives every element the
+   same colour transition with no stagger, so the whole page changes together.
+   Layout properties stay untouched, and the class is removed afterwards so
+   hover/press transitions keep their own timings. */
+:root.theme-transition,
+:root.theme-transition *,
+:root.theme-transition *::before,
+:root.theme-transition *::after {
+  transition-property: background-color, border-color, color, fill, stroke,
+    box-shadow, outline-color, text-decoration-color, caret-color !important;
+  transition-duration: var(--theme-transition) !important;
+  transition-timing-function: ease !important;
+  transition-delay: 0s !important;
 }
 
 a, button {

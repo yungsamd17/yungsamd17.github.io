@@ -36,11 +36,31 @@ function resolveTheme(mode: ThemeMode): 'light' | 'dark' {
   return systemPrefersDark() ? 'dark' : 'light';
 }
 
+/* Keep in sync with --theme-transition in src/styles/global.css. */
+const THEME_TRANSITION_MS = 300;
+let themeTransitionTimer: ReturnType<typeof setTimeout> | undefined;
+
 function applyTheme(mode: ThemeMode) {
   const resolved = resolveTheme(mode);
-  document.documentElement.dataset.themeMode = mode;
-  document.documentElement.dataset.theme = resolved;
-  document.documentElement.classList.toggle('dark', resolved === 'dark');
+  const root = document.documentElement;
+  const changed = root.dataset.theme != null && root.dataset.theme !== resolved;
+
+  // One class for the length of the switch: every element then fades its
+  // colours on the same clock instead of each component using its own timing
+  // (or snapping straight to the new colours). Added before the attributes
+  // change so the browser sees the old values as the transition start.
+  if (changed) {
+    root.classList.add('theme-transition');
+    clearTimeout(themeTransitionTimer);
+    themeTransitionTimer = setTimeout(() => {
+      root.classList.remove('theme-transition');
+      themeTransitionTimer = undefined;
+    }, THEME_TRANSITION_MS);
+  }
+
+  root.dataset.themeMode = mode;
+  root.dataset.theme = resolved;
+  root.classList.toggle('dark', resolved === 'dark');
 }
 
 function updateToggleLabels() {
