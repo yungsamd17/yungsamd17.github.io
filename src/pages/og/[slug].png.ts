@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 import sharp from 'sharp';
+import { SITE } from '../../data/site';
+import { UI } from '../../i18n/ui';
 
 interface OgPage {
   slug: string;
@@ -7,10 +9,12 @@ interface OgPage {
   subtitle?: string;
 }
 
+// Keep the card copy on the same strings the pages use, so it stays in sync
+// with the site instead of drifting into a second set of hardcoded titles.
 const PAGES: OgPage[] = [
-  { slug: 'index', title: 'Sam @yungsamd17', subtitle: 'building tools for the web' },
-  { slug: 'projects', title: 'Other projects', subtitle: 'browser extensions, userscripts, and web tools' },
-  { slug: 'links', title: 'Links', subtitle: 'all socials and profiles in one place' },
+  { slug: 'index', title: SITE.title, subtitle: UI.en.tagline },
+  { slug: 'projects', title: UI.en.projectsTitle, subtitle: 'browser extensions, userscripts, and web tools' },
+  { slug: 'links', title: UI.en.linksTitle, subtitle: UI.en.linksMeta },
 ];
 
 export const getStaticPaths = () => PAGES.map(({ slug }) => ({ params: { slug } }));
@@ -20,14 +24,7 @@ const esc = (s: string) =>
 
 function renderSvg({ title, subtitle }: OgPage): string {
   return `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="glow" cx="50%" cy="0%" r="90%">
-      <stop offset="0%" stop-color="#ff8a80" stop-opacity="0.14"/>
-      <stop offset="65%" stop-color="#ff8a80" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
   <rect width="1200" height="630" fill="#0e0e10"/>
-  <rect width="1200" height="630" fill="url(#glow)"/>
   <rect x="1.5" y="1.5" width="1197" height="627" rx="24" fill="none" stroke="#32323a" stroke-width="3"/>
   <rect x="96" y="136" width="10" height="150" rx="5" fill="#ff8a80"/>
   <text x="134" y="172" font-family="DejaVu Sans, Segoe UI, sans-serif" font-size="38" fill="#a0a0a8">@yungsamd17</text>

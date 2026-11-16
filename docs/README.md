@@ -78,7 +78,6 @@ yungsamd17.github.io/
 │   ├── pages/
 │   │   ├── index.astro         # Home
 │   │   ├── projects.astro      # Build-time GitHub stars via API
-│   │   ├── about.astro
 │   │   ├── links.astro         # Link-in-bio page (+ copy-email button)
 │   │   ├── extras.astro        # Experimental/legacy toggles (excluded from sitemap)
 │   │   ├── 404.astro
@@ -350,7 +349,9 @@ The page is marked `<meta name="robots" content="noindex">` (the `noindex` prop 
 
 ## Dynamic OG Images
 
-`src/pages/og/[slug].png.ts` prerenders 1200×630 share cards (coral accent bar, handle, page title, tagline) for `/`, `/about`, `/projects` and `/links` using sharp. `BaseHead.astro` maps each route to its card and upgrades `twitter:card` to `summary_large_image`; any other route (e.g. `/extras`) falls back to `logo.jpg` + `summary`.
+`src/pages/og/[slug].png.ts` prerenders 1200×630 share cards for `/`, `/projects` and `/links` using sharp. The copy comes from `SITE` and `UI.en` so the cards stay in sync with the pages. Each card uses the site's dark background and coral accent bar with no background gradient, matching the plain page background. `BaseHead.astro` maps each route to its card and upgrades `twitter:card` to `summary_large_image`; any other route (e.g. `/extras`) falls back to `logo.jpg` + `summary`.
+
+`docs/assets/og/` holds copies of the three generated cards for documentation, one per live OG route. An old `/about` card is not shipped because there is no about page.
 
 Example — home page card (`docs/assets/og/`):
 
