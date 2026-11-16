@@ -391,6 +391,31 @@ function initPageGlow() {
   });
 }
 
+/* ── experimental: avatar rain easter egg (off unless enabled on /extras) ── */
+
+function avatarEggEnabled(): boolean {
+  return document.documentElement.dataset.avataregg === 'on';
+}
+
+function applyAvatarEgg(enabled: boolean) {
+  if (enabled) document.documentElement.dataset.avataregg = 'on';
+  else delete document.documentElement.dataset.avataregg;
+}
+
+function initAvatarEggToggle() {
+  const enabled = getStorage('avataregg') === 'on';
+  applyAvatarEgg(enabled);
+  const toggle = document.getElementById('avataregg-toggle') as HTMLInputElement | null;
+  if (!toggle) return;
+  toggle.checked = enabled;
+  toggle.addEventListener('change', () => {
+    const on = toggle.checked;
+    applyAvatarEgg(on);
+    setStorage('avataregg', on ? 'on' : 'off');
+    showToast(t(on ? 'toastAvatarEggOn' : 'toastAvatarEggOff', currentLang()));
+  });
+}
+
 /* ── experimental: hide the snack bar ── */
 
 function applyToastHidden(hidden: boolean) {
@@ -1146,6 +1171,13 @@ let avatarRainStop: (() => void) | undefined;
 function initAvatarRain() {
   const avatar = document.querySelector<HTMLElement>('[data-avatar]');
   if (!avatar) return;
+  // Off by default: without an opt-in the avatar is just the hero picture.
+  const enabled = getStorage('avataregg') === 'on';
+  applyAvatarEgg(enabled);
+  if (!enabled) {
+    avatarRainStop = undefined;
+    return;
+  }
   let active = false;
   let timer: ReturnType<typeof setInterval> | undefined;
   const MIN_SIZE = 28;
@@ -1203,6 +1235,7 @@ function initPage() {
   initTextAnim();
   initPageGlow();
   initToastToggle();
+  initAvatarEggToggle();
   initThemeTransitionPicker();
   // The redesign always lands at the top of a page, including history
   // navigations, so the browser's own scroll restoration is turned off.
@@ -1282,6 +1315,8 @@ document.addEventListener('astro:before-swap', (event) => {
   else delete newDocument.documentElement.dataset.pageglow;
   if (toastHidden()) newDocument.documentElement.dataset.toast = 'off';
   else delete newDocument.documentElement.dataset.toast;
+  if (avatarEggEnabled()) newDocument.documentElement.dataset.avataregg = 'on';
+  else delete newDocument.documentElement.dataset.avataregg;
 });
 
 document.addEventListener('astro:after-swap', () => {

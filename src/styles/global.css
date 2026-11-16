@@ -1334,11 +1334,13 @@ html[data-redesign] .avatar {
   border-radius: 50%;
   object-fit: cover;
   background: var(--bg);
-  cursor: pointer;
+  cursor: default;
   transition: scale .12s;
 }
 
-html[data-redesign] .avatar:active { scale: .94; }
+/* the avatar only reacts to clicks when its experimental option is on */
+html[data-redesign][data-avataregg="on"] .avatar { cursor: pointer; }
+html[data-redesign][data-avataregg="on"] .avatar:active { scale: .94; }
 
 /* easter egg: falling profile pictures */
 .avatar-drop {

@@ -127,6 +127,9 @@ const personSchema = {
     try {
       if (localStorage.getItem('pageglow') === 'on') delete document.documentElement.dataset.pageglow;
     } catch {}
+    try {
+      if (localStorage.getItem('avataregg') === 'on') document.documentElement.dataset.avataregg = 'on';
+    } catch {}
   })();
 </script>
 

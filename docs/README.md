@@ -173,7 +173,7 @@ The site ships two layouts behind one gate: the **redesign** (newer card-based l
 - `html[data-redesign]` is added unless `localStorage['redesign'] === 'off'`.
 - On navigation the attribute (plus the other option attributes) is copied onto the incoming document in the `astro:before-swap` handler.
 
-Redesign-only features: the card glow, project star counts, contribution calendar, two-column links grid, centered links hero and the avatar easter egg.
+Redesign-only features: the card glow, project star counts, contribution calendar, two-column links grid, centered links hero and the optional avatar easter egg.
 
 ---
 
@@ -188,6 +188,7 @@ Redesign-only features: the card glow, project star counts, contribution calenda
 | Use classic load animation | `data-anim="bottom"` | `anim` | **off** (the redesign's staggered entrance) |
 | Hide snack bar | `data-toast="off"` | `toast` | **on** (toasts hidden) |
 | Page accent glow | (absence of `data-pageglow="off"`) | `pageglow` | **off** (only `'on'` enables the soft radial glow) |
+| Avatar rain easter egg | `data-avataregg="on"` | `avataregg` | **off** (`'on'` enables the hero avatar click) |
 
 The switches are plain checkboxes with `role="switch"`; the visible 46×26 track is a styled `.switch-ui` sibling. Toggling one writes the key, updates the attribute and shows a confirmation toast.
 
@@ -327,7 +328,7 @@ Example: French (`fr`).
 
 ## Easter Eggs
 
-1. **Avatar rain** — click the profile picture in the hero. Dim copies of the picture (28–48px, random static rotation) fall from the top, fade out completely by ~75% of the screen and despawn. Click the picture again to stop. Navigating away always stops it and it never restarts on its own.
+1. **Avatar rain** (experimental, off by default). Enable it in `/extras` with "Avatar rain easter egg", then click the profile picture in the hero. Dim copies of the picture (28–48px, random static rotation) fall from the top, fade out completely by ~75% of the screen and despawn. Click the picture again to stop. Navigating away always stops it and it never restarts on its own.
 2. **Console art** — open DevTools and say hi
 3. **`?debug=true`** — green debug border
 4. **Konami code** (↑↑↓↓←→←→BA) — rainbow hue-cycle for 8s + toast
