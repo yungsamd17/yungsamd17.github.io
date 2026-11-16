@@ -11,9 +11,10 @@ interface Props {
   title: string;
   description?: string;
   standalone?: boolean;
+  noindex?: boolean;
 }
 
-const { title, description, standalone = false } = Astro.props;
+const { title, description, standalone = false, noindex = false } = Astro.props;
 
 // Breadcrumb labels for the experimental toolbar, keyed by route
 const CRUMBS: Record<string, UIKey> = {
@@ -33,7 +34,7 @@ const fontCss = `@font-face{font-family:'Inter Variable';font-style:normal;font-
 <!doctype html>
 <html lang="en" class="dark" data-theme="dark" data-theme-mode="system">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title} description={description} noindex={noindex} />
     <link rel="preload" as="font" type="font/woff2" crossorigin href={interLatinExt} />
     <link rel="preload" as="font" type="font/woff2" crossorigin href={interLatin} />
     <style is:inline set:html={fontCss} />

@@ -10,6 +10,7 @@
     "prebuild": "node scripts/generate-icons.mjs",
     "dev": "astro dev",
     "build": "astro build",
+    "postbuild": "node scripts/publish-404.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

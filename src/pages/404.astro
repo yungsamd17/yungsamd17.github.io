@@ -2,19 +2,92 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { t } from '../i18n/ui';
+
+const digits = ['4', '0', '4'];
 ---
 
-<BaseLayout title={`404 · ${t('notFoundTitle')}`} standalone>
-  <div style="text-align: center;">
-    <h2 style="margin-top: 40px;">
+<BaseLayout title={`404 · ${t('notFoundTitle')}`} standalone noindex>
+  <div class="nf">
+    <div class="nf-stage" data-nf-stage aria-hidden="true">
+      {digits.map((digit) => <span class="nf-digit" data-nf-digit>{digit}</span>)}
+    </div>
+
+    <h2 class="nf-title">
       <span data-lang="en">{t('notFoundTitle')}</span><span data-lang="sk">{t('notFoundTitle', 'sk')}</span>
     </h2>
-    <p style="margin-top: 12px; color: var(--mid); font-weight: 300;">
+    <p class="nf-text">
       <span data-lang="en">{t('notFoundText')}</span><span data-lang="sk">{t('notFoundText', 'sk')}</span>
     </p>
-    <a href="/" class="back" style="justify-content: center; margin-top: 24px;">
+    <p class="nf-joke" data-nf-joke>
+      <span data-lang="en">{t('notFoundJoke')}</span><span data-lang="sk">{t('notFoundJoke', 'sk')}</span>
+    </p>
+
+    <a class="nf-home" href="/">
       <Icon name="arrow-left" size={12} />
-      yungsamd17.github.io
+      <span data-lang="en">{t('notFoundHome')}</span><span data-lang="sk">{t('notFoundHome', 'sk')}</span>
     </a>
   </div>
+
+  <script>
+    // A dead end deserves a toy: the digits are clickable, and three clicks
+    // scatter them off the row before they spring back. Purely decorative, so
+    // the markup stays aria-hidden and the home link is the real way out.
+    const stage = document.querySelector<HTMLElement>('[data-nf-stage]');
+    const joke = document.querySelector<HTMLElement>('[data-nf-joke]');
+
+    if (stage && joke) {
+      const digits = Array.from(stage.querySelectorAll<HTMLElement>('[data-nf-digit]'));
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let clicks = 0;
+      let resetTimer: ReturnType<typeof setTimeout> | undefined;
+      let returnTimer: ReturnType<typeof setTimeout> | undefined;
+
+      const revealJoke = () => joke.classList.add('is-shown');
+
+      const scatter = () => {
+        clearTimeout(resetTimer);
+        clearTimeout(returnTimer);
+        // Any digit still mid-pop just gives up its pop here: the scatter is
+        // its own animation, which outranks the pop and always starts from the
+        // top, so nothing has to finish playing first.
+        digits.forEach((digit) => digit.classList.remove('is-pop'));
+        digits.forEach((digit) => {
+          // keep the sideways travel inside the page so nothing can extend the
+          // document sideways (the container clips as a hard guarantee)
+          digit.style.setProperty('--dx', `${Math.round((Math.random() * 2 - 1) * 130)}px`);
+          // up and away: the space above the numbers is empty, so the pieces
+          // never tumble across the title, the text or the home link
+          digit.style.setProperty('--dy', `${Math.round(-80 - Math.random() * 90)}px`);
+          digit.style.setProperty('--rot', `${Math.round((Math.random() * 2 - 1) * 120)}deg`);
+        });
+        stage.classList.remove('is-returning');
+        stage.classList.add('is-scattered');
+        revealJoke();
+        // put the numbers back after a beat so the page heals itself, then
+        // drop the return animation so hover and clicks work again
+        resetTimer = setTimeout(() => {
+          stage.classList.remove('is-scattered');
+          stage.classList.add('is-returning');
+          joke.classList.remove('is-shown');
+          clicks = 0;
+          returnTimer = setTimeout(() => stage.classList.remove('is-returning'), 620);
+        }, 3400);
+      };
+
+      digits.forEach((digit) => {
+        digit.addEventListener('pointerdown', () => {
+          if (reducedMotion.matches) {
+            revealJoke();
+            return;
+          }
+          digit.classList.remove('is-pop');
+          void digit.offsetWidth; // restart the animation from the top
+          digit.classList.add('is-pop');
+          clicks += 1;
+          if (clicks >= digits.length) scatter();
+        });
+        digit.addEventListener('animationend', () => digit.classList.remove('is-pop'));
+      });
+    }
+  </script>
 </BaseLayout>

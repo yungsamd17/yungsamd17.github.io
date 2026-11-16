@@ -1936,6 +1936,145 @@ html[data-redesign] .copy-btn:active { color: var(--hi); }
 
 html[data-redesign] .copy-btn.copied { color: var(--hi); }
 
+/* ── 404 ──
+   The digits are a toy: hover lifts them, each click pops one, and three
+   clicks scatter the lot before they spring back into the row. */
+.nf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 32px;
+  width: 100%;
+  /* Scattering the digits translates them outside the row. Transformed boxes
+     still count towards scrollable overflow, which grew the document and gave
+     the page a horizontal scrollbar on narrow screens. Clip sideways only, so
+     the numbers can still fly up out of the row. */
+  overflow-x: clip;
+}
+
+.nf-stage {
+  display: flex;
+  gap: .04em;
+  font-size: clamp(4.2rem, 20vw, 7rem);
+  font-weight: 600;
+  line-height: .9;
+  letter-spacing: -.05em;
+  color: var(--hi);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.nf-digit {
+  /* the resting pose is a variable so the pop can start and end exactly
+     where the digit is, hovered or not, without a jump at either end */
+  --rest-y: 0px;
+  --rest-r: 0deg;
+  transform: translateY(var(--rest-y)) rotate(var(--rest-r));
+  display: inline-block;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  will-change: transform;
+  transition: transform .18s ease-out, color .18s, opacity .3s;
+}
+
+.nf-digit:hover { --rest-y: -10px; --rest-r: -5deg; color: var(--accent); }
+.nf-digit:nth-child(2):hover { --rest-r: 5deg; }
+
+/* a quick tap upwards from wherever the digit rests, straight back down */
+@keyframes nf-pop {
+  0%   { transform: translateY(var(--rest-y)) rotate(var(--rest-r)) scale(1); }
+  45%  { transform: translateY(calc(var(--rest-y) - 16px)) rotate(var(--rest-r)) scale(1.06); }
+  100% { transform: translateY(var(--rest-y)) rotate(var(--rest-r)) scale(1); }
+}
+
+.nf-digit.is-pop { animation: nf-pop .3s cubic-bezier(.2, .75, .3, 1); }
+
+/* scattered: the numbers tumble up and out, fading into the void.
+   This is an animation, not a class-driven transition, so it always plays
+   from the top: whichever digit is still mid-pop hands the transform over
+   immediately instead of freezing until its own pop finishes. */
+@keyframes nf-scatter {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  60%  { opacity: 0; }
+  100% { transform: translate(var(--dx, 0px), var(--dy, -140px)) rotate(var(--rot, 0deg)); opacity: 0; }
+}
+
+.nf-stage.is-scattered .nf-digit {
+  animation: nf-scatter .8s cubic-bezier(.4, .05, .7, .4) forwards;
+  pointer-events: none;
+}
+
+/* the same trip in reverse, so the row rebuilds itself with a spring */
+@keyframes nf-return {
+  0%   { transform: translate(var(--dx, 0px), var(--dy, -140px)) rotate(var(--rot, 0deg)); opacity: 0; }
+  45%  { opacity: 1; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+}
+
+.nf-stage.is-returning .nf-digit {
+  animation: nf-return .6s cubic-bezier(.22, 1.4, .36, 1) both;
+  pointer-events: none;
+}
+
+.nf-title {
+  margin: 28px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.nf-text {
+  margin: 6px 0 0;
+  font-size: .88rem;
+  font-weight: 300;
+  color: var(--mid);
+}
+
+.nf-joke {
+  margin: 14px 0 0;
+  min-height: 1.2em;
+  font-size: .78rem;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+.nf-joke.is-shown { opacity: 1; transform: none; }
+
+.nf-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 22px;
+  padding: 9px 16px;
+  border: 1px solid var(--lo);
+  border-radius: 999px;
+  color: var(--mid);
+  font-size: .78rem;
+  font-weight: 400;
+  text-decoration: none;
+  transition: color .18s, border-color .18s, transform .18s;
+}
+
+.nf-home:hover,
+.nf-home:focus-visible { color: var(--hi); border-color: var(--mid); }
+.nf-home:active { transform: scale(.97); }
+
+/* while the numbers are out, point at the way back */
+.nf:has(.nf-stage.is-scattered) .nf-home {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-digit,
+  .nf-joke { transition: none; }
+  .nf-digit:hover,
+  .nf-digit:nth-child(2):hover { transform: none; }
+}
+
 /* ── contributions ── */
 html[data-redesign] .rd-contrib-section {
   display: block;
