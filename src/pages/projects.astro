@@ -1,18 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import { SITE, PROJECTS } from '../data/site';
+import ProjectCard from '../components/ProjectCard.astro';
+import { SITE, PROJECTS, FEATURED } from '../data/site';
 import { t } from '../i18n/ui';
 
 interface RepoStats {
   stars?: number;
 }
 
-// Build-time GitHub lookup; any failure just hides the stat instead of breaking deploy
 async function fetchStars(slug: string): Promise<RepoStats> {
   try {
+    const headers: Record<string, string> = { 'User-Agent': 'yungsamd17.github.io', Accept: 'application/vnd.github+json' };
+    const token = (import.meta as any).env?.GITHUB_TOKEN ?? (typeof process !== 'undefined' ? process.env?.GITHUB_TOKEN : undefined);
+    if (token) headers.Authorization = `Bearer ${token}`;
     const res = await fetch(`https://api.github.com/repos/${slug}`, {
-      headers: { 'User-Agent': 'yungsamd17.github.io', Accept: 'application/vnd.github+json' },
+      headers,
       signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return {};
@@ -23,43 +26,56 @@ async function fetchStars(slug: string): Promise<RepoStats> {
   }
 }
 
-const repoSlugs = [...new Set(PROJECTS.map((p) => p.repo).filter((r): r is string => Boolean(r)))];
+// Featured projects to also show on the projects page (Twitch Live, Singlenote) — excluding s17 Labs org
+const FEATURED_PROJECTS = FEATURED.filter((f) => f.title !== 's17 Labs' && f.projectIcon);
+const allProjects = [...FEATURED_PROJECTS, ...PROJECTS];
+
+// Finished or no longer maintained — kept here for the record.
+const PAST_TITLES = new Set(['Volume Control', 'BetterDiscord Addons', 'NoPixel Vehicle Mods']);
+const nowProjects = allProjects.filter((p) => !PAST_TITLES.has(p.title));
+const pastProjects = allProjects.filter((p) => PAST_TITLES.has(p.title));
+
+const repoSlugs = [...new Set(allProjects.map((p) => p.repo).filter((r): r is string => Boolean(r)))];
 const repoEntries = await Promise.all(repoSlugs.map(async (slug) => [slug, await fetchStars(slug)] as const));
 const REPOS = Object.fromEntries(repoEntries);
+const starsFor = (repo?: string) => (repo ? REPOS[repo]?.stars ?? 0 : 0);
 ---
 
 <BaseLayout title={`${t('projectsTitle')} | ${SITE.title}`} description={SITE.description}>
-  <a href="/" class="back">
-    <Icon name="arrow-left" size={12} />
-    <span data-lang="en">{t('back')}</span>
-    <span data-lang="sk">{t('back', 'sk')}</span>
-  </a>
+  <header class="proj-hero">
+    <h1>
+      <span data-lang="en">{t('projectsTitle')}</span>
+      <span data-lang="sk">{t('projectsTitle', 'sk')}</span>
+    </h1>
+    <p class="proj-hero-desc">
+      <span data-lang="en">{t('projectsIntro')}</span>
+      <span data-lang="sk">{t('projectsIntro', 'sk')}</span>
+    </p>
+  </header>
 
-  <h2><span data-lang="en">{t('projectsTitle')}</span><span data-lang="sk">{t('projectsTitle', 'sk')}</span></h2>
+  <section class="proj-section" aria-labelledby="proj-now-heading">
+    <h2 class="rd-head" id="proj-now-heading">
+      <span class="rd-head-text">
+        <span data-lang="en">{t('projectsNow')}</span>
+        <span data-lang="sk">{t('projectsNow', 'sk')}</span>
+      </span>
+    </h2>
+    <div class="proj-grid">
+      {nowProjects.map((project) => <ProjectCard project={project} stars={starsFor(project.repo)} />)}
+    </div>
+  </section>
 
-  {
-    PROJECTS.map((project) => (
-      <a href={project.href} target="_blank" rel="noopener" class="proj-item">
-        <span class="proj-title">{project.title}</span>
-        <div class="proj-meta">
-          {project.live && <span class="proj-badge live">Live</span>}
-          {project.repo && REPOS[project.repo]?.stars !== undefined && (
-            <span class="proj-stat" style="--stat-color:#eac54f">
-              <Icon name="star" size={10} />
-              {(REPOS[project.repo]?.stars ?? 0).toLocaleString('en-US')}
-            </span>
-          )}
-          {project.langs.map((lang) => (
-            <span class="proj-lang">{lang}</span>
-          ))}
-        </div>
-        <p class="proj-desc">
-          <span data-lang="en">{project.desc.en}</span>
-          <span data-lang="sk">{project.desc.sk}</span>
-        </p>
-      </a>
-    ))
-  }
+  <section class="proj-section" aria-labelledby="proj-past-heading">
+    <h2 class="rd-head" id="proj-past-heading">
+      <span class="rd-head-text">
+        <span data-lang="en">{t('projectsPast')}</span>
+        <span data-lang="sk">{t('projectsPast', 'sk')}</span>
+      </span>
+    </h2>
+    <div class="proj-grid">
+      {pastProjects.map((project) => <ProjectCard project={project} stars={starsFor(project.repo)} />)}
+    </div>
+  </section>
 
   <a class="all-repos" href="https://github.com/yungsamd17?tab=repositories" target="_blank" rel="noopener">
     <Icon name="github" size={11} />

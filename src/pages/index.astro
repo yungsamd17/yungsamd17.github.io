@@ -1,28 +1,90 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import ThemeToggle from '../components/ThemeToggle.astro';
-import LangToggle from '../components/LangToggle.astro';
+import Contributions from '../components/Contributions.astro';
 import { SITE, SOCIALS, FEATURED } from '../data/site';
 import { t } from '../i18n/ui';
+
+// Render the age at build time so it is already in the HTML on first paint —
+// no "…" placeholder that pops in once the client script runs. app.ts only
+// corrects it if the value goes stale (birthday rolled over on a cached page).
+const now = new Date();
+let age = now.getFullYear() - SITE.birthDate.getFullYear();
+const hadBirthday =
+  now.getMonth() > SITE.birthDate.getMonth() ||
+  (now.getMonth() === SITE.birthDate.getMonth() && now.getDate() >= SITE.birthDate.getDate());
+if (!hadBirthday) age--;
 ---
 
 <BaseLayout title={SITE.title} description={SITE.description}>
   <header class="site-header">
-    <div>
-      <h1>{SITE.name}</h1>
-      <a href="/links/" class="handle"><span class="handle">@{SITE.handle}</span></a>
-    </div>
-    <div class="header-buttons">
-      <LangToggle />
-      <ThemeToggle />
+    <div class="identity">
+      <img class="avatar" src="/avatar.jpg" alt={SITE.name} width="64" height="64" decoding="async" data-avatar />
+      <div class="identity-text">
+        <h1>{SITE.name}</h1>
+        <a href="/links/" class="handle">@{SITE.handle}</a>
+        <p class="tagline" data-tagline>
+          <span data-lang="en">{t('tagline')}</span>
+          <span data-lang="sk">{t('tagline', 'sk')}</span>
+        </p>
+      </div>
     </div>
   </header>
 
-  <p class="tagline" data-tagline>
-    <span data-lang="en">{t('tagline')}</span>
-    <span data-lang="sk">{t('tagline', 'sk')}</span>
-  </p>
+  <section class="about-section">
+    <p class="about-text">
+      <span data-lang="en">
+        Hey, I'm <strong>Sam</strong>, a self-taught web developer from <strong>Slovakia</strong>, <span class="age">{age}</span> years old.
+        I build <strong>browser extensions</strong>, <strong>userscripts</strong>, and small tools that make platforms
+        like <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>,
+        <a href="https://x.com" target="_blank" rel="noopener">X/Twitter</a>, and
+        <a href="https://betterdiscord.app" target="_blank" rel="noopener">BetterDiscord</a> nicer to use.
+      </span>
+      <span data-lang="sk">
+        Ahoj, volám sa <strong>Sam</strong>, webový vývojár samouk zo <strong>Slovenska</strong>, mám <span class="age">{age}</span> rokov.
+        Vytváram <strong>rozšírenia pre prehliadače</strong>, <strong>používateľské skripty</strong> a malé nástroje, vďaka ktorým sa platformy
+        ako <a href="https://www.twitch.tv" target="_blank" rel="noopener">Twitch</a>,
+        <a href="https://x.com" target="_blank" rel="noopener">X/Twitter</a> a
+        <a href="https://betterdiscord.app" target="_blank" rel="noopener">BetterDiscord</a> stávajú príjemnejšie na používanie.
+      </span>
+    </p>
+
+    <p class="about-text">
+      <span data-lang="en">
+        I also make <strong>Android apps</strong>, mostly clean, minimal things like text editors and note apps.
+        <span class="about-keep">Under <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a>,</span>
+        I focus on lightweight, privacy-first software for the web and mobile.
+      </span>
+      <span data-lang="sk">
+        Tiež tvorím <strong>Android aplikácie</strong>, väčšinou čisté, minimalistické veci ako textové editory a poznámkové aplikácie.
+        <span class="about-keep">Pod <a href="https://s17labs.github.io" target="_blank" rel="noopener"><strong>s17 Labs</strong></a></span>
+        sa zameriavam na ľahký softvér s dôrazom na súkromie pre web a mobilné zariadenia.
+      </span>
+    </p>
+
+    <p class="about-text">
+      <span data-lang="en">
+        The best way to get in contact with me is <a href={`mailto:${SITE.email}`}>Email</a>,
+        or you can find me on <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X/Twitter</a>
+        and <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.
+      </span>
+      <span data-lang="sk">
+        Najlepší spôsob, ako ma kontaktovať, je <a href={`mailto:${SITE.email}`}>e-mail</a>,
+        alebo ma nájdete na <a href="https://x.com/yungsamd17" target="_blank" rel="noopener">X/Twitter</a>
+        a <a href="https://github.com/yungsamd17" target="_blank" rel="noopener">GitHub</a>.
+      </span>
+    </p>
+  </section>
+
+  <h2 class="rd-head">
+    <span data-lang="en">{t('secLinks')}</span>
+    <span data-lang="sk">{t('secLinks', 'sk')}</span>
+    <a class="rd-head-link" href="/links/">
+      <span data-lang="en">{t('allLinks')}</span>
+      <span data-lang="sk">{t('allLinks', 'sk')}</span>
+      <Icon name="arrow-right" size={11} />
+    </a>
+  </h2>
 
   <ul class="link-list">
     {
@@ -30,6 +92,7 @@ import { t } from '../i18n/ui';
         <li>
           <a href={social.href} target="_blank" rel="noopener">
             {social.label}
+            <Icon name="arrow-up-right" size={14} class="card-arrow" />
           </a>
         </li>
       ))
@@ -37,29 +100,45 @@ import { t } from '../i18n/ui';
   </ul>
 
   <div class="gap">
+    <h2 class="rd-head">
+      <span data-lang="en">{t('secFeatured')}</span>
+      <span data-lang="sk">{t('secFeatured', 'sk')}</span>
+      <a class="rd-head-link" href="/projects/">
+        <span data-lang="en">{t('allProjects')}</span>
+        <span data-lang="sk">{t('allProjects', 'sk')}</span>
+        <Icon name="arrow-right" size={11} />
+      </a>
+    </h2>
     {
       FEATURED.map((item) => (
-        <a class="featured-link" href={item.href} target="_blank" rel="noopener">
-          {item.title}
-          {item.badge && (
-            <span class="tag">
-              <Icon name="github" size={9} />
-              {item.badge}
+        <a
+          class="featured-link"
+          href={item.href}
+          target="_blank"
+          rel="noopener"
+          style={item.accent ? `--accent:${item.accent}` : undefined}
+        >
+          <div class="featured-icon-wrap">
+            {item.projectIcon ? (
+              <img class="featured-icon" src={item.projectIcon} alt="" loading="lazy" decoding="async" width="48" height="48" />
+            ) : (
+              <Icon name={item.icon} size={24} />
+            )}
+          </div>
+          <div class="featured-content">
+            <span class="featured-title">
+              {item.title}
             </span>
-          )}
+            <span class="featured-desc">
+              <span data-lang="en">{item.desc.en}</span>
+              <span data-lang="sk">{item.desc.sk}</span>
+            </span>
+          </div>
+          <Icon name="arrow-up-right" size={14} class="card-arrow" />
         </a>
       ))
     }
   </div>
 
-  <div class="gap">
-    <a class="nav-btn" href="/projects/">
-      <span data-lang="en">{t('navProjects')}</span>
-      <span data-lang="sk">{t('navProjects', 'sk')}</span>
-    </a>
-    <a class="nav-btn" href="/about/">
-      <span data-lang="en">{t('navAbout')}</span>
-      <span data-lang="sk">{t('navAbout', 'sk')}</span>
-    </a>
-  </div>
+  <Contributions />
 </BaseLayout>

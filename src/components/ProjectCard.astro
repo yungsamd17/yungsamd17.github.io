@@ -1,0 +1,88 @@
+---
+import Icon from './Icon.astro';
+import { t } from '../i18n/ui';
+
+interface Props {
+  project: {
+    title: string;
+    desc: { en: string; sk: string };
+    repo?: string;
+    site?: string;
+    icon?: string;
+    projectIcon?: string;
+    mono?: string;
+    iconBg?: string;
+    accent?: string;
+    langs?: string[];
+    archived?: boolean;
+  };
+  stars?: number;
+}
+
+const { project, stars = 0 } = Astro.props;
+const iconPath = project.projectIcon ?? (project.icon?.startsWith('/') ? project.icon : undefined);
+const repoUrl = project.repo ? `https://github.com/${project.repo}` : undefined;
+const href = project.site ?? repoUrl;
+---
+
+<div class="proj-item" data-repo={project.repo} style={`--accent:${project.accent}${project.iconBg ? `;--icon-bg:${project.iconBg}` : ''}`}>
+  <a class="proj-overlay" href={href} target="_blank" rel="noopener" aria-label={project.title} />
+  <div class="proj-icon-wrap">
+    {
+      iconPath ? (
+        <img class="proj-icon" src={iconPath} alt="" loading="lazy" decoding="async" width="48" height="48" />
+      ) : (
+        <span class="proj-mono">{project.mono ?? project.title.charAt(0)}</span>
+      )
+    }
+  </div>
+  <div class="proj-content">
+    <h3 class="proj-title">
+      {project.title}
+      {
+        stars >= 3 && (
+          <span class="proj-stat" title={`${stars.toLocaleString('en-US')} ${t('githubStars')}`}>
+            <Icon name="star-filled" size={12} />
+            {stars.toLocaleString('en-US')}
+            <span class="sr-only"> {t('githubStars')}</span>
+          </span>
+        )
+      }
+    </h3>
+    <div class="proj-links">
+      {
+        project.site && (
+          <a class="proj-link" href={project.site} target="_blank" rel="noopener">
+            <span data-lang="en">{t('projSite')}</span>
+            <span data-lang="sk">{t('projSite', 'sk')}</span>
+            <Icon name="arrow-up-right" size={10} />
+          </a>
+        )
+      }
+      {
+        repoUrl && (
+          <a class="proj-link" href={repoUrl} target="_blank" rel="noopener">
+            <span data-lang="en">{t('projGitHub')}</span>
+            <span data-lang="sk">{t('projGitHub', 'sk')}</span>
+            <Icon name="arrow-up-right" size={10} />
+          </a>
+        )
+      }
+    </div>
+    <p class="proj-desc">
+      <span data-lang="en">{project.desc.en}</span>
+      <span data-lang="sk">{project.desc.sk}</span>
+    </p>
+    <div class="proj-meta">
+      {
+        project.archived && (
+          <span class="proj-lang proj-lang-archived">
+            <span data-lang="en">{t('archiveBadge')}</span>
+            <span data-lang="sk">{t('archiveBadge', 'sk')}</span>
+          </span>
+        )
+      }
+      {(project.langs ?? []).map((lang) => <span class="proj-lang">{lang}</span>)}
+    </div>
+  </div>
+</div>

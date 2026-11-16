@@ -13,6 +13,10 @@ import { t } from '../i18n/ui';
   <div class="links-header">
     <h1>{SITE.name}</h1>
     <span class="handle">@{SITE.handle}</span>
+    <p class="links-intro">
+      <span data-lang="en">{t('linksIntro')}</span>
+      <span data-lang="sk">{t('linksIntro', 'sk')}</span>
+    </p>
   </div>
 
   <div class="links-list">
@@ -24,11 +28,13 @@ import { t } from '../i18n/ui';
               <Icon name={link.icon} size={17} />
               <div class="link-info">
                 <span class="link-platform">{link.platform}</span>
-                <span class="link-username">{link.username}</span>
               </div>
             </a>
             <button type="button" class="copy-btn" data-copy={link.copy} aria-label={t('copyEmail')}>
-              <Icon name="copy" size={16} />
+              <span class="copy-icon-wrap">
+                <Icon name="copy" size={16} />
+                <Icon name="check" size={16} />
+              </span>
             </button>
           </div>
         ) : (
@@ -41,22 +47,11 @@ import { t } from '../i18n/ui';
             <Icon name={link.icon} size={17} />
             <div class="link-info">
               <span class="link-platform">{link.platform}</span>
-              <span class="link-username">{link.username}</span>
             </div>
+            <Icon name="arrow-up-right" size={7} class="card-arrow" />
           </a>
         )
       )
     }
-
-    <a href="/" class="link-item" style="margin-top: 20px;">
-      <Icon name="arrow-left" size={16} />
-      <div class="link-info">
-        <span class="link-platform">
-          <span data-lang="en">{t('linksBack')}</span>
-          <span data-lang="sk">{t('linksBack', 'sk')}</span>
-        </span>
-        <span class="link-username">yungsamd17.github.io</span>
-      </div>
-    </a>
   </div>
 </BaseLayout>

@@ -1,0 +1,48 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import LangToggle from './LangToggle.astro';
+import { SITE } from '../data/site';
+import { t, type UIKey } from '../i18n/ui';
+
+interface Props {
+  crumbKey?: UIKey;
+}
+
+const { crumbKey } = Astro.props;
+const crumbEn = crumbKey ? t(crumbKey, 'en') : '';
+const crumbSk = crumbKey ? t(crumbKey, 'sk') : '';
+---
+
+<div class="rd-toolbar">
+  <nav class="rd-crumb" aria-label="Breadcrumb">
+    <ol>
+      <li>
+        {
+          crumbKey ? (
+            <a href="/">{SITE.handle}</a>
+          ) : (
+            <span aria-current="page">{SITE.handle}</span>
+          )
+        }
+      </li>
+      {
+        crumbKey && (
+          <>
+            <li class="rd-crumb-sep" aria-hidden="true">
+              /
+            </li>
+            <li class="rd-crumb-current" aria-current="page">
+              <span data-lang="en">{crumbEn}</span>
+              <span data-lang="sk">{crumbSk}</span>
+            </li>
+          </>
+        )
+      }
+    </ol>
+  </nav>
+
+  <div class="header-buttons">
+    <LangToggle />
+    <ThemeToggle />
+  </div>
+</div>

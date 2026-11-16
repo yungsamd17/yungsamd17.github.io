@@ -32,7 +32,16 @@ export interface FeaturedLink {
   desc: LocalizedText;
   href: string;
   icon: IconName;
-  badge?: string;
+  /** Languages/tech used */
+  langs?: string[];
+  /** Project icon shown on the project card (public path) */
+  projectIcon?: string;
+  /** Glow accent colour for the project card */
+  accent?: string;
+  /** Live site URL (for projects page) */
+  site?: string;
+  /** GitHub slug (owner/repo) for star count */
+  repo?: string;
 }
 
 export const FEATURED: FeaturedLink[] = [
@@ -43,91 +52,131 @@ export const FEATURED: FeaturedLink[] = [
       sk: 'Váš ultimátny spoločník pre Twitch — živé kanály na prvý pohľad.',
     },
     href: 'https://yungsamd17.github.io/Twitch-Live/',
+    site: 'https://yungsamd17.github.io/Twitch-Live/',
+    repo: 'yungsamd17/Twitch-Live',
     icon: 'twitch',
+    langs: ['Web', 'JS', 'Twitch', 'Extension'],
+    projectIcon: '/projects/twitch-live.svg',
+    accent: '#8531ff',
   },
   {
-    title: 'Koda',
+    title: 'Singlenote',
     desc: {
-      en: 'A clean, minimal text editor for Android by s17 Labs.',
-      sk: 'Čistý, minimalistický textový editor pre Android od s17 Labs.',
+      en: 'Focus on one note at a time. A minimalist, offline-first Android note app.',
+      sk: 'Sústreď sa vždy len na jednu poznámku. Minimalistická, offline-first Android aplikácia na poznámky.',
     },
-    href: 'https://s17labs.github.io/koda',
+    href: 'https://github.com/yungsamd17/singlenote',
+    repo: 'yungsamd17/singlenote',
     icon: 'android',
+    langs: ['Kotlin', 'Android', 'Notes'],
+    projectIcon: '/projects/singlenote.svg',
+    accent: '#a78bfa',
   },
   {
     title: 's17 Labs',
     desc: {
-      en: 'Lightweight, privacy-first software for the web and mobile.',
-      sk: 'Ľahký softvér s dôrazom na súkromie pre web a mobil.',
+      en: 'GitHub Org - Lightweight, privacy-first software for the web and mobile.',
+      sk: 'GitHub Org - Ľahký softvér s dôrazom na súkromie pre web a mobil.',
     },
     href: 'https://s17labs.github.io',
+    site: 'https://s17labs.github.io',
     icon: 'flask',
-    badge: 'org',
+    projectIcon: '/projects/s17-labs.svg',
+    accent: '#f53f35',
   },
 ];
 
 export interface Project {
   title: string;
-  href: string;
   desc: LocalizedText;
   langs: string[];
-  live?: boolean;
-  /** GitHub slug (owner/repo) used at build time to show live star counts */
+  /** Card icon (public path). Falls back to a monogram tile when omitted. */
+  icon?: string;
+  /** Card glow color, sampled from the project's icon */
+  accent: string;
+  /** GitHub slug (owner/repo) → GitHub link + build-time star count */
   repo?: string;
+  /** Live site URL → "Site" link */
+  site?: string;
+  /** Monogram text used when there is no icon (defaults to the first letter). */
+  mono?: string;
+  /** Override the icon tile background (defaults to a tinted accent wash). */
+  iconBg?: string;
+  /** Show a "Public Archive" badge on the card. */
+  archived?: boolean;
 }
 
 export const PROJECTS: Project[] = [
   {
-    title: 'Singlenote',
-    href: 'https://github.com/yungsamd17/singlenote',
-    repo: 'yungsamd17/singlenote',
+    title: 'Koda',
+    icon: '/projects/koda.svg',
+    repo: 's17labs/koda',
+    site: 'https://s17labs.github.io/koda',
+    accent: '#0146c0',
     desc: {
-      en: 'Focus on one note at a time. A minimalist, offline-first Android note app.',
-      sk: 'Sústreď sa vždy len na jednu poznámku. Minimalistická, offline-first Android aplikácia na poznámky.',
+      en: 'A clean, minimal text editor for Android by s17 Labs.',
+      sk: 'Čistý, minimalistický textový editor pre Android od s17 Labs.',
     },
-    langs: ['Kotlin', 'Android'],
+    langs: ['Kotlin', 'Android', 'Editor'],
   },
   {
     title: 's17 Labs Tools',
-    href: 'https://s17labs.github.io/tools',
+    icon: '/projects/s17-labs.svg',
     repo: 's17labs/tools',
+    site: 'https://s17labs.github.io/tools',
+    accent: '#f53f35',
     desc: {
       en: 'Fast, privacy-first browser utility tools for creators and developers.',
       sk: 'Rýchle nástroje pre prehliadače so zameraním na súkromie pre tvorcov a vývojárov.',
     },
-    langs: ['Web'],
-    live: true,
+    langs: ['Astro', 'TypeScript', 'Tools'],
   },
   {
     title: 'Volume Control',
-    href: 'https://github.com/yungsamd17/Volume-Control',
+    icon: '/projects/volume-control.svg',
     repo: 'yungsamd17/Volume-Control',
+    accent: '#1a74ea',
     desc: {
       en: 'Browser extension to push tab volume beyond the default 100% cap.',
       sk: 'Rozšírenie prehliadača na zvýšenie hlasitosti karty nad predvolených 100 %.',
     },
-    langs: ['JS'],
+    langs: ['JS', 'Extension', 'Chrome'],
   },
   {
     title: 'UserScripts',
-    href: 'https://yungsamd17.github.io/UserScripts/',
+    icon: '/projects/userscripts.svg',
     repo: 'yungsamd17/UserScripts',
+    site: 'https://yungsamd17.github.io/UserScripts/',
+    accent: '#f7df1e',
     desc: {
       en: 'Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.',
       sk: 'Userscripts pre Twitch, X a ďalšie — malé vylepšenia pre každodenné používanie.',
     },
-    langs: ['JS', 'Web'],
-    live: true,
+    langs: ['JS', 'Web', 'Userscripts'],
   },
   {
     title: 'BetterDiscord Addons',
-    href: 'https://github.com/yungsamd17/BetterDiscordAddons',
+    icon: '/projects/betterdiscord-addons.svg',
     repo: 'yungsamd17/BetterDiscordAddons',
+    accent: '#2853ab',
     desc: {
       en: 'A collection of plugins and themes for BetterDiscord.',
       sk: 'Kolekcia pluginov a tém pre BetterDiscord.',
     },
-    langs: ['JS', 'CSS'],
+    langs: ['JS', 'CSS', 'BetterDiscord'],
+  },
+  {
+    title: 'NoPixel Vehicle Mods',
+    repo: 'yungsamd17/np-carmods',
+    accent: '#00f8b9',
+    mono: 'NP',
+    iconBg: '#111117',
+    archived: true,
+    desc: {
+      en: 'A list of all vehicle mods from the NoPixel FiveM Roleplay Server.',
+      sk: 'Zoznam všetkých úprav vozidiel zo servera NoPixel FiveM Roleplay.',
+    },
+    langs: ['FiveM', 'GTA V', 'Mods'],
   },
 ];
 

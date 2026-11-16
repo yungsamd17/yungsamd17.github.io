@@ -1,5 +1,6 @@
 import { t } from '../i18n/ui';
 import { SITE } from '../data/site';
+import { contributionSignature, fetchContributions, type ContributionsData } from '../lib/contributions';
 
 function getStorage(key: string): string | null {
   try {
@@ -35,31 +36,210 @@ function resolveTheme(mode: ThemeMode): 'light' | 'dark' {
   return systemPrefersDark() ? 'dark' : 'light';
 }
 
+/* ── theme switch transition ──
+   Picked on /extras and stored per device. "fade" is a short-lived CSS
+   transition shared by every element; "crossfade" and "circle" hand the whole
+   page to the browser's View Transitions API, which snapshots it and
+   animates one image — so every component, text run and card changes at the
+   exact same instant. Anything the browser cannot animate (no VT support,
+   reduced motion) falls back to an instant swap instead of a half-done one. */
+
+type ThemeTransition = 'none' | 'fade' | 'crossfade' | 'circle';
+type ThemeViewTransition = { finished: Promise<void> };
+type ViewTransitionDocument = Document & {
+  startViewTransition?: (update: () => void) => ThemeViewTransition;
+};
+
+const THEME_TRANSITIONS: readonly ThemeTransition[] = ['none', 'fade', 'crossfade', 'circle'];
+const THEME_TRANSITION_DEFAULT: ThemeTransition = 'crossfade';
+const THEME_TRANSITION_KEY = 'themetransition';
+/* Keep in sync with --theme-transition in src/styles/global.css. */
+const THEME_TRANSITION_MS = 300;
+
+let themeTransitionTimer: ReturnType<typeof setTimeout> | undefined;
+let themeViewTransition: ThemeViewTransition | undefined;
+
+function currentThemeTransition(): ThemeTransition {
+  const stored = getStorage(THEME_TRANSITION_KEY);
+  return THEME_TRANSITIONS.includes(stored as ThemeTransition)
+    ? (stored as ThemeTransition)
+    : THEME_TRANSITION_DEFAULT;
+}
+
+function commitTheme(mode: ThemeMode, resolved: 'light' | 'dark') {
+  const root = document.documentElement;
+  root.dataset.themeMode = mode;
+  root.dataset.theme = resolved;
+  root.classList.toggle('dark', resolved === 'dark');
+}
+
+/** Centre of the visible theme button — the origin of the circular reveal. */
+function themeTogglePoint(): { x: number; y: number } {
+  const toggles = document.querySelectorAll<HTMLElement>('[data-theme-toggle]');
+  for (const toggle of toggles) {
+    const rect = toggle.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+  }
+  return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+}
+
+function clearViewTransitionScaffold() {
+  const root = document.documentElement;
+  root.classList.remove('theme-vt');
+  delete root.dataset.themeVt;
+  root.style.removeProperty('--vt-x');
+  root.style.removeProperty('--vt-y');
+}
+
 function applyTheme(mode: ThemeMode) {
+  const root = document.documentElement;
   const resolved = resolveTheme(mode);
-  document.documentElement.dataset.themeMode = mode;
-  document.documentElement.dataset.theme = resolved;
-  document.documentElement.classList.toggle('dark', resolved === 'dark');
+  const changed = root.dataset.theme != null && root.dataset.theme !== resolved;
+
+  if (!changed) {
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  const kind = currentThemeTransition();
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // A previous sweep, if any, never outlives this one.
+  clearTimeout(themeTransitionTimer);
+  themeTransitionTimer = undefined;
+  root.classList.remove('theme-transition');
+
+  if (kind === 'none' || reduceMotion) {
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  if (kind === 'fade') {
+    // One class for the length of the switch: every element then fades its
+    // colours on the same clock instead of each component using its own
+    // timing (or snapping straight to the new colours). Added before the
+    // attributes change so the old values are the transition's start.
+    root.classList.add('theme-transition');
+    themeTransitionTimer = setTimeout(() => {
+      root.classList.remove('theme-transition');
+      themeTransitionTimer = undefined;
+    }, THEME_TRANSITION_MS);
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  const doc = document as ViewTransitionDocument;
+  const start = doc.startViewTransition;
+  if (!start) {
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  // Scoped to this one switch via `html.theme-vt`, so Astro's own page
+  // navigation view transitions keep their default crossfade.
+  const point = themeTogglePoint();
+  root.dataset.themeVt = kind;
+  root.style.setProperty('--vt-x', `${point.x}px`);
+  root.style.setProperty('--vt-y', `${point.y}px`);
+  root.classList.add('theme-vt');
+
+  let transition: ThemeViewTransition;
+  try {
+    transition = start.call(doc, () => commitTheme(mode, resolved));
+  } catch {
+    clearViewTransitionScaffold();
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  themeViewTransition = transition;
+  const cleanup = () => {
+    // A newer switch owns the scaffold now; leave its classes alone.
+    if (themeViewTransition !== transition) return;
+    themeViewTransition = undefined;
+    clearViewTransitionScaffold();
+  };
+  transition.finished.then(cleanup, cleanup);
 }
 
 function updateToggleLabels() {
   const lang = currentLang();
-  document.getElementById('theme-toggle')?.setAttribute('aria-label', t('themeToggle', lang));
-  document.getElementById('lang-toggle')?.setAttribute('aria-label', t('langToggle', lang));
+  document.querySelectorAll('[data-theme-toggle]').forEach((el) => el.setAttribute('aria-label', t('themeToggle', lang)));
+  document.querySelectorAll('[data-lang-toggle]').forEach((el) => el.setAttribute('aria-label', t('langToggle', lang)));
   document.querySelectorAll<HTMLElement>('[data-copy]').forEach((btn) => {
     btn.setAttribute('aria-label', t('copyEmail', lang));
   });
 }
 
+/**
+ * Copy text to the clipboard.
+ *
+ * The async Clipboard API only exists in secure contexts and can still reject
+ * (denied permission, no user activation, unfocused document), so fall back to
+ * a hidden textarea + execCommand('copy') — that keeps the button working on
+ * http previews and older browsers.
+ */
+async function copyText(text: string): Promise<boolean> {
+  if (window.isSecureContext && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {}
+  }
+
+  const active = document.activeElement as HTMLElement | null;
+  const area = document.createElement('textarea');
+  area.value = text;
+  area.setAttribute('readonly', '');
+  area.setAttribute('aria-hidden', 'true');
+  area.style.position = 'fixed';
+  area.style.top = '0';
+  area.style.left = '0';
+  area.style.width = '1px';
+  area.style.height = '1px';
+  area.style.padding = '0';
+  area.style.border = 'none';
+  area.style.opacity = '0';
+  area.style.pointerEvents = 'none';
+  document.body.appendChild(area);
+
+  let copied = false;
+  try {
+    area.focus({ preventScroll: true });
+    area.select();
+    area.setSelectionRange(0, text.length);
+    copied = document.execCommand('copy');
+  } catch {
+    copied = false;
+  } finally {
+    area.remove();
+    active?.focus({ preventScroll: true });
+  }
+
+  return copied;
+}
+
 function initCopyButtons() {
   document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    let copiedTimer: ReturnType<typeof setTimeout> | undefined;
     btn.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
-        showToast(t('copiedEmail', currentLang()));
-      } catch {
+      const ok = await copyText(btn.dataset.copy ?? '');
+      if (!ok) {
         showToast(t('copyFailed', currentLang()));
+        return;
       }
+      showToast(t('copiedEmail', currentLang()));
+      // morph the icon into a check for two seconds
+      btn.classList.add('copied');
+      btn.setAttribute('aria-label', t('copiedEmail', currentLang()));
+      clearTimeout(copiedTimer);
+      copiedTimer = setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.setAttribute('aria-label', t('copyEmail', currentLang()));
+        copiedTimer = undefined;
+      }, 2000);
     });
   });
 }
@@ -80,15 +260,50 @@ function toggleMenu(panel: HTMLElement | null) {
   }
 }
 
+/** Arrow/Home/End navigation and Escape for the toolbar dropdowns. */
+function wireMenuKeyboard(trigger: HTMLElement, panel: HTMLElement | null) {
+  if (!panel) return;
+  const items = () => Array.from(panel.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+  const focusAt = (index: number) => {
+    const list = items();
+    if (list.length) list[(index + list.length) % list.length].focus();
+  };
+
+  trigger.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    if (!panel.classList.contains('open')) toggleMenu(panel);
+    focusAt(e.key === 'ArrowUp' ? items().length - 1 : 0);
+  });
+
+  panel.addEventListener('keydown', (e) => {
+    const list = items();
+    const current = list.indexOf(document.activeElement as HTMLElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); focusAt(current + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); focusAt(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); focusAt(0); }
+    else if (e.key === 'End') { e.preventDefault(); focusAt(list.length - 1); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeAllMenus(); trigger.focus(); }
+    else if (e.key === 'Tab') closeAllMenus();
+  });
+}
+
 function initTheme() {
   const saved = getStorage('theme');
   applyTheme(saved === 'light' || saved === 'dark' ? saved : 'system');
 
-  const trigger = document.getElementById('theme-toggle') as HTMLElement | null;
-  const panel = trigger?.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
-  trigger?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu(panel);
+  // Bind every theme toggle rather than a single ID, so all instances stay in sync.
+  document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((trigger) => {
+    const panel = trigger.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu(panel);
+      // keyboard-generated clicks have detail 0: move into the menu
+      if (e.detail === 0 && panel?.classList.contains('open')) {
+        panel.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+      }
+    });
+    wireMenuKeyboard(trigger, panel);
   });
 
   document.querySelectorAll<HTMLElement>('[data-theme-value]').forEach((btn) => {
@@ -100,35 +315,494 @@ function initTheme() {
         return;
       }
       setStorage('theme', mode);
-      applyTheme(mode);
+      // Close the menu before the transition snapshots the page, so the old
+      // frame is the plain page rather than page + open menu.
       closeAllMenus();
+      applyTheme(mode);
       showToast(t(mode === 'system' ? 'toastThemeSystem' : mode === 'light' ? 'toastThemeLight' : 'toastThemeDark', currentLang()));
     });
   });
 }
 
-type AnimDir = 'bottom' | 'top';
+/* ── experimental: page load text animations ── */
 
-function currentAnim(): AnimDir {
-  return document.documentElement.dataset.anim === 'bottom' ? 'bottom' : 'top';
+function textAnimDisabled(): boolean {
+  return document.documentElement.dataset.textanim === 'off';
 }
 
-function applyAnim(dir: AnimDir) {
-  if (dir === 'bottom') document.documentElement.dataset.anim = 'bottom';
-  else delete document.documentElement.dataset.anim;
+function applyTextAnim(disabled: boolean) {
+  if (disabled) document.documentElement.dataset.textanim = 'off';
+  else delete document.documentElement.dataset.textanim;
 }
 
-function initAnim() {
-  applyAnim(getStorage('anim') === 'bottom' ? 'bottom' : 'top');
-  const toggle = document.getElementById('anim-toggle') as HTMLInputElement | null;
+function initTextAnim() {
+  applyTextAnim(getStorage('textanim') !== 'on');
+  const toggle = document.getElementById('textanim-toggle') as HTMLInputElement | null;
   if (!toggle) return;
-  toggle.checked = currentAnim() === 'bottom';
+  toggle.checked = !textAnimDisabled();
   toggle.addEventListener('change', () => {
-    const dir: AnimDir = toggle.checked ? 'bottom' : 'top';
-    setStorage('anim', dir);
-    applyAnim(dir);
-    showToast(t(dir === 'top' ? 'toastAnimTop' : 'toastAnimBottom', currentLang()));
+    const disabled = !toggle.checked;
+    applyTextAnim(disabled);
+    setStorage('textanim', disabled ? 'off' : 'on');
+    showToast(t(disabled ? 'toastTextAnimOff' : 'toastTextAnimOn', currentLang()));
   });
+}
+
+/* ── experimental: page accent glow on the viewport ── */
+
+function pageGlowDisabled(): boolean {
+  return document.documentElement.dataset.pageglow === 'off';
+}
+
+function applyPageGlowDisabled(disabled: boolean) {
+  if (disabled) document.documentElement.dataset.pageglow = 'off';
+  else delete document.documentElement.dataset.pageglow;
+}
+
+function initPageGlow() {
+  // The switch reads "Page accent glow", so checked = the glow is visible.
+  // Fresh visitors get no glow; only an explicit 'on' enables it.
+  applyPageGlowDisabled(getStorage('pageglow') !== 'on');
+  const toggle = document.getElementById('pageglow-toggle') as HTMLInputElement | null;
+  if (!toggle) return;
+  toggle.checked = !pageGlowDisabled();
+  toggle.addEventListener('change', () => {
+    const enabled = toggle.checked;
+    applyPageGlowDisabled(!enabled);
+    setStorage('pageglow', enabled ? 'on' : 'off');
+    showToast(t(enabled ? 'toastPageGlowOn' : 'toastPageGlowOff', currentLang()));
+  });
+}
+
+/* ── experimental: avatar rain easter egg (off unless enabled on /extras) ── */
+
+function avatarEggEnabled(): boolean {
+  return document.documentElement.dataset.avataregg === 'on';
+}
+
+function applyAvatarEgg(enabled: boolean) {
+  if (enabled) document.documentElement.dataset.avataregg = 'on';
+  else delete document.documentElement.dataset.avataregg;
+}
+
+function initAvatarEggToggle() {
+  const enabled = getStorage('avataregg') === 'on';
+  applyAvatarEgg(enabled);
+  const toggle = document.getElementById('avataregg-toggle') as HTMLInputElement | null;
+  if (!toggle) return;
+  toggle.checked = enabled;
+  toggle.addEventListener('change', () => {
+    const on = toggle.checked;
+    applyAvatarEgg(on);
+    setStorage('avataregg', on ? 'on' : 'off');
+    showToast(t(on ? 'toastAvatarEggOn' : 'toastAvatarEggOff', currentLang()));
+  });
+}
+
+/* ── experimental: hide the snack bar ── */
+
+function applyToastHidden(hidden: boolean) {
+  if (hidden) document.documentElement.dataset.toast = 'off';
+  else delete document.documentElement.dataset.toast;
+}
+
+function initToastToggle() {
+  applyToastHidden(getStorage('toast') !== 'on');
+  const toggle = document.getElementById('toast-toggle') as HTMLInputElement | null;
+  if (!toggle) return;
+  toggle.checked = toastHidden();
+  toggle.addEventListener('change', () => {
+    applyToastHidden(toggle.checked);
+    setStorage('toast', toggle.checked ? 'off' : 'on');
+    // hidden toasts suppress their own confirmation by design
+    showToast(t(toggle.checked ? 'toastToastOff' : 'toastToastOn', currentLang()));
+  });
+}
+
+/* ── experimental: theme switch transition picker (radio group on /extras) ── */
+
+function initThemeTransitionPicker() {
+  const inputs = Array.from(document.querySelectorAll<HTMLInputElement>('input[data-theme-transition]'));
+  if (!inputs.length) return;
+  const current = currentThemeTransition();
+  for (const input of inputs) {
+    input.checked = input.value === current;
+    input.addEventListener('change', () => {
+      if (!input.checked) return;
+      if (!THEME_TRANSITIONS.includes(input.value as ThemeTransition)) return;
+      setStorage(THEME_TRANSITION_KEY, input.value);
+      showToast(t('toastThemeTransition', currentLang()));
+    });
+  }
+}
+
+/* ── scroll memory, contribution reveal ── */
+
+// Every navigation is instant: no animated scroll-to-top and no animated
+// scroll restore. The outgoing page records where it was left, and the
+// incoming page jumps straight to its remembered offset (or the top).
+// The path is read from the swap event because on a history traversal the
+// URL has already changed by the time the events fire.
+let navToPath = '';
+let reloadRestored = false;
+
+const SCROLL_STORE = 'scroll-positions';
+
+function pageKey(path: string): string {
+  return path.replace(/\/+$/, '') || '/';
+}
+
+function readScrollMap(): Record<string, number> {
+  try {
+    const parsed = JSON.parse(sessionStorage.getItem(SCROLL_STORE) ?? '{}');
+    return parsed && typeof parsed === 'object' ? (parsed as Record<string, number>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function rememberScroll(path: string, y: number) {
+  try {
+    const map = readScrollMap();
+    map[pageKey(path)] = Math.max(0, Math.round(y));
+    sessionStorage.setItem(SCROLL_STORE, JSON.stringify(map));
+  } catch {}
+}
+
+function rememberedScroll(path: string): number {
+  const y = readScrollMap()[pageKey(path)];
+  return typeof y === 'number' && Number.isFinite(y) ? y : 0;
+}
+
+/* ── contributions: cached calendar + change-only animation ──
+   The calendar is rendered at build time, so the first paint already has it.
+   A fingerprint of the last calendar that was shown is cached in localStorage:
+   when the page loads with the same fingerprint the cells appear instantly;
+   only new data (new build, or a fresh fetch that differs) animates in. */
+
+const CONTRIB_CACHE_KEY = 'contrib-cache';
+const CONTRIB_CACHE_TTL = 10 * 60 * 1000;
+const CONTRIB_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// One entry per calendar key, so a refresh never invalidates another
+// calendar's cache.
+type ContribEntry = { at: number; sig: string };
+type ContribCache = Record<string, ContribEntry>;
+
+function readContribCache(): ContribCache {
+  try {
+    const raw = localStorage.getItem(CONTRIB_CACHE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    if (!parsed || typeof parsed !== 'object') return {};
+    // migrate the first, single-graph shape { at, sig }
+    if (typeof parsed.sig === 'string' && typeof parsed.at === 'number') {
+      return { home: { at: parsed.at, sig: parsed.sig } };
+    }
+    const cache: ContribCache = {};
+    Object.entries(parsed).forEach(([key, value]) => {
+      const entry = value as Partial<ContribEntry>;
+      if (typeof entry?.at === 'number' && typeof entry?.sig === 'string') {
+        cache[key] = { at: entry.at, sig: entry.sig };
+      }
+    });
+    return cache;
+  } catch {
+    return {};
+  }
+}
+
+function writeContribCache(key: string, sig: string) {
+  try {
+    const cache = readContribCache();
+    cache[key] = { at: Date.now(), sig };
+    localStorage.setItem(CONTRIB_CACHE_KEY, JSON.stringify(cache));
+  } catch {}
+}
+
+// `instant` disables the per-cell transition, so a cached calendar lands in its
+// final state without replaying the staggered reveal.
+function revealContrib(grid: HTMLElement, animate: boolean) {
+  if (!animate) {
+    grid.setAttribute('data-instant', '');
+    grid.dataset.shown = 'true';
+    requestAnimationFrame(() => grid.removeAttribute('data-instant'));
+    return;
+  }
+  grid.removeAttribute('data-shown');
+  // next frame so the hidden -> shown transition actually runs
+  requestAnimationFrame(() => {
+    grid.dataset.shown = 'true';
+  });
+}
+
+function revealWhenVisible(grid: HTMLElement, animate: boolean) {
+  if (!animate) {
+    revealContrib(grid, false);
+    return;
+  }
+  let revealed = false;
+  const fire = () => {
+    if (revealed) return;
+    revealed = true;
+    revealContrib(grid, true);
+  };
+  // failsafe: never leave the graph invisible if the observer never fires
+  window.setTimeout(fire, 3000);
+  if (!('IntersectionObserver' in window)) {
+    fire();
+    return;
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      fire();
+    },
+    { threshold: 0.2, rootMargin: '0px 0px 120px 0px' }
+  );
+  observer.observe(grid);
+}
+
+const shortContribDate = (iso: string) => {
+  const [, month, day] = iso.split('-');
+  return `${CONTRIB_MONTHS[Number(month) - 1]} ${Number(day)}`;
+};
+
+/** Rebuild the calendar in place from fresh data (same markup as the build). */
+function applyContributions(grid: HTMLElement, data: ContributionsData) {
+  const { weeks } = data;
+  const recentFrom = Math.max(0, weeks.length - 26);
+  const visibleCount = Math.min(26, weeks.length);
+  const monthsEl = grid.parentElement?.querySelector<HTMLElement>('.rd-contrib-months') ?? null;
+  const totalEl = grid.closest('.rd-contrib-section')?.querySelector<HTMLElement>('.rd-head-total') ?? null;
+  const chartEl = grid.closest<HTMLElement>('.rd-contrib');
+
+  if (monthsEl) {
+    const months = document.createDocumentFragment();
+    data.months.forEach((month) => {
+      const el = document.createElement('span');
+      el.style.setProperty('--p', `${(month.col / weeks.length) * 100}%`);
+      el.style.setProperty('--mp', `${((month.col - recentFrom) / visibleCount) * 100}%`);
+      if (month.col < recentFrom) el.setAttribute('data-old', '');
+      el.textContent = month.label;
+      months.appendChild(el);
+    });
+    monthsEl.replaceChildren(months);
+  }
+
+  const cells = document.createDocumentFragment();
+  weeks.forEach((week, col) => {
+    week.forEach((day) => {
+      const cell = document.createElement('span');
+      cell.className = 'rd-contrib-cell';
+      cell.setAttribute('aria-hidden', 'true');
+      if (col < recentFrom) cell.setAttribute('data-old', '');
+      if (!day) {
+        cell.setAttribute('data-empty', '');
+      } else {
+        cell.dataset.level = String(day.level);
+        cell.dataset.date = day.date;
+        cell.style.setProperty('--d', `${(weeks.length - 1 - col) * 6}ms`);
+        const dateLabel = shortContribDate(day.date);
+        cell.dataset.tipEn = `${day.count} ${day.count === 1 ? 'contribution' : 'contributions'} on ${dateLabel}`;
+        cell.dataset.tipSk = `${day.count} ${day.count === 1 ? 'príspevok' : 'príspevkov'} · ${dateLabel}`;
+      }
+      cells.appendChild(cell);
+    });
+  });
+  grid.removeAttribute('data-shown');
+  grid.replaceChildren(cells);
+
+  if (totalEl) totalEl.textContent = data.total.toLocaleString('en-US');
+  chartEl?.setAttribute('aria-label', `GitHub contributions, ${data.from} to ${data.to}`);
+  dimFutureAndPastEmptyContribDays();
+}
+
+function dimFutureAndPastEmptyContribDays() {
+  document.querySelectorAll<HTMLElement>('.rd-contrib-grid').forEach((grid) => {
+    const cells = Array.from(grid.querySelectorAll<HTMLElement>('.rd-contrib-cell'));
+    // find index of last cell that has a real date
+    let lastDateIdx = -1;
+    cells.forEach((cell, i) => { if (cell.dataset.date) lastDateIdx = i; });
+    cells.forEach((cell, i) => {
+      if (!cell.hasAttribute('data-empty')) return;
+      // leading / already-passed empty padding cells
+      if (i < (cells.findIndex((c) => c.dataset.date) || 0)) {
+        cell.setAttribute('data-past-empty', '');
+        cell.removeAttribute('data-future');
+        return;
+      }
+      // trailing empty cells = future days
+      if (i > lastDateIdx) {
+        // the first trailing empty is tomorrow -> stays bright
+        const trailingIndex = i - lastDateIdx; // 1 = tomorrow
+        if (trailingIndex === 1) {
+          cell.removeAttribute('data-future');
+          cell.removeAttribute('data-past-empty');
+        } else {
+          cell.setAttribute('data-future', '');
+          cell.removeAttribute('data-past-empty');
+        }
+        return;
+      }
+      cell.removeAttribute('data-future');
+      cell.removeAttribute('data-past-empty');
+    });
+  });
+
+  // also handle dated future cells (none currently, but keep for safety)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const cutoff = new Date(today);
+  cutoff.setDate(cutoff.getDate() + 2);
+  document.querySelectorAll<HTMLElement>('.rd-contrib-cell[data-date]').forEach((cell) => {
+    const d = cell.dataset.date;
+    if (!d) return;
+    const date = new Date(`${d}T00:00:00`);
+    if (date.getTime() >= cutoff.getTime()) cell.setAttribute('data-future', '');
+    else cell.removeAttribute('data-future');
+  });
+}
+
+async function refreshContributions(grid: HTMLElement, key: string, currentSig: string) {
+  if (grid.dataset.contribFetching) return;
+  grid.dataset.contribFetching = 'true';
+  const year = key.startsWith('year-') ? key.slice(5) : 'last';
+  const data = await fetchContributions(SITE.handle, year);
+  delete grid.dataset.contribFetching;
+  if (!data) return;
+
+  const nextSig = contributionSignature(data);
+  // Refresh the cache timestamp even when nothing changed, so the next page
+  // load can skip the network call entirely.
+  writeContribCache(key, nextSig);
+  if (nextSig === currentSig) return;
+
+  // Real new data: swap the calendar in and animate it once.
+  grid.dataset.contribSig = nextSig;
+  applyContributions(grid, data);
+  revealContrib(grid, true);
+}
+
+function initContributions() {
+  document.querySelectorAll<HTMLElement>('[data-contrib-grid]').forEach((grid) => {
+    if (grid.dataset.contribInit) return;
+    grid.dataset.contribInit = 'true';
+
+    const key = grid.dataset.contribKey || 'home';
+    const sig = grid.dataset.contribSig ?? '';
+    const entry = readContribCache()[key];
+    // Already saw this exact calendar on a previous visit: show it instantly.
+    const unchanged = !!sig && entry?.sig === sig;
+    revealWhenVisible(grid, !unchanged);
+    if (!unchanged) writeContribCache(key, sig);
+
+    // Only hit the API when the cache is missing or old; a fresh cache means
+    // this page load already knows the calendar and nothing has to load.
+    const fresh = entry !== undefined && Date.now() - entry.at <= CONTRIB_CACHE_TTL;
+    if (!fresh) void refreshContributions(grid, key, sig);
+  });
+  dimFutureAndPastEmptyContribDays();
+}
+
+/* One shared, viewport-anchored tooltip for the contribution graph. Being
+   fixed-position and clamped keeps it off the page edges (no sideways scroll)
+   and its solid background never lets the cells show through. */
+let contribTipAbort: AbortController | undefined;
+
+function initContributionTooltip() {
+  const tip = document.querySelector<HTMLElement>('[data-contrib-tip]');
+  if (!tip) return;
+
+  contribTipAbort?.abort();
+  contribTipAbort = new AbortController();
+  const { signal } = contribTipAbort;
+
+  let visible = false;
+  let tipClearTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const cellFrom = (target: EventTarget | null) =>
+    target instanceof Element
+      ? (target.closest('.rd-contrib-cell:not([data-empty])') as HTMLElement | null)
+      : null;
+
+  const place = (cell: HTMLElement) => {
+    const lang = currentLang();
+    const text = (lang === 'sk' ? cell.dataset.tipSk : cell.dataset.tipEn) ?? cell.dataset.tipEn;
+    if (!text) return;
+
+    const wasVisible = visible;
+    clearTimeout(tipClearTimer);
+    tipClearTimer = undefined;
+    tip.textContent = text;
+
+    // the closed tip keeps its layout box, so it can be measured while hidden
+    const w = tip.offsetWidth;
+    const h = tip.offsetHeight;
+    const rect = cell.getBoundingClientRect();
+    const pad = 8;
+    const center = rect.left + rect.width / 2;
+    const left = Math.min(Math.max(center, pad + w / 2), window.innerWidth - pad - w / 2);
+    const above = rect.top - h - 8;
+    const top = above >= pad ? above : Math.min(rect.bottom + 8, window.innerHeight - pad - h);
+
+    if (!wasVisible) {
+      // land on the first date without gliding in from the previous spot
+      tip.style.transition = 'none';
+      tip.style.left = `${left}px`;
+      tip.style.top = `${top}px`;
+      void tip.offsetWidth;
+      tip.style.transition = '';
+      tip.dataset.open = 'true';
+      visible = true;
+      return;
+    }
+
+    // already open: the offsets transition, so the tip glides to the next date
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+  };
+
+  const hide = () => {
+    if (!visible) return;
+    visible = false;
+    delete tip.dataset.open;
+    // keep the text while it fades out, then release it
+    clearTimeout(tipClearTimer);
+    tipClearTimer = setTimeout(() => {
+      tipClearTimer = undefined;
+      if (!visible) tip.textContent = '';
+    }, 240);
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-contrib-grid]').forEach((grid) => {
+    grid.addEventListener('pointerover', (event) => {
+      const cell = cellFrom(event.target);
+      if (cell) place(cell);
+    });
+    grid.addEventListener('pointerout', (event) => {
+      if (event.pointerType === 'touch') return;
+      const cell = cellFrom(event.target);
+      if (!cell) return;
+      // moving straight onto a neighbouring day should just update the tip
+      if (cellFrom(event.relatedTarget)) return;
+      hide();
+    });
+  });
+
+  window.addEventListener('scroll', hide, { passive: true, signal });
+  window.addEventListener('resize', hide, { signal });
+  window.addEventListener('blur', hide, { signal });
+  // tapping anywhere outside the graph dismisses the touch tooltip
+  document.addEventListener(
+    'pointerdown',
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element) || !target.closest('[data-contrib-grid]')) hide();
+    },
+    { signal }
+  );
 }
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
@@ -176,7 +850,7 @@ window.addEventListener('pageshow', (e) => {
 });
 
 const TAGLINES: Record<'en' | 'sk', [string, string]> = {
-  en: ['building tools for the web', 'Perpetual side-project starter'],
+  en: ['building tools for the web', 'perpetual side-project starter'],
   sk: ['tvorím nástroje pre web', 'neustále začínam vedľajšie projekty'],
 };
 
@@ -255,11 +929,16 @@ function initTagline() {
 let langSwitchTimer: ReturnType<typeof setTimeout> | undefined;
 
 function initLang() {
-  const trigger = document.getElementById('lang-toggle') as HTMLElement | null;
-  const panel = trigger?.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
-  trigger?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu(panel);
+  document.querySelectorAll<HTMLElement>('[data-lang-toggle]').forEach((trigger) => {
+    const panel = trigger.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu(panel);
+      if (e.detail === 0 && panel?.classList.contains('open')) {
+        panel.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+      }
+    });
+    wireMenuKeyboard(trigger, panel);
   });
 
   document.querySelectorAll<HTMLElement>('[data-lang-value]').forEach((btn) => {
@@ -302,7 +981,12 @@ function initLang() {
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined;
 
+function toastHidden(): boolean {
+  return document.documentElement.dataset.toast === 'off';
+}
+
 function showToast(message: string) {
+  if (toastHidden()) return;
   let toast = document.getElementById('toast');
   if (!toast) {
     toast = document.createElement('div');
@@ -322,41 +1006,23 @@ function showToast(message: string) {
 }
 
 function updateAge() {
+  const now = new Date();
+  let age = now.getFullYear() - SITE.birthDate.getFullYear();
+  const hadBirthday =
+    now.getMonth() > SITE.birthDate.getMonth() ||
+    (now.getMonth() === SITE.birthDate.getMonth() && now.getDate() >= SITE.birthDate.getDate());
+  if (!hadBirthday) age--;
+  // The markup already carries build-time values, so these writes only fire
+  // when a cached page has gone stale — never on a normal load, no pop-in.
   document.querySelectorAll('.age').forEach((el) => {
-    const now = new Date();
-    let age = now.getFullYear() - SITE.birthDate.getFullYear();
-    const hadBirthday =
-      now.getMonth() > SITE.birthDate.getMonth() ||
-      (now.getMonth() === SITE.birthDate.getMonth() && now.getDate() >= SITE.birthDate.getDate());
-    if (!hadBirthday) age--;
-    el.textContent = String(age);
+    const next = String(age);
+    if (el.textContent !== next) el.textContent = next;
+  });
+  const year = String(now.getFullYear());
+  document.querySelectorAll('.year').forEach((el) => {
+    if (el.textContent !== year) el.textContent = year;
   });
 }
-
-let rainbowTimer: ReturnType<typeof setTimeout> | undefined;
-
-const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-let konamiIndex = 0;
-
-function triggerRainbow() {
-  if (document.documentElement.classList.contains('rainbow')) return;
-  document.documentElement.classList.add('rainbow');
-  showToast(t('toastRainbow', currentLang()));
-  rainbowTimer = setTimeout(() => {
-    document.documentElement.classList.remove('rainbow');
-    rainbowTimer = undefined;
-  }, 8000);
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select')) return;
-  const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-  konamiIndex = key === KONAMI[konamiIndex] ? konamiIndex + 1 : key === KONAMI[0] ? 1 : 0;
-  if (konamiIndex === KONAMI.length) {
-    konamiIndex = 0;
-    triggerRainbow();
-  }
-});
 
 function consoleArt() {
   if ((window as any).__consoleArt) return;
@@ -375,19 +1041,204 @@ function debugParam() {
   }
 }
 
+const STAR_FILLED_PATH =
+  'M 11.47 3.08 Q 12.00 2.00 12.53 3.08 L 14.56 7.18 Q 15.09 8.26 16.28 8.43 L 20.81 9.10 Q 22.00 9.27 21.14 10.11 L 17.86 13.30 Q 17.00 14.14 17.20 15.32 L 17.98 19.97 Q 18.18 21.15 17.13 20.57 L 13.05 18.35 Q 12.00 17.77 10.94 18.33 L 6.88 20.46 Q 5.82 21.02 6.02 19.84 L 6.80 15.32 Q 7.00 14.14 6.14 13.30 L 2.86 10.11 Q 2.00 9.27 3.19 9.10 L 7.72 8.43 Q 8.91 8.26 9.44 7.18 Z';
+
+const STARS_CACHE_KEY = 'stars-cache';
+const STARS_TTL = 6 * 60 * 60 * 1000;
+
+function readStarsCache(): Record<string, { at: number; stars: number }> {
+  try {
+    const raw = localStorage.getItem(STARS_CACHE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeStarsCache(cache: Record<string, { at: number; stars: number }>) {
+  try {
+    localStorage.setItem(STARS_CACHE_KEY, JSON.stringify(cache));
+  } catch {}
+}
+
+function setStatStars(stat: HTMLElement, stars: number) {
+  stat.title = `${stars.toLocaleString('en-US')} GitHub stars`;
+  stat.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="${STAR_FILLED_PATH}"/></svg>${stars.toLocaleString('en-US')}<span class="sr-only"> GitHub stars</span>`;
+}
+
+async function initProjectStars() {
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.proj-item[data-repo]'));
+  if (!cards.length) return;
+  const cache = readStarsCache();
+  const now = Date.now();
+  await Promise.all(
+    cards.map(async (card) => {
+      const repo = card.dataset.repo;
+      if (!repo) return;
+      const entry = cache[repo];
+      const fresh = !!entry && typeof entry.stars === 'number' && now - entry.at <= STARS_TTL;
+
+      let stars: number | null = null;
+      if (fresh) {
+        stars = entry.stars;
+      } else {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${repo}`, {
+            headers: { Accept: 'application/vnd.github+json' },
+          });
+          if (!res.ok) {
+            // fall back to stale cache if the network/rate limit fails
+            if (entry) stars = entry.stars;
+            else return;
+          } else {
+            const data = await res.json();
+            const fetched = typeof data.stargazers_count === 'number' ? data.stargazers_count : 0;
+            stars = fetched;
+            cache[repo] = { at: now, stars: fetched };
+            writeStarsCache(cache);
+          }
+        } catch {
+          if (entry) stars = entry.stars;
+          else return;
+        }
+      }
+
+      if (stars == null || stars < 3) {
+        // remove a stale stat if the count dropped below the gate
+        card.querySelector('.proj-stat')?.remove();
+        return;
+      }
+
+      const title = card.querySelector<HTMLElement>('.proj-title');
+      if (!title) return;
+      const existing = card.querySelector<HTMLElement>('.proj-stat');
+      if (existing) {
+        // update only if the value actually changed
+        const current = parseInt(existing.textContent?.replace(/[^0-9]/g, '') || '0', 10);
+        if (current !== stars) setStatStars(existing, stars);
+      } else {
+        const stat = document.createElement('span');
+        stat.className = 'proj-stat';
+        setStatStars(stat, stars);
+        title.appendChild(stat);
+      }
+    })
+  );
+}
+
+let avatarRainStop: (() => void) | undefined;
+
+function initAvatarRain() {
+  const avatar = document.querySelector<HTMLElement>('[data-avatar]');
+  if (!avatar) return;
+  // Off by default: without an opt-in the avatar is just the hero picture.
+  const enabled = getStorage('avataregg') === 'on';
+  applyAvatarEgg(enabled);
+  if (!enabled) {
+    avatarRainStop = undefined;
+    return;
+  }
+  let active = false;
+  let timer: ReturnType<typeof setInterval> | undefined;
+  const MIN_SIZE = 28;
+  const MAX_SIZE = 48;
+  const MAX_DROPS = 40;
+
+  const spawn = () => {
+    if (document.querySelectorAll('.avatar-drop').length >= MAX_DROPS) return;
+    const size = MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE);
+    const left = Math.random() * Math.max(0, window.innerWidth - size);
+    const duration = 2600 + Math.random() * 2600;
+    const rotation = Math.round(Math.random() * 60 - 30);
+    const img = document.createElement('img');
+    img.src = '/avatar.jpg';
+    img.alt = '';
+    img.className = 'avatar-drop';
+    img.style.width = `${size}px`;
+    img.style.height = `${size}px`;
+    img.style.left = `${left}px`;
+    img.style.setProperty('--rot', `${rotation}deg`);
+    img.style.animationDuration = `${duration}ms`;
+    img.addEventListener(
+      'animationend',
+      (event) => {
+        if ((event as AnimationEvent).animationName === 'avatar-fall') img.remove();
+      },
+      { once: false }
+    );
+    document.body.appendChild(img);
+  };
+
+  const start = () => {
+    active = true;
+    document.documentElement.dataset.avatarRain = 'on';
+    spawn();
+    timer = setInterval(spawn, 220);
+  };
+
+  const stop = () => {
+    active = false;
+    delete document.documentElement.dataset.avatarRain;
+    if (timer) clearInterval(timer);
+    timer = undefined;
+    document.querySelectorAll('.avatar-drop').forEach((el) => el.remove());
+  };
+
+  avatarRainStop = stop;
+  avatar.addEventListener('click', () => (active ? stop() : start()));
+}
+
 function initPage() {
   initTheme();
-  initAnim();
+  initTextAnim();
+  initPageGlow();
+  initToastToggle();
+  initAvatarEggToggle();
+  initThemeTransitionPicker();
+  // Non-home pages always land at the top, including history
+  // navigations, so the browser's own scroll restoration is turned off.
+  history.scrollRestoration = 'manual';
+  // A reload (mobile pull-to-refresh included) restores the last recorded
+  // offset instantly; a pull while already at the top records 0, so the page
+  // stays at the top instead of animating back to a stale position.
+  if (!reloadRestored) {
+    reloadRestored = true;
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    if (nav?.type === 'reload') {
+      const target = pageKey(location.pathname) === '/' ? rememberedScroll(location.pathname) : 0;
+      window.scrollTo({ top: target, left: 0, behavior: 'instant' });
+    }
+  }
+  // Reveal the page now that the scroll position is correct.
+  document.documentElement.style.visibility = '';
   initLang();
   updateToggleLabels();
   initCopyButtons();
   updateAge();
   initTagline();
+  initContributions();
+  initContributionTooltip();
+  void initProjectStars();
+  initAvatarRain();
+  // Navigation scroll is handled in the swap handlers: instantly, no animation.
   consoleArt();
   debugParam();
 }
 
 document.addEventListener('astro:before-swap', (event) => {
+  // On a history traversal the URL has already changed by now, so take the
+  // paths from the event instead of location.
+  const fromPath = event.from.pathname;
+  const toPath = event.to.pathname;
+  navToPath = pageKey(toPath);
+  // the falling-avatar easter egg never survives a navigation
+  avatarRainStop?.();
+  avatarRainStop = undefined;
+  // Only the homepage remembers its scroll position; other pages open at top.
+  if (pageKey(fromPath) === '/') rememberScroll(fromPath, window.scrollY);
   clearTimeout(langSwitchTimer);
   langSwitchTimer = undefined;
   document.documentElement.classList.remove('lang-switching');
@@ -399,16 +1250,35 @@ document.addEventListener('astro:before-swap', (event) => {
   taglineFadeTimer = undefined;
   clearTimeout(toastTimer);
   toastTimer = undefined;
-  clearTimeout(rainbowTimer);
-  rainbowTimer = undefined;
-  const { newDocument } = event as CustomEvent<{ newDocument: Document }>;
+  const { newDocument } = event;
   newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
   newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;
   newDocument.documentElement.lang = document.documentElement.lang;
   if (document.documentElement.classList.contains('dark')) newDocument.documentElement.classList.add('dark');
   else newDocument.documentElement.classList.remove('dark');
-  if (currentAnim() === 'bottom') newDocument.documentElement.dataset.anim = 'bottom';
-  else delete newDocument.documentElement.dataset.anim;
+  if (textAnimDisabled()) newDocument.documentElement.dataset.textanim = 'off';
+  else delete newDocument.documentElement.dataset.textanim;
+  if (pageGlowDisabled()) newDocument.documentElement.dataset.pageglow = 'off';
+  else delete newDocument.documentElement.dataset.pageglow;
+  if (toastHidden()) newDocument.documentElement.dataset.toast = 'off';
+  else delete newDocument.documentElement.dataset.toast;
+  if (avatarEggEnabled()) newDocument.documentElement.dataset.avataregg = 'on';
+  else delete newDocument.documentElement.dataset.avataregg;
+});
+
+document.addEventListener('astro:after-swap', () => {
+  const toPath = navToPath || pageKey(location.pathname);
+  navToPath = '';
+
+  // The homepage restores its remembered offset; every other page opens at
+  // the top. `instant` makes sure no animated scroll ever starts.
+  const target = pageKey(toPath) === '/' ? rememberedScroll(toPath) : 0;
+  window.scrollTo({ top: target, left: 0, behavior: 'instant' });
 });
 
 document.addEventListener('astro:page-load', initPage);
+
+// Keep the homepage's remembered scroll position fresh on reload.
+window.addEventListener('pagehide', () => {
+  if (pageKey(location.pathname) === '/') rememberScroll(location.pathname, window.scrollY);
+});

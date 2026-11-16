@@ -10,8 +10,10 @@
     "prebuild": "node scripts/generate-icons.mjs",
     "dev": "astro dev",
     "build": "astro build",
+    "postbuild": "node scripts/publish-404.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
