@@ -8,17 +8,21 @@ const digits = ['4', '0', '4'];
 
 <BaseLayout title={`404 · ${t('notFoundTitle')}`} standalone noindex>
   <div class="nf">
-    <div class="nf-stage" data-nf-stage aria-hidden="true">
-      {digits.map((digit) => <span class="nf-digit" data-nf-digit>{digit}</span>)}
+    <div class="nf-stage" data-nf-stage>
+      {digits.map((digit, i) => (
+        <button type="button" class="nf-digit" data-nf-digit aria-label={`${t('notFoundPopDigit')} ${i + 1}`}>
+          {digit}
+        </button>
+      ))}
     </div>
 
-    <h2 class="nf-title">
+    <h1 class="nf-title">
       <span data-lang="en">{t('notFoundTitle')}</span><span data-lang="sk">{t('notFoundTitle', 'sk')}</span>
-    </h2>
+    </h1>
     <p class="nf-text">
       <span data-lang="en">{t('notFoundText')}</span><span data-lang="sk">{t('notFoundText', 'sk')}</span>
     </p>
-    <p class="nf-joke" data-nf-joke>
+    <p class="nf-joke" data-nf-joke aria-live="polite">
       <span data-lang="en">{t('notFoundJoke')}</span><span data-lang="sk">{t('notFoundJoke', 'sk')}</span>
     </p>
 
@@ -29,9 +33,9 @@ const digits = ['4', '0', '4'];
   </div>
 
   <script>
-    // A dead end deserves a toy: the digits are clickable, and three clicks
-    // scatter them off the row before they spring back. Purely decorative, so
-    // the markup stays aria-hidden and the home link is the real way out.
+    // A dead end deserves a toy: the digits are real buttons, so three
+    // presses scatter them off the row for keyboard and pointer users alike.
+    // The home link is still the real way out.
     const stage = document.querySelector<HTMLElement>('[data-nf-stage]');
     const joke = document.querySelector<HTMLElement>('[data-nf-joke]');
 
@@ -75,7 +79,7 @@ const digits = ['4', '0', '4'];
       };
 
       digits.forEach((digit) => {
-        digit.addEventListener('pointerdown', () => {
+        digit.addEventListener('click', () => {
           if (reducedMotion.matches) {
             revealJoke();
             return;

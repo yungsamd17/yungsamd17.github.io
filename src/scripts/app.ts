@@ -260,6 +260,34 @@ function toggleMenu(panel: HTMLElement | null) {
   }
 }
 
+/** Arrow/Home/End navigation and Escape for the toolbar dropdowns. */
+function wireMenuKeyboard(trigger: HTMLElement, panel: HTMLElement | null) {
+  if (!panel) return;
+  const items = () => Array.from(panel.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+  const focusAt = (index: number) => {
+    const list = items();
+    if (list.length) list[(index + list.length) % list.length].focus();
+  };
+
+  trigger.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    if (!panel.classList.contains('open')) toggleMenu(panel);
+    focusAt(e.key === 'ArrowUp' ? items().length - 1 : 0);
+  });
+
+  panel.addEventListener('keydown', (e) => {
+    const list = items();
+    const current = list.indexOf(document.activeElement as HTMLElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); focusAt(current + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); focusAt(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); focusAt(0); }
+    else if (e.key === 'End') { e.preventDefault(); focusAt(list.length - 1); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeAllMenus(); trigger.focus(); }
+    else if (e.key === 'Tab') closeAllMenus();
+  });
+}
+
 function initTheme() {
   const saved = getStorage('theme');
   applyTheme(saved === 'light' || saved === 'dark' ? saved : 'system');
@@ -270,7 +298,12 @@ function initTheme() {
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
       toggleMenu(panel);
+      // keyboard-generated clicks have detail 0: move into the menu
+      if (e.detail === 0 && panel?.classList.contains('open')) {
+        panel.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+      }
     });
+    wireMenuKeyboard(trigger, panel);
   });
 
   document.querySelectorAll<HTMLElement>('[data-theme-value]').forEach((btn) => {
@@ -901,7 +934,11 @@ function initLang() {
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
       toggleMenu(panel);
+      if (e.detail === 0 && panel?.classList.contains('open')) {
+        panel.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+      }
     });
+    wireMenuKeyboard(trigger, panel);
   });
 
   document.querySelectorAll<HTMLElement>('[data-lang-value]').forEach((btn) => {

@@ -15,6 +15,18 @@ const shortDate = (iso: string) => {
   return `${MONTHS[Number(month) - 1]} ${Number(day)}`;
 };
 const totalLabel = data ? data.total.toLocaleString('en-US') : '';
+
+// A compact, screen-reader-friendly view of the same data: monthly totals.
+const monthlyTotals = data
+  ? [...data.weeks.flat().reduce((acc, day) => {
+      if (!day) return acc;
+      const month = new Date(`${day.date}T00:00:00Z`).getUTCMonth();
+      acc.set(month, (acc.get(month) ?? 0) + day.count);
+      return acc;
+    }, new Map<number, number>()).entries()]
+      .sort((a, b) => a[0] - b[0])
+      .map(([month, count]) => ({ label: MONTHS[month], count }))
+  : [];
 ---
 
 {
@@ -36,7 +48,7 @@ const totalLabel = data ? data.total.toLocaleString('en-US') : '';
         </a>
       </h2>
 
-      <div class="rd-contrib" role="img" aria-label={chartLabel}>
+      <div class="rd-contrib" role="img" aria-label={chartLabel} aria-describedby="contrib-data">
         <div class="rd-contrib-days" aria-hidden="true">
           <span style="grid-row: 2">Mon</span>
           <span style="grid-row: 4">Wed</span>
@@ -98,6 +110,26 @@ const totalLabel = data ? data.total.toLocaleString('en-US') : '';
       </div>
 
       <div class="rd-contrib-tip" data-contrib-tip aria-hidden="true" />
+
+      <div class="sr-only" id="contrib-data">
+        <table>
+          <caption>{t('contribTableCaption')}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{t('contribMonth')}</th>
+              <th scope="col">{t('contribCount')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {monthlyTotals.map((month) => (
+              <tr>
+                <th scope="row">{month.label}</th>
+                <td>{month.count}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   )
 }
