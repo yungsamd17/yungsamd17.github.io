@@ -97,7 +97,7 @@ const personSchema = {
     } catch {
       document.documentElement.lang = 'en';
     }
-    // The redesign owns scroll restoration; tell the browser early so a reload
+    // The site owns scroll restoration; tell the browser early so a reload
     // (e.g. mobile pull-to-refresh) never restores a stale offset.
     try {
       history.scrollRestoration = 'manual';

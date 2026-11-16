@@ -35,12 +35,6 @@ const REPOS = Object.fromEntries(repoEntries);
 ---
 
 <BaseLayout title={`${t('projectsTitle')} | ${SITE.title}`} description={SITE.description}>
-  <a href="/" class="back">
-    <Icon name="arrow-left" size={12} />
-    <span data-lang="en">{t('back')}</span>
-    <span data-lang="sk">{t('back', 'sk')}</span>
-  </a>
-
   <h2 class="page-title">
     <span data-lang="en">{t('projectsTitle')}</span>
     <span data-lang="sk">{t('projectsTitle', 'sk')}</span>
@@ -50,7 +44,7 @@ const REPOS = Object.fromEntries(repoEntries);
     {
       allProjects.map((project) => {
         const stars = (project.repo ? REPOS[project.repo]?.stars : undefined) ?? 0;
-        // projectIcon is the image path (for redesign); icon can be IconName or path
+        // projectIcon is the image path; icon can be IconName or path
         const iconPath = project.projectIcon ?? (project.icon?.startsWith('/') ? project.icon : undefined);
         const hasIcon = Boolean(iconPath);
         const accent = project.accent;
@@ -59,7 +53,7 @@ const REPOS = Object.fromEntries(repoEntries);
         // The card itself opens the first available link: site, then GitHub.
         const href = project.site ?? repoUrl;
         return (
-          <div class="proj-item" data-rd-only={project.projectIcon ? '' : undefined} data-repo={project.repo} style={`--accent:${accent}${project.iconBg ? `;--icon-bg:${project.iconBg}` : ''}`}>
+          <div class="proj-item" data-repo={project.repo} style={`--accent:${accent}${project.iconBg ? `;--icon-bg:${project.iconBg}` : ''}`}>
             <a class="proj-overlay" href={href} target="_blank" rel="noopener" aria-label={project.title} />
             <div class="proj-icon-wrap">
               {hasIcon ? (

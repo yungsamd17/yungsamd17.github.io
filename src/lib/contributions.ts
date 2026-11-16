@@ -1,4 +1,4 @@
-export interface ContributionDay {
+interface ContributionDay {
   date: string;
   count: number;
   level: number;
@@ -16,7 +16,7 @@ export interface ContributionsData {
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /** Turn a flat list of contribution days into the calendar grid. */
-export function buildContributions(days: unknown): ContributionsData | null {
+function buildContributions(days: unknown): ContributionsData | null {
   if (!Array.isArray(days) || days.length === 0) return null;
 
   const valid = (days as ContributionDay[])

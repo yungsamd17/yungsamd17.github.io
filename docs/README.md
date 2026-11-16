@@ -79,13 +79,13 @@ yungsamd17.github.io/
 │   │   ├── index.astro         # Home
 │   │   ├── projects.astro      # Build-time GitHub stars via API
 │   │   ├── links.astro         # Link-in-bio page (+ copy-email button)
-│   │   ├── extras.astro        # Experimental/legacy toggles (excluded from sitemap)
+│   │   ├── extras.astro        # Experimental options (excluded from sitemap)
 │   │   ├── 404.astro
 │   │   └── og/[slug].png.ts    # Dynamic 1200×630 OG share cards (sharp)
 │   ├── scripts/
 │   │   └── app.ts              # Client JS: theme, lang, toasts, age, easter eggs
 │   └── styles/
-│       └── global.css          # Design tokens, classic + redesign styles, motion
+│       └── global.css          # Design tokens, layout, components and motion
 ├── docs/                    # This documentation
 └── .github/
     ├── FUNDING.yml
@@ -133,7 +133,7 @@ A project entry accepts a few optional extras:
 
 | Field | Purpose |
 |-------|---------|
-| `projectIcon` | SVG icon shown in the redesign card (path under `public/`) |
+| `projectIcon` | SVG icon shown on the project card (path under `public/`) |
 | `icon` | Icon path (starting with `/`) used when there is no `projectIcon` |
 | `mono` | Monogram text for icon-less cards (defaults to the first letter) |
 | `iconBg` | Overrides the icon tile background |
@@ -160,19 +160,13 @@ Tokens live in `src/styles/global.css` and are mapped into Tailwind via `@theme 
 | `--dim` | `#2a2a3080` | `#fafafa80` | Card backgrounds |
 | `--item` | `#a0a0a8` | `#4a4a4a` | Link/text items |
 
-Classic component classes mirror v1: `.page`, `.link-list`, `.featured-link`, `.nav-btn`, `.proj-item`, `.about-text`, `.chip`, `.tag`, plus the radial gradient body background and the 500px column layout.
+Layout classes include `.page`, `.link-list`, `.featured-link`, `.nav-btn`, `.proj-item` and `.about-text`, plus the radial gradient body background and the 720px centred column.
 
 App-like viewport behavior: `html` gets a definite height and `body` uses `min-height: 100dvh`, so pages fit the visible screen exactly (no browser-toolbar overflow) and only scroll when content genuinely exceeds it.
 
-### The redesign
+### Card-based layout
 
-The redesign is the site's only layout. `BaseLayout.astro` puts `data-redesign="on"` directly on `<html>`, so the new card-based design applies from the very first paint with no switch and no stored preference. There is no way back to the classic v1 layout.
-
-- Every redesign rule is still scoped under `html[data-redesign]`, and the old classic rules remain under `html:not([data-redesign])` in `global.css`. They no longer select anything in normal use.
-- The layout gate is no longer copied during navigation, because every page ships with the attribute in its static markup.
-- Old `localStorage['redesign']` values are ignored; they do not affect the design.
-
-Redesign features: the card glow, project star counts, contribution calendar, two-column links grid, centered links hero and the optional avatar easter egg.
+The card-based design is the only layout. There is no layout switch, no `data-redesign` attribute and no classic v1 styles in `global.css` — what ships is what renders, from the first paint onward. Features include the card glow, project star counts, contribution calendar, two-column links grid, centered links hero and the optional avatar rain easter egg.
 
 ---
 
@@ -257,7 +251,7 @@ Manual theme/language changes confirm themselves with a solid, card-rounded toas
 - **Theme toasts** are localized by the current site language ("Switched to dark theme" / "Prepnuté na tmavú tému")
 - **Language toasts** are fixed in the target language ("Switched to English" / "Prepnuté na slovenčinu")
 - **Option toasts** confirm the `/extras` toggles ("Page glow disabled", "Avatar rain enabled", …)
-- **Copy-email + konami toasts** reuse the same system (`copiedEmail`, `toastRainbow` keys)
+- **Copy-email toasts** reuse the same system (`copiedEmail` key)
 - `data-toast="off"` (the "Hide snack bar" option) suppresses the toast element entirely
 
 ---
@@ -327,7 +321,6 @@ Example: French (`fr`).
 1. **Avatar rain** (experimental, off by default). Enable it in `/extras` with "Avatar rain easter egg", then click the profile picture in the hero. Dim copies of the picture (28–48px, random static rotation) fall from the top, fade out completely by ~75% of the screen and despawn. Click the picture again to stop. Navigating away always stops it and it never restarts on its own.
 2. **Console art** — open DevTools and say hi
 3. **`?debug=true`** — green debug border
-4. **Konami code** (↑↑↓↓←→←→BA) — rainbow hue-cycle for 8s + toast
 
 There is one more. It is not documented here — that would ruin the fun.
 
@@ -399,10 +392,10 @@ Recommended commit message format for this project:
 
 ### Examples:
 ```
-feat: add rainbow theme easter egg
+feat: add dark mode toggle
 fix: correct translation typo in Slovak about text
 style: update project card hover effects
-refactor: remove unused rainbow theme code
+refactor: remove unused theme code
 docs: add documentation for language system
 chore: bump astro to latest
 ```

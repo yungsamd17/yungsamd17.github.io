@@ -264,8 +264,7 @@ function initTheme() {
   const saved = getStorage('theme');
   applyTheme(saved === 'light' || saved === 'dark' ? saved : 'system');
 
-  // The classic header and the redesign toolbar each render a toggle, so bind
-  // every instance instead of a single ID.
+  // Bind every theme toggle rather than a single ID, so all instances stay in sync.
   document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((trigger) => {
     const panel = trigger.parentElement?.querySelector<HTMLElement>('.menu-panel') ?? null;
     trigger.addEventListener('click', (e) => {
@@ -404,7 +403,7 @@ function initThemeTransitionPicker() {
   }
 }
 
-/* ── redesign: scroll memory, contribution reveal ── */
+/* ── scroll memory, contribution reveal ── */
 
 // Every navigation is instant: no animated scroll-to-top and no animated
 // scroll restore. The outgoing page records where it was left, and the
@@ -988,31 +987,6 @@ function updateAge() {
   });
 }
 
-let rainbowTimer: ReturnType<typeof setTimeout> | undefined;
-
-const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-let konamiIndex = 0;
-
-function triggerRainbow() {
-  if (document.documentElement.classList.contains('rainbow')) return;
-  document.documentElement.classList.add('rainbow');
-  showToast(t('toastRainbow', currentLang()));
-  rainbowTimer = setTimeout(() => {
-    document.documentElement.classList.remove('rainbow');
-    rainbowTimer = undefined;
-  }, 8000);
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.target instanceof HTMLElement && e.target.closest('input, textarea, select')) return;
-  const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-  konamiIndex = key === KONAMI[konamiIndex] ? konamiIndex + 1 : key === KONAMI[0] ? 1 : 0;
-  if (konamiIndex === KONAMI.length) {
-    konamiIndex = 0;
-    triggerRainbow();
-  }
-});
-
 function consoleArt() {
   if ((window as any).__consoleArt) return;
   (window as any).__consoleArt = true;
@@ -1186,7 +1160,7 @@ function initPage() {
   initToastToggle();
   initAvatarEggToggle();
   initThemeTransitionPicker();
-  // The redesign always lands at the top of a page, including history
+  // Non-home pages always land at the top, including history
   // navigations, so the browser's own scroll restoration is turned off.
   history.scrollRestoration = 'manual';
   // A reload (mobile pull-to-refresh included) restores the last recorded
@@ -1244,8 +1218,6 @@ document.addEventListener('astro:before-swap', (event) => {
   taglineFadeTimer = undefined;
   clearTimeout(toastTimer);
   toastTimer = undefined;
-  clearTimeout(rainbowTimer);
-  rainbowTimer = undefined;
   const { newDocument } = swap;
   newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
   newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;

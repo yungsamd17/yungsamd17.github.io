@@ -1,8 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import ThemeToggle from '../components/ThemeToggle.astro';
-import LangToggle from '../components/LangToggle.astro';
 import Contributions from '../components/Contributions.astro';
 import { SITE, SOCIALS, FEATURED } from '../data/site';
 import { t } from '../i18n/ui';
@@ -30,10 +28,6 @@ if (!hadBirthday) age--;
           <span data-lang="sk">{t('tagline', 'sk')}</span>
         </p>
       </div>
-    </div>
-    <div class="header-buttons">
-      <LangToggle />
-      <ThemeToggle />
     </div>
   </header>
 
@@ -144,14 +138,6 @@ if (!hadBirthday) age--;
         </a>
       ))
     }
-  </div>
-
-  <div class="gap" data-classic-only>
-    <a class="nav-btn" href="/projects/">
-      <span data-lang="en">{t('allProjects')}</span>
-      <span data-lang="sk">{t('allProjects', 'sk')}</span>
-      <Icon name="arrow-right" size={14} class="card-arrow" />
-    </a>
   </div>
 
   <Contributions />

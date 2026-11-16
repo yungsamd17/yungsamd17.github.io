@@ -34,9 +34,9 @@ export interface FeaturedLink {
   icon: IconName;
   /** Languages/tech used */
   langs?: string[];
-  /** Project icon for the experimental redesign (public path) */
+  /** Project icon shown on the project card (public path) */
   projectIcon?: string;
-  /** Glow accent color for the experimental redesign */
+  /** Glow accent colour for the project card */
   accent?: string;
   /** Live site URL (for projects page) */
   site?: string;
@@ -130,7 +130,6 @@ export const PROJECTS: Project[] = [
       sk: 'Rýchle nástroje pre prehliadače so zameraním na súkromie pre tvorcov a vývojárov.',
     },
     langs: ['Astro', 'TypeScript', 'Tools'],
-    live: true,
   },
   {
     title: 'Volume Control',
@@ -154,7 +153,6 @@ export const PROJECTS: Project[] = [
       sk: 'Userscripts pre Twitch, X a ďalšie — malé vylepšenia pre každodenné používanie.',
     },
     langs: ['JS', 'Web', 'Userscripts'],
-    live: true,
   },
   {
     title: 'BetterDiscord Addons',
