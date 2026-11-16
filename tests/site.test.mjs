@@ -63,6 +63,17 @@ test('past projects are the three no-longer-maintained ones', () => {
   assert.ok(projects.includes('aria-labelledby="proj-past-heading"'));
 });
 
+test('snack bar is shown by default', () => {
+  const head = read('src/components/BaseHead.astro');
+  const app = read('src/scripts/app.ts');
+  const docs = read('docs/README.md');
+
+  // only an explicit opt-out sets the hiding attribute before first paint
+  assert.ok(head.includes("localStorage.getItem('toast') === 'off'"));
+  assert.ok(app.includes("getStorage('toast') === 'off'"));
+  assert.ok(docs.includes('**off** (toasts shown'));
+});
+
 test('contribution graph revalidates data and dims tomorrow', () => {
   const app = read('src/scripts/app.ts');
   const lib = read('src/lib/contributions.ts');

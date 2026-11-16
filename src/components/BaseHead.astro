@@ -110,7 +110,8 @@ const personSchema = {
       if (localStorage.getItem('textanim') !== 'on') document.documentElement.dataset.textanim = 'off';
     } catch {}
     try {
-      if (localStorage.getItem('toast') !== 'on') document.documentElement.dataset.toast = 'off';
+      // toasts are on by default; only an explicit opt-out suppresses them
+      if (localStorage.getItem('toast') === 'off') document.documentElement.dataset.toast = 'off';
     } catch {}
     // The glow is off in the static markup, so it also stays off without JS.
     // An explicit opt-in is the only case where it is removed before paint.

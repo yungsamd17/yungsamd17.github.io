@@ -407,7 +407,7 @@ function applyToastHidden(hidden: boolean) {
 }
 
 function initToastToggle() {
-  applyToastHidden(getStorage('toast') !== 'on');
+  applyToastHidden(getStorage('toast') === 'off');
   const toggle = document.getElementById('toast-toggle') as HTMLInputElement | null;
   if (!toggle) return;
   toggle.checked = toastHidden();

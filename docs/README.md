@@ -177,7 +177,7 @@ The card-based design is the only layout. There is no layout switch, no `data-re
 | Option | Effect on `<html>` | Storage key | Default |
 |--------|--------------------|-------------|---------|
 | Page load text animations | (absence of `data-textanim="off"`) | `textanim` | **off** (`'on'` enables them) |
-| Hide snack bar | `data-toast="off"` | `toast` | **on** (toasts hidden) |
+| Hide snack bar | `data-toast="off"` | `toast` | **off** (toasts shown; `'off'` hides them) |
 | Page accent glow | (absence of `data-pageglow="off"`) | `pageglow` | **off** (only `'on'` enables the soft radial glow) |
 | Avatar rain easter egg | `data-avataregg="on"` | `avataregg` | **off** (`'on'` enables the hero avatar click) |
 
