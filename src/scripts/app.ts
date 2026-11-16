@@ -378,7 +378,8 @@ function applyPageGlowDisabled(disabled: boolean) {
 
 function initPageGlow() {
   // The switch reads "Page accent glow", so checked = the glow is visible.
-  applyPageGlowDisabled(getStorage('pageglow') === 'off');
+  // Fresh visitors get no glow; only an explicit 'on' enables it.
+  applyPageGlowDisabled(getStorage('pageglow') !== 'on');
   const toggle = document.getElementById('pageglow-toggle') as HTMLInputElement | null;
   if (!toggle) return;
   toggle.checked = !pageGlowDisabled();

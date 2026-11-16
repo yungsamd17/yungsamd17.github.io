@@ -188,7 +188,7 @@ Redesign-only features: the card glow, project star counts, contribution calenda
 | Page load text animations | (absence of `data-textanim="off"`) | `textanim` | **off** (`'on'` enables them) |
 | Use classic load animation | `data-anim="bottom"` | `anim` | **off** (the redesign's staggered entrance) |
 | Hide snack bar | `data-toast="off"` | `toast` | **on** (toasts hidden) |
-| Page accent glow | (absence of `data-pageglow="off"`) | `pageglow` | **on** (soft radial glow behind the page) |
+| Page accent glow | (absence of `data-pageglow="off"`) | `pageglow` | **off** (only `'on'` enables the soft radial glow) |
 
 The switches are plain checkboxes with `role="switch"`; the visible 46×26 track is a styled `.switch-ui` sibling. Toggling one writes the key, updates the attribute and shows a confirmation toast.
 

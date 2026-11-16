@@ -122,8 +122,10 @@ const personSchema = {
     try {
       if (localStorage.getItem('toast') !== 'on') document.documentElement.dataset.toast = 'off';
     } catch {}
+    // The glow is off in the static markup, so it also stays off without JS.
+    // An explicit opt-in is the only case where it is removed before paint.
     try {
-      if (localStorage.getItem('pageglow') === 'off') document.documentElement.dataset.pageglow = 'off';
+      if (localStorage.getItem('pageglow') === 'on') delete document.documentElement.dataset.pageglow;
     } catch {}
   })();
 </script>
