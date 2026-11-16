@@ -38,19 +38,19 @@ function resolveTheme(mode: ThemeMode): 'light' | 'dark' {
 
 /* ── theme switch transition ──
    Picked on /extras and stored per device. "fade" is a short-lived CSS
-   transition shared by every element; "crossfade", "circle" and "wipe" hand
-   the whole page to the browser's View Transitions API, which snapshots it and
+   transition shared by every element; "crossfade" and "circle" hand the whole
+   page to the browser's View Transitions API, which snapshots it and
    animates one image — so every component, text run and card changes at the
    exact same instant. Anything the browser cannot animate (no VT support,
    reduced motion) falls back to an instant swap instead of a half-done one. */
 
-type ThemeTransition = 'none' | 'fade' | 'crossfade' | 'circle' | 'wipe';
+type ThemeTransition = 'none' | 'fade' | 'crossfade' | 'circle';
 type ThemeViewTransition = { finished: Promise<void> };
 type ViewTransitionDocument = Document & {
   startViewTransition?: (update: () => void) => ThemeViewTransition;
 };
 
-const THEME_TRANSITIONS: readonly ThemeTransition[] = ['none', 'fade', 'crossfade', 'circle', 'wipe'];
+const THEME_TRANSITIONS: readonly ThemeTransition[] = ['none', 'fade', 'crossfade', 'circle'];
 const THEME_TRANSITION_DEFAULT: ThemeTransition = 'crossfade';
 const THEME_TRANSITION_KEY = 'themetransition';
 /* Keep in sync with --theme-transition in src/styles/global.css. */

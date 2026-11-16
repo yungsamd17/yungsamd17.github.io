@@ -97,9 +97,7 @@ body {
    Scoped to html.theme-vt, which only exists for the length of a theme
    switch, so Astro's page navigation transitions keep their defaults. */
 html.theme-vt[data-theme-vt="circle"]::view-transition-old(root),
-html.theme-vt[data-theme-vt="circle"]::view-transition-new(root),
-html.theme-vt[data-theme-vt="wipe"]::view-transition-old(root),
-html.theme-vt[data-theme-vt="wipe"]::view-transition-new(root) {
+html.theme-vt[data-theme-vt="circle"]::view-transition-new(root) {
   /* no default crossfade: the new snapshot is revealed by clip-path */
   animation: none;
   mix-blend-mode: normal;
@@ -116,19 +114,9 @@ html.theme-vt[data-theme-vt="circle"]::view-transition-new(root) {
   animation: theme-vt-circle 500ms cubic-bezier(.4, 0, .2, 1) both;
 }
 
-html.theme-vt[data-theme-vt="wipe"]::view-transition-new(root) {
-  z-index: 2;
-  animation: theme-vt-wipe 500ms cubic-bezier(.4, 0, .2, 1) both;
-}
-
 @keyframes theme-vt-circle {
   from { clip-path: circle(0% at var(--vt-x, 50%) var(--vt-y, 50%)); }
   to   { clip-path: circle(150% at var(--vt-x, 50%) var(--vt-y, 50%)); }
-}
-
-@keyframes theme-vt-wipe {
-  from { clip-path: inset(0 0 100% 0); }
-  to   { clip-path: inset(0 0 0 0); }
 }
 
 a, button {
@@ -864,16 +852,13 @@ html[data-redesign] .proj-lang.proj-lang-archived {
   left: 50%;
   top: 28px;
   transform: translate(-50%, -12px);
-  background: rgb(232 232 236 / 0.05);
-  color: var(--hi);
-  border: 1px solid rgb(1 1 1 / 0.14);
+  background: var(--hi);
+  color: var(--bg);
   font-size: .78rem;
   letter-spacing: .02em;
   padding: 8px 18px;
-  border-radius: 100px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .28);
   opacity: 0;
   pointer-events: none;
   z-index: 1000;
@@ -886,14 +871,6 @@ html[data-redesign] .proj-lang.proj-lang-archived {
   transition: opacity .25s ease, transform .25s ease;
 }
 
-[data-theme="light"] .toast {
-  background: rgb(0 0 0 / 0.03);
-  border-color: rgb(0 0 0 / 0.18);
-}
-[data-theme="dark"] .toast {
-  background: rgb(232 232 236 / 0.05);
-  border-color: rgb(1 1 1 / 0.14);
-}
 
 .toast.show {
   opacity: 1;
@@ -942,6 +919,20 @@ html[data-pageglow="off"] body {
   line-height: 1.7;
   text-wrap: pretty;
 }
+
+.extras-repo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+  color: var(--mid);
+  font-size: .8rem;
+  text-decoration: none;
+  transition: color .15s;
+}
+
+.extras-repo:hover,
+.extras-repo:focus-visible { color: var(--hi); }
 
 .extras-group { margin-top: 30px; }
 

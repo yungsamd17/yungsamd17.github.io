@@ -16,7 +16,6 @@ const THEME_TRANSITIONS = [
   { id: 'fade', label: 'themeTransitionFadeLabel', desc: 'themeTransitionFadeDesc' },
   { id: 'crossfade', label: 'themeTransitionCrossfadeLabel', desc: 'themeTransitionCrossfadeDesc' },
   { id: 'circle', label: 'themeTransitionCircleLabel', desc: 'themeTransitionCircleDesc' },
-  { id: 'wipe', label: 'themeTransitionWipeLabel', desc: 'themeTransitionWipeDesc' },
 ] as const;
 ---
 
@@ -36,6 +35,12 @@ const THEME_TRANSITIONS = [
       <span data-lang="en">{t('extrasText')}</span>
       <span data-lang="sk">{t('extrasText', 'sk')}</span>
     </p>
+    <a class="extras-repo" href="https://github.com/yungsamd17/yungsamd17.github.io" target="_blank" rel="noopener">
+      <Icon name="github" size={13} />
+      <span data-lang="en">{t('extrasRepoLink')}</span>
+      <span data-lang="sk">{t('extrasRepoLink', 'sk')}</span>
+      <Icon name="arrow-up-right" size={10} />
+    </a>
   </header>
 
   <section class="extras-group">

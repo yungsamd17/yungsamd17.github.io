@@ -197,9 +197,8 @@ The theme switch transition is picked separately, with an accessible radio group
 | `fade` | Short-lived CSS colour transitions across the page (~300ms) |
 | `crossfade` | View Transitions API crossfade — **default** |
 | `circle` | Clip-path circle growing out of the theme button (~500ms) |
-| `wipe` | Clip-path inset wipe, top to bottom (~500ms) |
 
-`crossfade`, `circle` and `wipe` need `document.startViewTransition`; without it, or with `prefers-reduced-motion: reduce`, the switch falls back to instant rather than a half-animated page.
+`crossfade` and `circle` need `document.startViewTransition`; without it, or with `prefers-reduced-motion: reduce`, the switch falls back to instant rather than a half-animated page.
 
 ---
 
@@ -219,7 +218,7 @@ How it works:
 3. **Persistence:** `localStorage['theme']` stores `'system'`, `'light'` or `'dark'` (older `'light'`/`'dark'` values remain valid)
 4. **Live OS changes:** a `matchMedia('(prefers-color-scheme)')` listener re-resolves while in system mode
 5. **View Transitions:** `astro:before-swap` copies both attributes onto the incoming page so navigation never resets your choice
-6. **Switch transition:** the chosen mode drives `applyTheme()`. `fade` adds `.theme-transition` to `<html>` for one shared 300ms sweep, so every element fades its colours on the same clock instead of some snapping. `crossfade`, `circle` and `wipe` snapshot the whole page with the View Transitions API — every component, text run and card changes at the exact same instant — scoped to a temporary `html.theme-vt` class (plus `data-theme-vt`) so Astro's own page navigation transitions are untouched. The class is removed when the transition finishes or is skipped.
+6. **Switch transition:** the chosen mode drives `applyTheme()`. `fade` adds `.theme-transition` to `<html>` for one shared 300ms sweep, so every element fades its colours on the same clock instead of some snapping. `crossfade` and `circle` snapshot the whole page with the View Transitions API — every component, text run and card changes at the exact same instant — scoped to a temporary `html.theme-vt` class (plus `data-theme-vt`) so Astro's own page navigation transitions are untouched. The class is removed when the transition finishes or is skipped.
 
 ---
 
@@ -250,10 +249,10 @@ The tagline rotates through two phrases per language every 8 seconds and fades b
 
 ## Toasts
 
-Manual theme/language changes confirm themselves with a small pill toast (bottom center, auto-hides after 2s):
+Manual theme/language changes confirm themselves with a solid, card-rounded toast (top center, auto-hides after 2s):
 
 - Created once by `showToast()` in `app.ts` as `#toast` with `role="status"` for screen readers
-- Styled purely from design tokens (`--lo` background, `--hi` text, `--mid` border), so it automatically matches the active theme
+- Styled purely from design tokens (`--hi` solid background, `--bg` text, 14px card radius), so it automatically matches the active theme and stays readable over the page
 - Slide-up + fade animation, disabled under `prefers-reduced-motion`
 - **Theme toasts** are localized by the current site language ("Switched to dark theme" / "Prepnuté na tmavú tému")
 - **Language toasts** are fixed in the target language ("Switched to English" / "Prepnuté na slovenčinu")
