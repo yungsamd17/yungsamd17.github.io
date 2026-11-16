@@ -164,16 +164,15 @@ Classic component classes mirror v1: `.page`, `.link-list`, `.featured-link`, `.
 
 App-like viewport behavior: `html` gets a definite height and `body` uses `min-height: 100dvh`, so pages fit the visible screen exactly (no browser-toolbar overflow) and only scroll when content genuinely exceeds it.
 
-### Classic vs. redesign
+### The redesign
 
-The site ships two layouts behind one gate: the **redesign** (newer card-based layout) is active by default, the **classic** v1 layout stays fully intact and can be switched back at any time.
+The redesign is the site's only layout. `BaseLayout.astro` puts `data-redesign="on"` directly on `<html>`, so the new card-based design applies from the very first paint with no switch and no stored preference. There is no way back to the classic v1 layout.
 
-- The gate is the `data-redesign` attribute on `<html>` — every redesign rule is scoped under `html[data-redesign]`, every classic rule stays where it was.
-- The attribute is set by the no-FOUC inline script in `BaseHead.astro` before the first paint, so the layout never flashes.
-- `html[data-redesign]` is added unless `localStorage['redesign'] === 'off'`.
-- On navigation the attribute (plus the other option attributes) is copied onto the incoming document in the `astro:before-swap` handler.
+- Every redesign rule is still scoped under `html[data-redesign]`, and the old classic rules remain under `html:not([data-redesign])` in `global.css`. They no longer select anything in normal use.
+- The layout gate is no longer copied during navigation, because every page ships with the attribute in its static markup.
+- Old `localStorage['redesign']` values are ignored; they do not affect the design.
 
-Redesign-only features: the card glow, project star counts, contribution calendar, two-column links grid, centered links hero and the optional avatar easter egg.
+Redesign features: the card glow, project star counts, contribution calendar, two-column links grid, centered links hero and the optional avatar easter egg.
 
 ---
 
@@ -183,9 +182,7 @@ Redesign-only features: the card glow, project star counts, contribution calenda
 
 | Option | Effect on `<html>` | Storage key | Default |
 |--------|--------------------|-------------|---------|
-| Experimental redesign | `data-redesign="on"` | `redesign` | **on** (only `'off'` turns it off) |
 | Page load text animations | (absence of `data-textanim="off"`) | `textanim` | **off** (`'on'` enables them) |
-| Use classic load animation | `data-anim="bottom"` | `anim` | **off** (the redesign's staggered entrance) |
 | Hide snack bar | `data-toast="off"` | `toast` | **on** (toasts hidden) |
 | Page accent glow | (absence of `data-pageglow="off"`) | `pageglow` | **off** (only `'on'` enables the soft radial glow) |
 | Avatar rain easter egg | `data-avataregg="on"` | `avataregg` | **off** (`'on'` enables the hero avatar click) |
@@ -260,7 +257,7 @@ Manual theme/language changes confirm themselves with a small pill toast (bottom
 - Slide-up + fade animation, disabled under `prefers-reduced-motion`
 - **Theme toasts** are localized by the current site language ("Switched to dark theme" / "Prepnuté na tmavú tému")
 - **Language toasts** are fixed in the target language ("Switched to English" / "Prepnuté na slovenčinu")
-- **Option toasts** confirm every `/extras` toggle ("Redesign enabled", "Page glow disabled", …)
+- **Option toasts** confirm the `/extras` toggles ("Page glow disabled", "Avatar rain enabled", …)
 - **Copy-email + konami toasts** reuse the same system (`copiedEmail`, `toastRainbow` keys)
 - `data-toast="off"` (the "Hide snack bar" option) suppresses the toast element entirely
 
@@ -276,7 +273,7 @@ The Email row on `/links` has a copy button next to the mailto link. `app.ts` bi
 
 Navigation scrolling is fully instant — no animated scroll-to-top and no animated scroll restore.
 
-- `history.scrollRestoration` is set to `manual` (redesign only) before the first paint, so the browser never restores a stale offset by itself.
+- `history.scrollRestoration` is set to `manual` before the first paint, so the browser never restores a stale offset by itself.
 - Only the **homepage** remembers where it was left. The offset is stored per normalized path in `sessionStorage['scroll-positions']` and restored on the next visit; every other page opens at the top.
 - On reload the page stays hidden (`html { visibility: hidden }`) until the remembered offset is restored, with a 300ms fallback that reveals it if the script never runs — this prevents the stale-position flash on pull-to-refresh.
 

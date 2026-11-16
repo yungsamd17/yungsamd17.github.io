@@ -292,55 +292,6 @@ function initTheme() {
   });
 }
 
-type AnimDir = 'bottom' | 'top';
-
-function currentAnim(): AnimDir {
-  return document.documentElement.dataset.anim === 'bottom' ? 'bottom' : 'top';
-}
-
-function applyAnim(dir: AnimDir) {
-  if (dir === 'bottom') document.documentElement.dataset.anim = 'bottom';
-  else delete document.documentElement.dataset.anim;
-}
-
-function initAnim() {
-  applyAnim(getStorage('anim') === 'bottom' ? 'bottom' : 'top');
-  const toggle = document.getElementById('anim-toggle') as HTMLInputElement | null;
-  if (!toggle) return;
-  toggle.checked = currentAnim() === 'bottom';
-  toggle.addEventListener('change', () => {
-    const dir: AnimDir = toggle.checked ? 'bottom' : 'top';
-    setStorage('anim', dir);
-    applyAnim(dir);
-    showToast(t(dir === 'top' ? 'toastAnimTop' : 'toastAnimBottom', currentLang()));
-  });
-}
-
-/* ── experimental: redesign ── */
-
-function currentRedesign(): boolean {
-  return document.documentElement.dataset.redesign === 'on';
-}
-
-function applyRedesign(on: boolean) {
-  if (on) document.documentElement.dataset.redesign = 'on';
-  else delete document.documentElement.dataset.redesign;
-}
-
-function initRedesign() {
-  applyRedesign(getStorage('redesign') !== 'off');
-  history.scrollRestoration = currentRedesign() ? 'manual' : 'auto';
-  const toggle = document.getElementById('redesign-toggle') as HTMLInputElement | null;
-  if (!toggle) return;
-  toggle.checked = currentRedesign();
-  toggle.addEventListener('change', () => {
-    applyRedesign(toggle.checked);
-    history.scrollRestoration = toggle.checked ? 'manual' : 'auto';
-    setStorage('redesign', toggle.checked ? 'on' : 'off');
-    showToast(t(toggle.checked ? 'toastRedesignOn' : 'toastRedesignOff', currentLang()));
-  });
-}
-
 /* ── experimental: page load text animations ── */
 
 function textAnimDisabled(): boolean {
@@ -1230,8 +1181,6 @@ function initAvatarRain() {
 
 function initPage() {
   initTheme();
-  initAnim();
-  initRedesign();
   initTextAnim();
   initPageGlow();
   initToastToggle();
@@ -1239,18 +1188,16 @@ function initPage() {
   initThemeTransitionPicker();
   // The redesign always lands at the top of a page, including history
   // navigations, so the browser's own scroll restoration is turned off.
-  if (currentRedesign()) history.scrollRestoration = 'manual';
+  history.scrollRestoration = 'manual';
   // A reload (mobile pull-to-refresh included) restores the last recorded
   // offset instantly; a pull while already at the top records 0, so the page
   // stays at the top instead of animating back to a stale position.
   if (!reloadRestored) {
     reloadRestored = true;
-    if (currentRedesign()) {
-      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-      if (nav?.type === 'reload') {
-        const target = pageKey(location.pathname) === '/' ? rememberedScroll(location.pathname) : 0;
-        window.scrollTo({ top: target, left: 0, behavior: 'instant' });
-      }
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    if (nav?.type === 'reload') {
+      const target = pageKey(location.pathname) === '/' ? rememberedScroll(location.pathname) : 0;
+      window.scrollTo({ top: target, left: 0, behavior: 'instant' });
     }
   }
   // Reveal the page now that the scroll position is correct.
@@ -1285,7 +1232,7 @@ document.addEventListener('astro:before-swap', (event) => {
   avatarRainStop?.();
   avatarRainStop = undefined;
   // Only the homepage remembers its scroll position; other pages open at top.
-  if (currentRedesign() && pageKey(fromPath) === '/') rememberScroll(fromPath, window.scrollY);
+  if (pageKey(fromPath) === '/') rememberScroll(fromPath, window.scrollY);
   clearTimeout(langSwitchTimer);
   langSwitchTimer = undefined;
   document.documentElement.classList.remove('lang-switching');
@@ -1305,10 +1252,6 @@ document.addEventListener('astro:before-swap', (event) => {
   newDocument.documentElement.lang = document.documentElement.lang;
   if (document.documentElement.classList.contains('dark')) newDocument.documentElement.classList.add('dark');
   else newDocument.documentElement.classList.remove('dark');
-  if (currentAnim() === 'bottom') newDocument.documentElement.dataset.anim = 'bottom';
-  else delete newDocument.documentElement.dataset.anim;
-  if (currentRedesign()) newDocument.documentElement.dataset.redesign = 'on';
-  else delete newDocument.documentElement.dataset.redesign;
   if (textAnimDisabled()) newDocument.documentElement.dataset.textanim = 'off';
   else delete newDocument.documentElement.dataset.textanim;
   if (pageGlowDisabled()) newDocument.documentElement.dataset.pageglow = 'off';
@@ -1322,7 +1265,6 @@ document.addEventListener('astro:before-swap', (event) => {
 document.addEventListener('astro:after-swap', () => {
   const toPath = navToPath || pageKey(location.pathname);
   navToPath = '';
-  if (!currentRedesign()) return;
 
   // The homepage restores its remembered offset; every other page opens at
   // the top. `instant` makes sure no animated scroll ever starts.
@@ -1334,5 +1276,5 @@ document.addEventListener('astro:page-load', initPage);
 
 // Keep the homepage's remembered scroll position fresh on reload.
 window.addEventListener('pagehide', () => {
-  if (currentRedesign() && pageKey(location.pathname) === '/') rememberScroll(location.pathname, window.scrollY);
+  if (pageKey(location.pathname) === '/') rememberScroll(location.pathname, window.scrollY);
 });

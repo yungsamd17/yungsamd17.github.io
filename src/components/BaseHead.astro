@@ -97,24 +97,14 @@ const personSchema = {
     } catch {
       document.documentElement.lang = 'en';
     }
+    // The redesign owns scroll restoration; tell the browser early so a reload
+    // (e.g. mobile pull-to-refresh) never restores a stale offset.
     try {
-      if (localStorage.getItem('anim') === 'bottom') document.documentElement.dataset.anim = 'bottom';
-    } catch {}
-    // Experimental options need to land on <html> before first paint so the
-    // redesign never flashes the classic layout.
-    try {
-      if (localStorage.getItem('redesign') !== 'off') document.documentElement.dataset.redesign = 'on';
-    } catch {}
-    // The redesign owns scroll restoration manually; tell the browser early so
-    // a reload (e.g. mobile pull-to-refresh) never restores a stale offset.
-    try {
-      if (localStorage.getItem('redesign') !== 'off') {
-        history.scrollRestoration = 'manual';
-        // Hide the page until the remembered scroll offset is restored, so a
-        // stale position never flashes on screen during a reload.
-        document.documentElement.style.visibility = 'hidden';
-        setTimeout(() => { document.documentElement.style.visibility = ''; }, 300);
-      }
+      history.scrollRestoration = 'manual';
+      // Hide the page until the remembered scroll offset is restored, so a
+      // stale position never flashes on screen during a reload.
+      document.documentElement.style.visibility = 'hidden';
+      setTimeout(() => { document.documentElement.style.visibility = ''; }, 300);
     } catch {}
     try {
       if (localStorage.getItem('textanim') !== 'on') document.documentElement.dataset.textanim = 'off';

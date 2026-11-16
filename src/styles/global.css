@@ -160,14 +160,8 @@ select:focus-visible {
   flex: 1;
 }
 
-@keyframes fadein {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 /* ── load animation ──
-   default: staggered cascade dropping in from the top (t3.gg style);
-   html[data-anim="bottom"]: classic single fade rising from below */
+   staggered cascade dropping in from the top (t3.gg style) */
 @keyframes fadein-top {
   from { opacity: 0; transform: translateY(-16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -198,16 +192,6 @@ select:focus-visible {
 
 .page > *:nth-child(n+8),
 .links-container > *:nth-child(n+8) { animation-delay: .35s; }
-
-html[data-anim="bottom"] .page,
-html[data-anim="bottom"] .links-container {
-  animation: fadein .35s ease both;
-}
-
-html[data-anim="bottom"] .page > *,
-html[data-anim="bottom"] .links-container > * {
-  animation: none;
-}
 
 /* opacity-only: the footer sits flush with the viewport bottom, so a
    translateY here would create transient scrollable overflow */
@@ -309,8 +293,8 @@ a:hover.handle { color: var(--hi); }
 
 html.lang-switching .page,
 html.lang-switching .links-container {
-  /* animation: none drops the finished `fadein ... both` fill that would
-     otherwise pin opacity to 1 and cancel the fade */
+  /* animation: none drops any finished entrance fill that would otherwise
+     pin opacity to 1 and cancel the fade */
   animation: none;
   opacity: 0;
 }
@@ -1395,6 +1379,10 @@ html[data-redesign] .about-text {
   font-size: .9rem;
   line-height: 1.6;
 }
+
+/* keep a name and the single word introducing it on one line, rather than
+   leaving that word dangling at the end of the previous line */
+html[data-redesign] .about-text .about-keep { white-space: nowrap; }
 
 html[data-redesign] .about-text:last-child { margin-bottom: 0; }
 
