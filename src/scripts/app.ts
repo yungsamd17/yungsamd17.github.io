@@ -474,14 +474,14 @@ function rememberedScroll(path: string): number {
   return typeof y === 'number' && Number.isFinite(y) ? y : 0;
 }
 
-/* ── contributions: cached calendar + change-only animation ──
+/* ── contributions: cached reveal + always-fresh data ──
    The calendar is rendered at build time, so the first paint already has it.
-   A fingerprint of the last calendar that was shown is cached in localStorage:
-   when the page loads with the same fingerprint the cells appear instantly;
-   only new data (new build, or a fresh fetch that differs) animates in. */
+   A fingerprint of the last calendar shown is cached in localStorage to decide
+   whether the reveal animates; it must never suppress a data refresh. The API
+   is revalidated on every load, because the build-time copy can be stale and
+   a visitor should never have to clear site data to see today's numbers. */
 
 const CONTRIB_CACHE_KEY = 'contrib-cache';
-const CONTRIB_CACHE_TTL = 10 * 60 * 1000;
 const CONTRIB_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 // One entry per calendar key, so a refresh never invalidates another
@@ -633,17 +633,11 @@ function dimFutureAndPastEmptyContribDays() {
         cell.removeAttribute('data-future');
         return;
       }
-      // trailing empty cells = future days
+      // every trailing empty cell is a day that hasn't happened yet,
+      // including tomorrow
       if (i > lastDateIdx) {
-        // the first trailing empty is tomorrow -> stays bright
-        const trailingIndex = i - lastDateIdx; // 1 = tomorrow
-        if (trailingIndex === 1) {
-          cell.removeAttribute('data-future');
-          cell.removeAttribute('data-past-empty');
-        } else {
-          cell.setAttribute('data-future', '');
-          cell.removeAttribute('data-past-empty');
-        }
+        cell.setAttribute('data-future', '');
+        cell.removeAttribute('data-past-empty');
         return;
       }
       cell.removeAttribute('data-future');
@@ -651,11 +645,12 @@ function dimFutureAndPastEmptyContribDays() {
     });
   });
 
-  // also handle dated future cells (none currently, but keep for safety)
+  // dated cells for tomorrow or later are dimmed as well, in case the API
+  // already includes them
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const cutoff = new Date(today);
-  cutoff.setDate(cutoff.getDate() + 2);
+  cutoff.setDate(cutoff.getDate() + 1);
   document.querySelectorAll<HTMLElement>('.rd-contrib-cell[data-date]').forEach((cell) => {
     const d = cell.dataset.date;
     if (!d) return;
@@ -674,8 +669,8 @@ async function refreshContributions(grid: HTMLElement, key: string, currentSig: 
   if (!data) return;
 
   const nextSig = contributionSignature(data);
-  // Refresh the cache timestamp even when nothing changed, so the next page
-  // load can skip the network call entirely.
+  // Keep the last seen signature so a later load can reveal instantly when
+  // the numbers have not changed; data is still revalidated every time.
   writeContribCache(key, nextSig);
   if (nextSig === currentSig) return;
 
@@ -698,10 +693,9 @@ function initContributions() {
     revealWhenVisible(grid, !unchanged);
     if (!unchanged) writeContribCache(key, sig);
 
-    // Only hit the API when the cache is missing or old; a fresh cache means
-    // this page load already knows the calendar and nothing has to load.
-    const fresh = entry !== undefined && Date.now() - entry.at <= CONTRIB_CACHE_TTL;
-    if (!fresh) void refreshContributions(grid, key, sig);
+    // Always revalidate: the fingerprint in localStorage only controls the
+    // reveal animation, never whether fresh numbers are loaded.
+    void refreshContributions(grid, key, sig);
   });
   dimFutureAndPastEmptyContribDays();
 }

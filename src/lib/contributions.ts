@@ -83,6 +83,9 @@ export async function fetchContributions(
     const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${handle}?y=${year}`, {
       signal: AbortSignal.timeout(8000),
       headers: { Accept: 'application/json' },
+      // Always ask the mirror for today's numbers; an HTTP-cached response
+      // would keep the graph one build behind for every visitor.
+      cache: 'no-store',
     });
     if (!res.ok) return null;
 

@@ -63,6 +63,22 @@ test('past projects are the three no-longer-maintained ones', () => {
   assert.ok(projects.includes('aria-labelledby="proj-past-heading"'));
 });
 
+test('contribution graph revalidates data and dims tomorrow', () => {
+  const app = read('src/scripts/app.ts');
+  const lib = read('src/lib/contributions.ts');
+  const css = read('src/styles/global.css');
+
+  // the API response must never be served from an HTTP cache
+  assert.ok(lib.includes("cache: 'no-store'"));
+  // no localStorage TTL may skip the refresh
+  assert.ok(!app.includes('CONTRIB_CACHE_TTL'));
+  assert.ok(app.includes('void refreshContributions(grid, key, sig);'));
+  // tomorrow is a future day like any other
+  assert.ok(!app.includes('trailingIndex'));
+  assert.ok(app.includes('cutoff.setDate(cutoff.getDate() + 1);'));
+  assert.ok(!css.includes('tomorrow stays bright'));
+});
+
 test('build artifacts (when dist exists)', { skip: !existsSync(join(root, 'dist/index.html')) }, () => {
   const dist = (path) => readFileSync(join(root, 'dist', path), 'utf8');
   assert.equal(dist('404.html'), dist('404/index.html'));

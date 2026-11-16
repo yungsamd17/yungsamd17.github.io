@@ -1857,7 +1857,7 @@ h1 {
 
 .rd-contrib-cell[data-empty][data-past-empty] { background: var(--rd-surf); }
 
-/* future days that haven't happened yet are dimmed (tomorrow stays bright) */
+/* days that haven't happened yet, including tomorrow, are dimmed */
 .rd-contrib-grid[data-shown="true"] .rd-contrib-cell[data-future] {
   opacity: .25;
 }
