@@ -160,7 +160,7 @@ export const PROJECTS: Project[] = [
     title: 'BetterDiscord Addons',
     icon: '/projects/betterdiscord-addons.svg',
     repo: 'yungsamd17/BetterDiscordAddons',
-    accent: '#5865f2',
+    accent: '#2853ab',
     desc: {
       en: 'A collection of plugins and themes for BetterDiscord.',
       sk: 'Kolekcia pluginov a tém pre BetterDiscord.',
