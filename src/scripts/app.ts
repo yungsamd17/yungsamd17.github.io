@@ -36,31 +36,132 @@ function resolveTheme(mode: ThemeMode): 'light' | 'dark' {
   return systemPrefersDark() ? 'dark' : 'light';
 }
 
+/* ── theme switch transition ──
+   Picked on /extras and stored per device. "fade" is a short-lived CSS
+   transition shared by every element; "crossfade", "circle" and "wipe" hand
+   the whole page to the browser's View Transitions API, which snapshots it and
+   animates one image — so every component, text run and card changes at the
+   exact same instant. Anything the browser cannot animate (no VT support,
+   reduced motion) falls back to an instant swap instead of a half-done one. */
+
+type ThemeTransition = 'none' | 'fade' | 'crossfade' | 'circle' | 'wipe';
+type ThemeViewTransition = { finished: Promise<void> };
+type ViewTransitionDocument = Document & {
+  startViewTransition?: (update: () => void) => ThemeViewTransition;
+};
+
+const THEME_TRANSITIONS: readonly ThemeTransition[] = ['none', 'fade', 'crossfade', 'circle', 'wipe'];
+const THEME_TRANSITION_DEFAULT: ThemeTransition = 'crossfade';
+const THEME_TRANSITION_KEY = 'themetransition';
 /* Keep in sync with --theme-transition in src/styles/global.css. */
 const THEME_TRANSITION_MS = 300;
+
 let themeTransitionTimer: ReturnType<typeof setTimeout> | undefined;
+let themeViewTransition: ThemeViewTransition | undefined;
+
+function currentThemeTransition(): ThemeTransition {
+  const stored = getStorage(THEME_TRANSITION_KEY);
+  return THEME_TRANSITIONS.includes(stored as ThemeTransition)
+    ? (stored as ThemeTransition)
+    : THEME_TRANSITION_DEFAULT;
+}
+
+function commitTheme(mode: ThemeMode, resolved: 'light' | 'dark') {
+  const root = document.documentElement;
+  root.dataset.themeMode = mode;
+  root.dataset.theme = resolved;
+  root.classList.toggle('dark', resolved === 'dark');
+}
+
+/** Centre of the visible theme button — the origin of the circular reveal. */
+function themeTogglePoint(): { x: number; y: number } {
+  const toggles = document.querySelectorAll<HTMLElement>('[data-theme-toggle]');
+  for (const toggle of toggles) {
+    const rect = toggle.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+  }
+  return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+}
+
+function clearViewTransitionScaffold() {
+  const root = document.documentElement;
+  root.classList.remove('theme-vt');
+  delete root.dataset.themeVt;
+  root.style.removeProperty('--vt-x');
+  root.style.removeProperty('--vt-y');
+}
 
 function applyTheme(mode: ThemeMode) {
-  const resolved = resolveTheme(mode);
   const root = document.documentElement;
+  const resolved = resolveTheme(mode);
   const changed = root.dataset.theme != null && root.dataset.theme !== resolved;
 
-  // One class for the length of the switch: every element then fades its
-  // colours on the same clock instead of each component using its own timing
-  // (or snapping straight to the new colours). Added before the attributes
-  // change so the browser sees the old values as the transition start.
-  if (changed) {
+  if (!changed) {
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  const kind = currentThemeTransition();
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // A previous sweep, if any, never outlives this one.
+  clearTimeout(themeTransitionTimer);
+  themeTransitionTimer = undefined;
+  root.classList.remove('theme-transition');
+
+  if (kind === 'none' || reduceMotion) {
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  if (kind === 'fade') {
+    // One class for the length of the switch: every element then fades its
+    // colours on the same clock instead of each component using its own
+    // timing (or snapping straight to the new colours). Added before the
+    // attributes change so the old values are the transition's start.
     root.classList.add('theme-transition');
-    clearTimeout(themeTransitionTimer);
     themeTransitionTimer = setTimeout(() => {
       root.classList.remove('theme-transition');
       themeTransitionTimer = undefined;
     }, THEME_TRANSITION_MS);
+    commitTheme(mode, resolved);
+    return;
   }
 
-  root.dataset.themeMode = mode;
-  root.dataset.theme = resolved;
-  root.classList.toggle('dark', resolved === 'dark');
+  const doc = document as ViewTransitionDocument;
+  const start = doc.startViewTransition;
+  if (!start) {
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  // Scoped to this one switch via `html.theme-vt`, so Astro's own page
+  // navigation view transitions keep their default crossfade.
+  const point = themeTogglePoint();
+  root.dataset.themeVt = kind;
+  root.style.setProperty('--vt-x', `${point.x}px`);
+  root.style.setProperty('--vt-y', `${point.y}px`);
+  root.classList.add('theme-vt');
+
+  let transition: ThemeViewTransition;
+  try {
+    transition = start.call(doc, () => commitTheme(mode, resolved));
+  } catch {
+    clearViewTransitionScaffold();
+    commitTheme(mode, resolved);
+    return;
+  }
+
+  themeViewTransition = transition;
+  const cleanup = () => {
+    // A newer switch owns the scaffold now; leave its classes alone.
+    if (themeViewTransition !== transition) return;
+    themeViewTransition = undefined;
+    clearViewTransitionScaffold();
+  };
+  transition.finished.then(cleanup, cleanup);
 }
 
 function updateToggleLabels() {
@@ -182,8 +283,10 @@ function initTheme() {
         return;
       }
       setStorage('theme', mode);
-      applyTheme(mode);
+      // Close the menu before the transition snapshots the page, so the old
+      // frame is the plain page rather than page + open menu.
       closeAllMenus();
+      applyTheme(mode);
       showToast(t(mode === 'system' ? 'toastThemeSystem' : mode === 'light' ? 'toastThemeLight' : 'toastThemeDark', currentLang()));
     });
   });
@@ -305,6 +408,23 @@ function initToastToggle() {
     // hidden toasts suppress their own confirmation by design
     showToast(t(toggle.checked ? 'toastToastOff' : 'toastToastOn', currentLang()));
   });
+}
+
+/* ── experimental: theme switch transition picker (radio group on /extras) ── */
+
+function initThemeTransitionPicker() {
+  const inputs = Array.from(document.querySelectorAll<HTMLInputElement>('input[data-theme-transition]'));
+  if (!inputs.length) return;
+  const current = currentThemeTransition();
+  for (const input of inputs) {
+    input.checked = input.value === current;
+    input.addEventListener('change', () => {
+      if (!input.checked) return;
+      if (!THEME_TRANSITIONS.includes(input.value as ThemeTransition)) return;
+      setStorage(THEME_TRANSITION_KEY, input.value);
+      showToast(t('toastThemeTransition', currentLang()));
+    });
+  }
 }
 
 /* ── redesign: scroll memory, contribution reveal ── */
@@ -1082,6 +1202,7 @@ function initPage() {
   initTextAnim();
   initPageGlow();
   initToastToggle();
+  initThemeTransitionPicker();
   // The redesign always lands at the top of a page, including history
   // navigations, so the browser's own scroll restoration is turned off.
   if (currentRedesign()) history.scrollRestoration = 'manual';

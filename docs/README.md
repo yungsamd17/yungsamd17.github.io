@@ -190,6 +190,18 @@ Redesign-only features: the card glow, project star counts, contribution calenda
 
 The switches are plain checkboxes with `role="switch"`; the visible 46×26 track is a styled `.switch-ui` sibling. Toggling one writes the key, updates the attribute and shows a confirmation toast.
 
+The theme switch transition is picked separately, with an accessible radio group (`fieldset` + real `input type="radio"`, name `theme-transition`) in the "Theme switch transition" group. Selecting a mode saves `localStorage['themetransition']` immediately — it is used the next time a theme toggle runs, nothing changes on select.
+
+| Mode | Effect |
+|------|--------|
+| `none` | Instant swap |
+| `fade` | Short-lived CSS colour transitions across the page (~300ms) |
+| `crossfade` | View Transitions API crossfade — **default** |
+| `circle` | Clip-path circle growing out of the theme button (~500ms) |
+| `wipe` | Clip-path inset wipe, top to bottom (~500ms) |
+
+`crossfade`, `circle` and `wipe` need `document.startViewTransition`; without it, or with `prefers-reduced-motion: reduce`, the switch falls back to instant rather than a half-animated page.
+
 ---
 
 ## Theme System
@@ -208,7 +220,7 @@ How it works:
 3. **Persistence:** `localStorage['theme']` stores `'system'`, `'light'` or `'dark'` (older `'light'`/`'dark'` values remain valid)
 4. **Live OS changes:** a `matchMedia('(prefers-color-scheme)')` listener re-resolves while in system mode
 5. **View Transitions:** `astro:before-swap` copies both attributes onto the incoming page so navigation never resets your choice
-6. **Synchronized fade:** `applyTheme()` adds `.theme-transition` to `<html>` before switching, which gives every element the same colour transition (`--theme-transition`, 300ms, no stagger) so the whole page changes together instead of some parts snapping. The class is removed afterwards so hover/press transitions keep their own timings.
+6. **Switch transition:** the chosen mode drives `applyTheme()`. `fade` adds `.theme-transition` to `<html>` for one shared 300ms sweep, so every element fades its colours on the same clock instead of some snapping. `crossfade`, `circle` and `wipe` snapshot the whole page with the View Transitions API — every component, text run and card changes at the exact same instant — scoped to a temporary `html.theme-vt` class (plus `data-theme-vt`) so Astro's own page navigation transitions are untouched. The class is removed when the transition finishes or is skipped.
 
 ---
 

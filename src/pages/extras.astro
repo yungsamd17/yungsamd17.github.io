@@ -11,6 +11,14 @@ const OPTIONS = [
   { id: 'toast-toggle', label: 'extrasToastLabel', desc: 'extrasToastDesc' },
   { id: 'pageglow-toggle', label: 'extrasPageGlowLabel', desc: 'extrasPageGlowDesc' },
 ] as const;
+
+const THEME_TRANSITIONS = [
+  { id: 'none', label: 'themeTransitionNoneLabel', desc: 'themeTransitionNoneDesc' },
+  { id: 'fade', label: 'themeTransitionFadeLabel', desc: 'themeTransitionFadeDesc' },
+  { id: 'crossfade', label: 'themeTransitionCrossfadeLabel', desc: 'themeTransitionCrossfadeDesc' },
+  { id: 'circle', label: 'themeTransitionCircleLabel', desc: 'themeTransitionCircleDesc' },
+  { id: 'wipe', label: 'themeTransitionWipeLabel', desc: 'themeTransitionWipeDesc' },
+] as const;
 ---
 
 <BaseLayout title={`${t('extrasTitle')} | ${SITE.title}`}>
@@ -57,5 +65,38 @@ const OPTIONS = [
         ))
       }
     </div>
+  </section>
+
+  <section class="extras-group">
+    <fieldset class="extras-fieldset">
+      <legend class="extras-group-title">
+        <span data-lang="en">{t('extrasThemeTransitionLabel')}</span>
+        <span data-lang="sk">{t('extrasThemeTransitionLabel', 'sk')}</span>
+      </legend>
+      <p class="extras-group-note">
+        <span data-lang="en">{t('extrasThemeTransitionDesc')}</span>
+        <span data-lang="sk">{t('extrasThemeTransitionDesc', 'sk')}</span>
+      </p>
+      <div class="vt-options">
+        {
+          THEME_TRANSITIONS.map((option) => (
+            <label class="vt-opt">
+              <input type="radio" name="theme-transition" value={option.id} data-theme-transition />
+              <span class="opt-copy">
+                <span class="opt-label">
+                  <span data-lang="en">{t(option.label)}</span>
+                  <span data-lang="sk">{t(option.label, 'sk')}</span>
+                </span>
+                <span class="opt-desc">
+                  <span data-lang="en">{t(option.desc)}</span>
+                  <span data-lang="sk">{t(option.desc, 'sk')}</span>
+                </span>
+              </span>
+              <span class="vt-radio" aria-hidden="true" />
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
   </section>
 </BaseLayout>
