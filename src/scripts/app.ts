@@ -1058,8 +1058,9 @@ async function initProjectStars() {
             else return;
           } else {
             const data = await res.json();
-            stars = typeof data.stargazers_count === 'number' ? data.stargazers_count : 0;
-            cache[repo] = { at: now, stars };
+            const fetched = typeof data.stargazers_count === 'number' ? data.stargazers_count : 0;
+            stars = fetched;
+            cache[repo] = { at: now, stars: fetched };
             writeStarsCache(cache);
           }
         } catch {
@@ -1191,16 +1192,10 @@ function initPage() {
 }
 
 document.addEventListener('astro:before-swap', (event) => {
-  const swap = event as CustomEvent & {
-    from?: URL;
-    to?: URL;
-    navigationType?: 'push' | 'replace' | 'traverse';
-    newDocument: Document;
-  };
   // On a history traversal the URL has already changed by now, so take the
   // paths from the event instead of location.
-  const fromPath = swap.from?.pathname ?? location.pathname;
-  const toPath = swap.to?.pathname ?? location.pathname;
+  const fromPath = event.from.pathname;
+  const toPath = event.to.pathname;
   navToPath = pageKey(toPath);
   // the falling-avatar easter egg never survives a navigation
   avatarRainStop?.();
@@ -1218,7 +1213,7 @@ document.addEventListener('astro:before-swap', (event) => {
   taglineFadeTimer = undefined;
   clearTimeout(toastTimer);
   toastTimer = undefined;
-  const { newDocument } = swap;
+  const { newDocument } = event;
   newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme;
   newDocument.documentElement.dataset.themeMode = document.documentElement.dataset.themeMode;
   newDocument.documentElement.lang = document.documentElement.lang;

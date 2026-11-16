@@ -198,7 +198,7 @@ The theme switch transition is picked separately, with an accessible radio group
 
 ## Theme System
 
-Three modes cycled by the header toggle: **system → light → dark → system**. `system` (monitor icon) is the default and follows the OS preference live.
+Three modes picked from the toolbar's theme dropdown: **system**, **light** and **dark**. `system` (monitor icon) is the default and follows the OS preference live.
 
 Two attributes on `<html>` drive everything:
 
@@ -232,7 +232,7 @@ Fully static bilingual rendering — **both languages are in the HTML**, one is 
 Language selection flow:
 
 1. **First visit:** the no-FOUC script in `BaseHead.astro` detects the browser languages (`navigator.languages`) — any Slovak variant picks `sk`, everything else picks `en`
-2. **Manual switch:** the header toggle flips `en` ↔ `sk`
+2. **Manual switch:** pick a language from the toolbar's language dropdown (`en` ↔ `sk`)
 3. **Persistence:** `localStorage['lang']` always wins over detection on later visits
 
 Switching only sets `<html lang>` + storage — zero content swapping, works without JS after first choice.
@@ -299,7 +299,7 @@ Projects with a `repo: 'owner/name'` field in `site.ts` get a live star count.
 
 Example: French (`fr`).
 
-> ⚠️ The header toggle currently assumes two languages (it flips `en` ↔ `sk`). A third language requires turning it into a cycling button or a menu first.
+> ⚠️ The language dropdown currently offers two languages (`en` ↔ `sk`). A third language needs another `data-lang-value` option in `LangToggle.astro`.
 
 1. **`src/data/site.ts`** — extend the `Locale` type with `'fr'` and add `fr` text to every `desc`
 2. **`src/i18n/ui.ts`** — add a `fr` object with all keys from `en` (including the `toastTheme*` keys)
@@ -311,8 +311,8 @@ Example: French (`fr`).
    :root[lang="fr"] [data-lang="sk"] { display: none !important; }
    ```
 4. **`src/components/BaseHead.astro`** — extend the browser-language detection (`l?.toLowerCase().startsWith('sk')` → include `'fr'`)
-5. **`src/scripts/app.ts`** — extend `currentLang()` and the toggle handler in `initLang()` to cycle three languages
-6. **Pages with `data-lang` blocks** (`index.astro`, `projects.astro`, `about.astro`, `404.astro`) — duplicate every marked block with `data-lang="fr"`
+5. **`src/scripts/app.ts`** — extend `currentLang()` and the `data-lang-value` handler in `initLang()` to cover the third language
+6. **Files with `data-lang` blocks** (pages `index.astro`, `projects.astro`, `links.astro`, `extras.astro`, `404.astro` and components `Contributions.astro`, `SiteToolbar.astro`, `ThemeToggle.astro`) — duplicate every marked block with `data-lang="fr"`
 
 ---
 

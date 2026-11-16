@@ -16,7 +16,7 @@ interface Props {
 
 const { title, description, standalone = false, noindex = false } = Astro.props;
 
-// Breadcrumb labels for the experimental toolbar, keyed by route
+// Breadcrumb labels for the toolbar, keyed by route
 const CRUMBS: Record<string, UIKey> = {
   '/projects': 'crumbProjects',
   '/links': 'crumbLinks',
