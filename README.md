@@ -6,8 +6,6 @@ My personal website and portfolio for the browser extensions, userscripts, Andro
 [![Projects](docs/assets/stack/projects.svg)](https://yungsamd17.github.io/projects/)
 [![Links](docs/assets/stack/links.svg)](https://yungsamd17.github.io/links/)
 
-![Sonic waiting](docs/assets/sonic-waiting.gif)
-
 ## Built with
 
 ![Astro 7](docs/assets/stack/astro.svg)
