@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
-import { t } from '../i18n/ui';
+import Localized from './Localized.astro';
+import { t, type UIKey } from '../i18n/ui';
 
 interface Props {
   project: {
@@ -17,16 +18,22 @@ interface Props {
     archived?: boolean;
   };
   stars?: number;
+  siteLabel?: UIKey;
+  titleLabel?: UIKey;
 }
 
-const { project, stars = 0 } = Astro.props;
+const { project, stars = 0, siteLabel = 'projSite', titleLabel } = Astro.props;
 const iconPath = project.projectIcon ?? (project.icon?.startsWith('/') ? project.icon : undefined);
 const repoUrl = project.repo ? `https://github.com/${project.repo}` : undefined;
 const href = project.site ?? repoUrl;
+const local = href?.startsWith('/') && !href.startsWith('//');
+const target = local ? undefined : '_blank';
+const rel = local ? undefined : 'noopener';
+const titleId = titleLabel ? `project-${titleLabel}` : undefined;
 ---
 
 <div class="proj-item" data-repo={project.repo} style={`--accent:${project.accent}${project.iconBg ? `;--icon-bg:${project.iconBg}` : ''}`}>
-  <a class="proj-overlay" href={href} target="_blank" rel="noopener" aria-label={project.title} />
+  <a class="proj-overlay" href={href} target={target} rel={rel} aria-label={titleId ? undefined : project.title} aria-labelledby={titleId} />
   <div class="proj-icon-wrap">
     {
       iconPath ? (
@@ -38,7 +45,7 @@ const href = project.site ?? repoUrl;
   </div>
   <div class="proj-content">
     <h3 class="proj-title">
-      {project.title}
+      {titleLabel ? <span id={titleId}><Localized text={titleLabel} /></span> : project.title}
       {
         stars >= 3 && (
           <span class="proj-stat" title={`${stars.toLocaleString('en-US')} ${t('githubStars')}`}>
@@ -52,10 +59,10 @@ const href = project.site ?? repoUrl;
     <div class="proj-links">
       {
         project.site && (
-          <a class="proj-link" href={project.site} target="_blank" rel="noopener">
-            <span data-lang="en">{t('projSite')}</span>
-            <span data-lang="sk">{t('projSite', 'sk')}</span>
-            <Icon name="arrow-up-right" size={10} />
+          <a class="proj-link" href={project.site} target={target} rel={rel}>
+            <span data-lang="en">{t(siteLabel)}</span>
+            <span data-lang="sk">{t(siteLabel, 'sk')}</span>
+            {local ? <Icon name="arrow-right" size={10} /> : <Icon name="arrow-up-right" size={10} />}
           </a>
         )
       }

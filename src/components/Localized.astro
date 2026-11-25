@@ -1,0 +1,13 @@
+---
+import type { LocalizedText } from '../data/site';
+import { t, type UIKey } from '../i18n/ui';
+
+interface Props {
+  text: LocalizedText | UIKey;
+}
+
+const { text } = Astro.props;
+---
+
+<span data-lang="en">{typeof text === 'string' ? t(text) : text.en}</span>
+<span data-lang="sk">{typeof text === 'string' ? t(text, 'sk') : text.sk}</span>

@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from './Icon.astro';
+import Localized from './Localized.astro';
+import { EDITIONS, HISTORY_PROJECT, editionPath } from '../data/history';
+import { SITE } from '../data/site';
+import { t } from '../i18n/ui';
+
+interface Props {
+  edition: (typeof EDITIONS)[number];
+}
+
+const { edition } = Astro.props;
+const image = `${HISTORY_PROJECT.site}${edition.slug}.webp`;
+const repo = `https://github.com/${SITE.handle}/${new URL(SITE.url).hostname}`;
+---
+
+<BaseLayout title={`${t('historyTitle')} | ${SITE.title}`} description={t('historyIntro')}>
+  <header class="proj-hero">
+    <h1><Localized text="historyTitle" /></h1>
+    <p class="proj-hero-desc"><Localized text="historyIntro" /></p>
+  </header>
+
+  <history-editions data-source-root={`${repo}/tree/`}>
+    <nav aria-labelledby="edition-label">
+      <h2 id="edition-label" class="rd-head"><Localized text="historyNav" /></h2>
+      <ul class="link-list edition-list">
+        {EDITIONS.map((item) => (
+          <li>
+            <a href={editionPath(item)} data-edition={item.slug} aria-current={item === edition ? 'page' : undefined}>
+              <span>
+                <time datetime={item.date}>{item.label}</time>
+                <small><Localized text={item.title} /></small>
+              </span>
+              <Icon name="arrow-right" size={14} class="card-arrow" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </history-editions>
+
+  <figure class="proj-item snapshot" style={`--accent:${HISTORY_PROJECT.accent}`}>
+    <figcaption aria-live="polite">
+      <h2><Localized text={edition.title} /></h2>
+      <p><Localized text={edition.description} /></p>
+    </figcaption>
+    <a class="snapshot-image" href={image}>
+      <img src={image} alt="" width="1120" height="740" decoding="async" />
+      <span class="sr-only"><Localized text="historyScreenshot" /></span>
+    </a>
+    <ul class="link-list snapshot-links">
+      <li>
+        <a class="snapshot-source" href={`${repo}/tree/${edition.revision}`}>
+          <Localized text="historySource" />
+          <Icon name="arrow-up-right" size={14} class="card-arrow" />
+        </a>
+      </li>
+    </ul>
+  </figure>
+
+  <a class="all-repos" href={repo} target="_blank" rel="noopener">
+    <Icon name="github" size={11} />
+    <Localized text="extrasRepoLink" />
+  </a>
+</BaseLayout>
+
+<script>
+  import { EDITIONS, HISTORY_PROJECT } from '../data/history';
+
+  class HistoryEditions extends HTMLElement {
+    connectedCallback() {
+      this.addEventListener('click', this.selectEdition);
+    }
+
+    private selectEdition = (event: MouseEvent) => {
+      // Leave modified clicks and direct loads to the normal links.
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-edition]');
+      if (!link) return;
+
+      const edition = EDITIONS.find((item) => item.slug === link.dataset.edition);
+      const snapshot = this.closest('main')?.querySelector('.snapshot');
+      const imageLink = snapshot?.querySelector<HTMLAnchorElement>('.snapshot-image');
+      const image = imageLink?.querySelector('img');
+      const source = snapshot?.querySelector<HTMLAnchorElement>('.snapshot-source');
+      if (!edition || !snapshot || !imageLink || !image || !source) return;
+
+      event.preventDefault();
+      if (link.hasAttribute('aria-current')) return;
+
+      // Preserve Astro's router state so Back and Forward still traverse pages.
+      history.replaceState(history.state, '', link.href);
+      this.querySelector('[aria-current]')?.removeAttribute('aria-current');
+      link.setAttribute('aria-current', 'page');
+      for (const text of snapshot.querySelectorAll<HTMLElement>('figcaption [data-lang]')) {
+        const copy = text.closest('h2') ? edition.title : edition.description;
+        text.textContent = text.dataset.lang === 'sk' ? copy.sk : copy.en;
+      }
+      imageLink.href = `${HISTORY_PROJECT.site}${edition.slug}.webp`;
+      image.src = imageLink.href;
+      source.href = `${this.dataset.sourceRoot}${edition.revision}`;
+    };
+  }
+
+  if (!customElements.get('history-editions')) {
+    customElements.define('history-editions', HistoryEditions);
+  }
+</script>
+
+<style>
+  history-editions { display: block; }
+  .edition-list a { min-height: 52px; height: 100%; }
+  .edition-list a > span { min-width: 0; }
+  .edition-list a[aria-current] {
+    background-color: color-mix(in oklab, var(--rd-surf), var(--accent) 13%);
+    color: var(--hi);
+  }
+  .edition-list time {
+    display: block;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .edition-list small {
+    display: block;
+    margin-top: 3px;
+    font-size: .72rem;
+  }
+  .snapshot {
+    display: block;
+    margin: 16px 0 0;
+  }
+  .snapshot:active:has(.snapshot-source:active) { scale: none; }
+  .snapshot figcaption { padding: 2px 1px 12px; }
+  .snapshot h2 {
+    color: var(--hi);
+    font-size: 1.06rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .snapshot p {
+    color: var(--item);
+    margin: 5px 0 0;
+    font-size: .84rem;
+    line-height: 1.55;
+  }
+  .snapshot-image {
+    display: block;
+    border-radius: 10px;
+    background: var(--bg);
+  }
+  .snapshot-image:focus-visible { outline-offset: -3px; }
+  .snapshot-image img { display: block; width: 100%; height: auto; border-radius: inherit; }
+  .snapshot-links {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    margin-top: 8px;
+  }
+  .snapshot-links a { min-height: 44px; }
+</style>

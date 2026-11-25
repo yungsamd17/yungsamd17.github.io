@@ -1,0 +1,15 @@
+---
+import WebsiteHistory from '../../components/WebsiteHistory.astro';
+import { EDITIONS } from '../../data/history';
+
+export function getStaticPaths() {
+  return EDITIONS.slice(1).map((edition) => ({
+    params: { era: edition.slug },
+    props: { edition },
+  }));
+}
+
+const { edition } = Astro.props;
+---
+
+<WebsiteHistory edition={edition} />
