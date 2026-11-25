@@ -1,90 +1,24 @@
 # AGENTS.md
 
-Guidance for AI coding agents (OpenCode, Claude Code, etc.) working on this repository.
-This is a **single-developer project**: Sam (@yungsamd17) is the only contributor.
-Everything here is optimized for speed of iteration, not team process.
+Sam (@yungsamd17) maintains [this personal site](https://yungsamd17.github.io) with Astro 7, Tailwind CSS v4 and TypeScript. Start with the [full website documentation](docs/README.md) for architecture, content, theme, translations and deployment.
 
-## Project Overview
+## Work locally
 
-Personal website of yungsamd17 — homepage, about, projects, links, and an OG-image endpoint,
-built with Astro 7 + Tailwind CSS v4 (via Vite plugin) + TypeScript. Deployed to GitHub Pages.
+- Use Node.js 22 or newer. Run `npm install`, then `npm run dev` (port 4321).
+- Run `npm test` for regression checks. Run `npm run build` first when you need to verify generated output, since those checks require `dist/`. Use `npm run preview` to inspect the production build.
+- Prefer local builds and tests to conserve GitHub Actions minutes. Every push to `main` triggers a live GitHub Pages deployment via `.github/workflows/deploy.yml`.
 
-- Site URL: https://yungsamd17.github.io
-- Stack: Astro 7, Tailwind v4, sharp (icon generation), Node >= 22
-- Author/maintainer: yungsamd17 (https://github.com/yungsamd17)
+## Site conventions
 
-## Workflow (solo mode)
+- `src/pages/` serves the homepage, projects, links, extras, the custom 404 and generated OG images. The homepage includes a GitHub contribution calendar, and the projects page shows GitHub star counts.
+- Keep site identity and shared content in `src/data/site.ts`. Keep UI strings in `src/i18n/ui.ts` and add matching English and Slovak keys.
+- `BaseLayout.astro` renders the shared toolbar and footer. The toolbar holds the theme and language controls, with client-side behavior in `src/scripts/app.ts`.
+- Edit `public/logo.jpg` to update generated icons. The prebuild script regenerates them with sharp. Postbuild publishes the clean `/404/` route alongside GitHub Pages' root `404.html`.
+- Keep the downloader in `public/downloader/` framework-free. `/extras/` is publicly reachable and excluded from the sitemap. Preserve `compressHTML: false` and `trailingSlash: 'ignore'` in `astro.config.mjs`.
 
-- **Direct commits/pushes to `main` are the default.** There is no branch protection and no CI gate;
-  use whatever fits the change.
-- Pull requests are **optional**. Use one only for risky or multi-step work you want to review
-  before landing. When you do open a PR:
-  - Title: `type(scope): short imperative summary` (same format as commits).
-   - End the body with an AI attribution line using your REAL model and agent
-     (do NOT output literal `{model}`/`{agent}` or copy the example):
+## Git workflow
 
-    ```
-    Built with YOUR_MODEL_NAME in the YOUR_AGENT_NAME harness.
-    ```
-
-     Example with real values — use your own: `Built with claude-opus-4 in the Claude Code harness.`
-
-- Commit messages: `type(scope): short imperative summary`, lowercase after type, no trailing period.
-  Scopes used here: `site`, `pages`, `i18n`, `icons`, `downloader`, `ci`, `docs`.
-
-  ```
-  feat(pages): add projects page
-  fix(i18n): correct Slovak translation of link text
-  chore(ci): bump astro to 7.2.4
-  docs(readme): document local development
-  ```
-
-- Never add a `Co-authored-by` / `Signed-off-by` trailer for the same identity
-  that authors the commit — a self co-author is a redundant duplicate. Only
-  credit a genuinely different human co-author, and only when asked. No AI
-  co-author trailers in commits either; AI attribution stays only in the PR body.
-
-- Never commit `node_modules/`, `dist/`, or secrets.
-
-## Build & Verify
-
-```bash
-npm install          # install deps (Node >= 22)
-npm run dev          # dev server at localhost:4321
-npm run build        # production build (prebuild regenerates icons via sharp)
-npm run preview      # serve the dist/ build locally
-```
-
-There is no lint/test setup — verify changes visually with `dev`/`preview`.
-`.github/workflows/deploy.yml` builds and deploys on every push to `main`.
-
-## Architecture
-
-```
-astro.config.mjs         # site config: sitemap (excludes /extras/), Tailwind vite plugin
-src/
-  data/site.ts           # central site config: identity, socials, Locale type (en | sk)
-  i18n/ui.ts             # UI translations — en/sk keys must stay paired
-  layouts/BaseLayout.astro
-  components/            # BaseHead, Icon, LangToggle, ThemeToggle (Footer kept but not rendered)
-  pages/                 # index, about, projects, links, 404, extras, og/
-  scripts/app.ts         # client-side JS (theme toggle etc.)
-  styles/                # global styles
-scripts/generate-icons.mjs  # prebuild: generates favicon/PWA icons from public/logo.jpg
-public/downloader/          # standalone vanilla-JS downloader page (no framework)
-```
-
-Key patterns:
-
-- All site identity/config lives in `src/data/site.ts`; edit there, not hardcoded in pages.
-- User-visible strings live in `src/i18n/ui.ts` keyed by locale (`en`, `sk`) — when adding a key,
-  always add both locales.
-- Icons are generated artifacts (`public/icon-*.png`) from `public/logo.jpg` during prebuild —
-  edit the source logo, not the generated PNGs.
-
-## Gotchas
-
-- **Every push to `main` deploys live within ~a minute** — double-check before pushing.
-- `/extras/` is excluded from the sitemap but is still publicly reachable if someone knows the URL.
-- `compressHTML: false` and `trailingSlash: 'ignore'` in astro.config.mjs are intentional — don't "fix".
-- `public/downloader/` is deliberately framework-free vanilla JS; keep it that way.
+- Direct commits to `main` are the default. Use a PR when a risky or multi-step change needs review.
+- Use `type(scope): short imperative summary` for commits and PR titles. Keep the summary lowercase with no trailing period. Common scopes are `site`, `pages`, `i18n`, `icons`, `downloader`, `ci` and `docs`.
+- End PR bodies with `Built with <model> in the <agent> harness.` using the actual model and harness names. Omit AI attribution and self co-author or self sign-off trailers from commits. Credit other human co-authors only when asked.
+- Keep `node_modules/`, `dist/` and secrets out of commits.
