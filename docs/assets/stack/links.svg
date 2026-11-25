@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="62.75" height="28" viewBox="0 0 62.75 28" role="img" aria-labelledby="title">
+  <title id="title">Links</title>
+  <rect x=".5" y=".5" width="61.75" height="27" rx="6" fill="#16161a" stroke="#55555e"/>
+  <path d="M10 13a4 4 0 0 0 6 .5l4-4a4 4 0 0 0-5.7-5.7L12 6m2 5a4 4 0 0 0-6-.5l-4 4a4 4 0 0 0 5.7 5.7L12 18" transform="translate(8 6.5) scale(.625)" fill="none" stroke="#FF8A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="53.75" text-anchor="end" y="18.1" fill="#f4f4f5" font-family="DejaVu Sans, sans-serif" font-size="12" font-weight="400">Links</text>
+</svg>

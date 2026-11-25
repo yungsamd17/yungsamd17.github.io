@@ -1,31 +1,39 @@
-# yungsamd17.github.io
+# Sam @yungsamd17
 
-Minimalist personal homepage — portfolio, links, and a couple of easter eggs.
+My personal website and portfolio for the browser extensions, userscripts, Android apps, and web tools I build. It’s also where you can find my links and get in touch.
 
-**Live site:** [yungsamd17.github.io](https://yungsamd17.github.io)
+[![Visit the site](docs/assets/stack/site.svg)](https://yungsamd17.github.io/)
+[![Projects](docs/assets/stack/projects.svg)](https://yungsamd17.github.io/projects/)
+[![Links](docs/assets/stack/links.svg)](https://yungsamd17.github.io/links/)
 
----
+![Sonic waiting](docs/assets/sonic-waiting.gif)
 
-## Tech Stack
+## Built with
 
-![Astro](https://img.shields.io/badge/Astro-BC52EE?style=flat&logo=astro&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![Astro 7](docs/assets/stack/astro.svg)
+![Tailwind CSS 4](docs/assets/stack/tailwind.svg)
+![TypeScript](docs/assets/stack/typescript.svg)
 
----
+- **Astro 7** builds the static pages and sitemap.
+- **Tailwind CSS 4** styles the site, with Inter served locally.
+- **TypeScript** handles project data, English and Slovak translations, and browser interactions.
+- **sharp** generates icons and social preview images at build time.
 
-## Development
+GitHub Actions builds and publishes the site to GitHub Pages on every push to `main`. [Deployment workflow](.github/workflows/deploy.yml)
 
-```bash
-npm install     # install dependencies
-npm run dev     # dev server at localhost:4321
-npm run build   # production build → dist/
+## Run it locally
+
+Use Node.js 22 or newer.
+
+```sh
+npm install
+npm run dev
 ```
 
-Deploys automatically to GitHub Pages on every push to `main` (see `.github/workflows/deploy.yml`).
+Open `http://localhost:4321`. Run `npm test` for regression checks. Run `npm run build` before testing to include checks against the generated files in `dist/`. Use `npm run preview` to browse that build.
 
----
+## Docs
 
-## Documentation
+[![Full website documentation](docs/assets/stack/docs.svg)](docs/README.md)
 
-- **[docs/](https://github.com/yungsamd17/yungsamd17.github.io/blob/main/docs/README.md)** - Website documentation (structure, theme system, adding languages, deployment)
+The docs cover site structure, content editing, themes, translations, and deployment. [License](LICENSE)
