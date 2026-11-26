@@ -16,7 +16,7 @@
   --bg: #0e0e10;
   --accent: #ff8a80;
   --hi: #e8e8ec;
-  --mid: #6a6a72;
+  --mid: #808088;
   --lo: #32323a;
   --dim: #2a2a3080;
   --item: #a0a0a8;
@@ -29,7 +29,7 @@
   --bg: #e8e8ec;
   --accent: #ff8a80;
   --hi: #1a1a1a;
-  --mid: #6a6a72;
+  --mid: #62626a;
   --lo: #c8c8d0;
   --dim: #fafafa80;
   --item: #4a4a4a;
@@ -1132,7 +1132,7 @@ h1 {
   margin-left: auto;
   font-family: var(--font-sans);
   font-size: 12px;
-  color: color-mix(in oklab, var(--mid) 85%, transparent);
+  color: var(--mid);
   text-decoration: none;
   text-transform: none;
   white-space: nowrap;
@@ -1757,7 +1757,7 @@ h1 {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   font-size: 11px;
   line-height: 1;
-  color: color-mix(in oklab, var(--mid) 85%, transparent);
+  color: var(--mid);
 }
 
 .rd-contrib-days span { display: flex; align-items: center; }
@@ -1795,7 +1795,7 @@ h1 {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   font-size: 11px;
   line-height: 1;
-  color: color-mix(in oklab, var(--mid) 85%, transparent);
+  color: var(--mid);
 }
 
 .rd-contrib-months span {
