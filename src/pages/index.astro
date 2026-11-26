@@ -120,7 +120,7 @@ if (!hadBirthday) age--;
         >
           <div class="featured-icon-wrap">
             {item.projectIcon ? (
-              <img class="featured-icon" src={item.projectIcon} alt="" loading="lazy" decoding="async" width="48" height="48" />
+              <img class="featured-icon" src={item.projectIcon} alt="" loading="eager" decoding="async" width="48" height="48" />
             ) : (
               <Icon name={item.icon} size={24} />
             )}

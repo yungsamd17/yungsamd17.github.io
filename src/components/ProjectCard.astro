@@ -37,7 +37,7 @@ const titleId = titleLabel ? `project-${titleLabel}` : undefined;
   <div class="proj-icon-wrap">
     {
       iconPath ? (
-        <img class="proj-icon" src={iconPath} alt="" loading="lazy" decoding="async" width="48" height="48" />
+        <img class="proj-icon" src={iconPath} alt="" loading="eager" decoding="async" width="48" height="48" />
       ) : (
         <span class="proj-mono">{project.mono ?? project.title.charAt(0)}</span>
       )
