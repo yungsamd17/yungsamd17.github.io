@@ -16,6 +16,7 @@ Documentation for [yungsamd17.github.io](https://yungsamd17.github.io) - Sam's p
 - [Scroll Behavior](#scroll-behavior)
 - [Contribution Graph](#contribution-graph)
 - [GitHub Stars on /projects](#github-stars-on-projects)
+- [Website Time Machine](#website-time-machine)
 - [Adding a New Language](#adding-a-new-language)
 - [Easter Eggs](#easter-eggs)
 - [404 Page](#404-page)
@@ -292,6 +293,20 @@ Projects with a `repo: 'owner/name'` field in `site.ts` get a live star count.
 - **Runtime:** `initProjectStars()` in `app.ts` re-checks the counts in the browser and caches them in `localStorage['stars-cache']` (6h TTL), falling back to the stale cached value when the API is rate-limited.
 - Counts below 3 are hidden, so tiny repos show no chip at all.
 - Lookups fail soft: if the API is unreachable or rate-limited the chip is omitted and the build still succeeds.
+
+---
+
+## Website Time Machine
+
+`/history/` presents four archived homepages (2023–2026) as a timeline of dated stops. Each stop carries a thumbnail cropped from its own snapshot; selecting one — or the previous/next controls under the figure — swaps the caption, screenshot, source revision, page title and meta description in place. Each selection replaces the current URL with `replaceState`, so Back and Forward leave the time machine instead of stepping through editions. Plain links and modified clicks still perform a normal page load, so every edition works without JavaScript.
+
+The screenshot opens in a native `<dialog>` at full size; Escape or a backdrop click closes it and focus returns to the opener. The directional slide that accompanies a swap is skipped under `prefers-reduced-motion` or the "Page load text animations" opt-out in `/extras`.
+
+Previews follow the site's resolved theme: an edition with `light: true` ships `<slug>-light.webp`, and the main screenshot, timeline thumbnails and full-size view switch together when the toolbar changes theme. The 03.2026 edition uses the final iteration of that layout from just before the card redesign (`470bb36`), captured in both themes; the 2023 and 2024 versions stay dark.
+
+The first edition keeps the original 2023 blog, whose later form looked too much like the portfolio version; the other editions show their last form before the next rebuild. Labels stay the year each design first appeared.
+
+Editions live in `src/data/history.ts`. To add one, append an entry with `slug`, `date`, `label`, `revision`, `title`, `description`, `alt` and `focus`, then place `public/history/<slug>.webp` (1120×740) beside the others. The first entry is `/history/`; every later entry gets `/history/<slug>/`. UI labels are the `history*` keys in `src/i18n/ui.ts` and need both English and Slovak.
 
 ---
 
