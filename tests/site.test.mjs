@@ -90,6 +90,38 @@ test('contribution graph revalidates data and dims tomorrow', () => {
   assert.ok(!css.includes('tomorrow stays bright'));
 });
 
+test('user-facing copy avoids em dashes', () => {
+  for (const path of ['src/data/site.ts', 'src/data/history.ts', 'src/i18n/ui.ts']) {
+    assert.ok(!/[—–]/.test(read(path)), `dash found in ${path}`);
+  }
+});
+
+test('above-the-fold icons are not lazy loaded', () => {
+  for (const path of ['src/pages/index.astro', 'src/components/ProjectCard.astro', 'src/components/WebsiteHistory.astro']) {
+    assert.ok(!read(path).includes('loading="lazy"'), `lazy above-the-fold image in ${path}`);
+  }
+});
+
+test('history editions stay in sync with their shipped snapshots', () => {
+  const data = read('src/data/history.ts');
+  const component = read('src/components/WebsiteHistory.astro');
+  const slugs = [...data.matchAll(/slug: '([^']+)'/g)].map((match) => match[1]);
+
+  assert.equal(slugs.length, 4);
+  assert.equal(new Set(slugs).size, slugs.length);
+  for (const slug of slugs) {
+    assert.ok(existsSync(join(root, 'public/history', `${slug}.webp`)), `missing snapshot: ${slug}`);
+  }
+  assert.ok(data.includes('alt: LocalizedText'), 'editions need localized alt text');
+  assert.equal((data.match(/light: true/g) ?? []).length, 2, 'two editions need light previews');
+  for (const slug of ['minimal-site', 'card-redesign']) {
+    assert.ok(existsSync(join(root, 'public/history', `${slug}-light.webp`)), `missing light snapshot: ${slug}`);
+  }
+  assert.ok(component.includes('data-theme'), 'previews must follow the active theme');
+  assert.ok(component.includes('replaceState'), 'edition changes must replace history');
+  assert.ok(!component.includes('pushState') && !component.includes('popstate'));
+});
+
 test('build artifacts (when dist exists)', { skip: !existsSync(join(root, 'dist/index.html')) }, () => {
   const dist = (path) => readFileSync(join(root, 'dist', path), 'utf8');
   assert.equal(dist('404.html'), dist('404/index.html'));
