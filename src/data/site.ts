@@ -6,7 +6,7 @@ export const SITE = {
   title: 'Sam @yungsamd17',
   email: 'yungsamd@proton.me',
   url: 'https://yungsamd17.github.io',
-  description: 'Web developer building browser extensions, userscripts, and web tools — Sam (@yungsamd17)',
+  description: 'Web developer building browser extensions, userscripts, and web tools. Sam (@yungsamd17)',
   birthDate: new Date(2003, 7, 1),
 } as const;
 
@@ -48,8 +48,8 @@ export const FEATURED: FeaturedLink[] = [
   {
     title: 'Twitch Live',
     desc: {
-      en: 'Your ultimate companion for Twitch — live channels, at a glance.',
-      sk: 'Váš ultimátny spoločník pre Twitch — živé kanály na prvý pohľad.',
+      en: 'Your ultimate companion for Twitch. Live channels at a glance.',
+      sk: 'Váš ultimátny spoločník pre Twitch. Živé kanály na prvý pohľad.',
     },
     href: 'https://yungsamd17.github.io/Twitch-Live/',
     site: 'https://yungsamd17.github.io/Twitch-Live/',
@@ -149,8 +149,8 @@ export const PROJECTS: Project[] = [
     site: 'https://yungsamd17.github.io/UserScripts/',
     accent: '#f7df1e',
     desc: {
-      en: 'Userscripts for Twitch, X and more — small tweaks that improve day-to-day use.',
-      sk: 'Userscripts pre Twitch, X a ďalšie — malé vylepšenia pre každodenné používanie.',
+      en: 'Userscripts for Twitch, X and more. Small tweaks that improve day-to-day use.',
+      sk: 'Userscripts pre Twitch, X a ďalšie. Malé vylepšenia pre každodenné používanie.',
     },
     langs: ['JS', 'Web', 'Userscripts'],
   },
