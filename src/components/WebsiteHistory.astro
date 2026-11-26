@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from './Icon.astro';
 import Localized from './Localized.astro';
-import { EDITIONS, HISTORY_PROJECT, editionPath } from '../data/history';
+import { EDITIONS, HISTORY_PROJECT, editionImage, editionPath } from '../data/history';
 import { SITE } from '../data/site';
 import { t } from '../i18n/ui';
 
@@ -11,24 +11,45 @@ interface Props {
 }
 
 const { edition } = Astro.props;
-const image = `${HISTORY_PROJECT.site}${edition.slug}.webp`;
+const index = EDITIONS.indexOf(edition);
+const previous = EDITIONS[index - 1];
+const next = EDITIONS[index + 1];
 const repo = `https://github.com/${SITE.handle}/${new URL(SITE.url).hostname}`;
 ---
 
-<BaseLayout title={`${t('historyTitle')} | ${SITE.title}`} description={t('historyIntro')}>
+<BaseLayout
+  title={`${edition.title.en} · ${t('historyTitle')} | ${SITE.title}`}
+  description={edition.description.en}
+>
   <header class="proj-hero">
     <h1><Localized text="historyTitle" /></h1>
     <p class="proj-hero-desc"><Localized text="historyIntro" /></p>
   </header>
 
-  <history-editions data-source-root={`${repo}/tree/`}>
-    <nav aria-labelledby="edition-label">
+  <history-editions
+    data-source-root={`${repo}/tree/`}
+    data-current={edition.slug}
+    data-total={EDITIONS.length}
+  >
+    <nav class="edition-nav" aria-labelledby="edition-label">
       <h2 id="edition-label" class="rd-head"><Localized text="historyNav" /></h2>
-      <ul class="link-list edition-list">
+      <ol class="timeline">
         {EDITIONS.map((item) => (
           <li>
             <a href={editionPath(item)} data-edition={item.slug} aria-current={item === edition ? 'page' : undefined}>
-              <span>
+              <span class="timeline-thumb">
+                <img
+                  src={editionImage(item)}
+                  alt=""
+                  width="1120"
+                  height="740"
+                  loading="eager"
+                  decoding="async"
+                  data-thumb={item.slug}
+                  style={`object-position:${item.focus}`}
+                />
+              </span>
+              <span class="timeline-copy">
                 <time datetime={item.date}>{item.label}</time>
                 <small><Localized text={item.title} /></small>
               </span>
@@ -36,28 +57,83 @@ const repo = `https://github.com/${SITE.handle}/${new URL(SITE.url).hostname}`;
             </a>
           </li>
         ))}
-      </ul>
+      </ol>
     </nav>
-  </history-editions>
 
-  <figure class="proj-item snapshot" style={`--accent:${HISTORY_PROJECT.accent}`}>
-    <figcaption aria-live="polite">
-      <h2><Localized text={edition.title} /></h2>
-      <p><Localized text={edition.description} /></p>
-    </figcaption>
-    <a class="snapshot-image" href={image}>
-      <img src={image} alt="" width="1120" height="740" decoding="async" />
-      <span class="sr-only"><Localized text="historyScreenshot" /></span>
-    </a>
-    <ul class="link-list snapshot-links">
-      <li>
-        <a class="snapshot-source" href={`${repo}/tree/${edition.revision}`}>
-          <Localized text="historySource" />
-          <Icon name="arrow-up-right" size={14} class="card-arrow" />
+    <figure class="snapshot proj-item" style={`--accent:${HISTORY_PROJECT.accent}`}>
+      <figcaption aria-live="polite">
+        <div class="snapshot-meta">
+          <time datetime={edition.date} data-snapshot-date>{edition.label}</time>
+          <span class="revision" data-revision>{edition.revision.slice(0, 8)}</span>
+        </div>
+        <h2>
+          <span data-lang="en" data-field="title">{edition.title.en}</span>
+          <span data-lang="sk" data-field="title">{edition.title.sk}</span>
+        </h2>
+        <p>
+          <span data-lang="en" data-field="description">{edition.description.en}</span>
+          <span data-lang="sk" data-field="description">{edition.description.sk}</span>
+        </p>
+      </figcaption>
+
+      <a class="snapshot-image" href={editionImage(edition)} data-full>
+        <img
+          src={editionImage(edition)}
+          alt={edition.alt.en}
+          width="1120"
+          height="740"
+          decoding="async"
+        />
+        <span class="sr-only"><Localized text="historyScreenshot" /></span>
+      </a>
+
+      <ul class="link-list snapshot-links">
+        <li>
+          <a class="snapshot-source" href={`${repo}/tree/${edition.revision}`}>
+            <Localized text="historySource" />
+            <Icon name="arrow-up-right" size={14} class="card-arrow" />
+          </a>
+        </li>
+      </ul>
+
+      <nav class="step-nav" aria-label={t('historyStepNav')}>
+        <a
+          class="step-link"
+          data-step="-1"
+          href={previous ? editionPath(previous) : editionPath(edition)}
+          aria-disabled={previous ? undefined : 'true'}
+          tabindex={previous ? undefined : -1}
+        >
+          <Icon name="arrow-left" size={14} class="card-arrow" />
+          <Localized text="historyPrevious" />
         </a>
-      </li>
-    </ul>
-  </figure>
+        <span class="step-count">
+          <Localized text="historyEdition" /> <span data-step-number>{index + 1}</span> <Localized text="historyOf" /> <span data-step-total>{EDITIONS.length}</span>
+        </span>
+        <a
+          class="step-link"
+          data-step="1"
+          href={next ? editionPath(next) : editionPath(edition)}
+          aria-disabled={next ? undefined : 'true'}
+          tabindex={next ? undefined : -1}
+        >
+          <Localized text="historyNext" />
+          <Icon name="arrow-right" size={14} class="card-arrow" />
+        </a>
+      </nav>
+    </figure>
+
+    <dialog class="lightbox" aria-label={t('historyScreenshot')}>
+      <button class="lightbox-close" type="button" data-close aria-label={t('historyClose')}></button>
+      <img
+        data-lightbox-image
+        src={editionImage(edition)}
+        alt={edition.alt.en}
+        width="1120"
+        height="740"
+      />
+    </dialog>
+  </history-editions>
 
   <a class="all-repos" href={repo} target="_blank" rel="noopener">
     <Icon name="github" size={11} />
@@ -66,41 +142,189 @@ const repo = `https://github.com/${SITE.handle}/${new URL(SITE.url).hostname}`;
 </BaseLayout>
 
 <script>
-  import { EDITIONS, HISTORY_PROJECT } from '../data/history';
+  import { EDITIONS, editionImage, editionPath } from '../data/history';
+  import { SITE } from '../data/site';
+  import { t } from '../i18n/ui';
+
+  type Edition = (typeof EDITIONS)[number];
 
   class HistoryEditions extends HTMLElement {
+    private currentSlug = this.dataset.current ?? '';
+    private imageToken = 0;
+    private attrObserver?: MutationObserver;
+
     connectedCallback() {
+      history.replaceState({ edition: this.currentSlug }, '', location.href);
       this.addEventListener('click', this.selectEdition);
+      this.attrObserver = new MutationObserver(() => {
+        this.syncLocale();
+        this.syncTheme();
+      });
+      this.attrObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['lang', 'data-theme'] });
+      this.syncTheme();
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener('click', this.selectEdition);
+      this.attrObserver?.disconnect();
     }
 
     private selectEdition = (event: MouseEvent) => {
       // Leave modified clicks and direct loads to the normal links.
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-edition]');
+      const target = event.target as Element;
+      const dialog = this.querySelector<HTMLDialogElement>('dialog.lightbox');
+
+      const fullLink = target.closest<HTMLAnchorElement>('a[data-full]');
+      if (fullLink && dialog) {
+        event.preventDefault();
+        const image = dialog.querySelector<HTMLImageElement>('[data-lightbox-image]');
+        if (image) {
+          image.src = fullLink.href;
+          image.alt = this.querySelector<HTMLImageElement>('.snapshot-image img')?.alt ?? '';
+        }
+        dialog.showModal();
+        return;
+      }
+
+      if (target.closest('[data-close]') || (dialog && target === dialog)) {
+        dialog?.close();
+        return;
+      }
+
+      const step = target.closest<HTMLAnchorElement>('a[data-step]');
+      if (step) {
+        event.preventDefault();
+        if (step.hasAttribute('aria-disabled')) return;
+        const targetEdition = EDITIONS[this.currentIndex() + Number(step.dataset.step)];
+        if (targetEdition) this.showEdition(targetEdition);
+        return;
+      }
+
+      const link = target.closest<HTMLAnchorElement>('a[data-edition]');
       if (!link) return;
-
-      const edition = EDITIONS.find((item) => item.slug === link.dataset.edition);
-      const snapshot = this.closest('main')?.querySelector('.snapshot');
-      const imageLink = snapshot?.querySelector<HTMLAnchorElement>('.snapshot-image');
-      const image = imageLink?.querySelector('img');
-      const source = snapshot?.querySelector<HTMLAnchorElement>('.snapshot-source');
-      if (!edition || !snapshot || !imageLink || !image || !source) return;
-
       event.preventDefault();
       if (link.hasAttribute('aria-current')) return;
-
-      // Preserve Astro's router state so Back and Forward still traverse pages.
-      history.replaceState(history.state, '', link.href);
-      this.querySelector('[aria-current]')?.removeAttribute('aria-current');
-      link.setAttribute('aria-current', 'page');
-      for (const text of snapshot.querySelectorAll<HTMLElement>('figcaption [data-lang]')) {
-        const copy = text.closest('h2') ? edition.title : edition.description;
-        text.textContent = text.dataset.lang === 'sk' ? copy.sk : copy.en;
-      }
-      imageLink.href = `${HISTORY_PROJECT.site}${edition.slug}.webp`;
-      image.src = imageLink.href;
-      source.href = `${this.dataset.sourceRoot}${edition.revision}`;
+      const edition = EDITIONS.find((item) => item.slug === link.dataset.edition);
+      if (edition) this.showEdition(edition);
     };
+
+    private currentIndex() {
+      const index = EDITIONS.findIndex((item) => item.slug === this.currentSlug);
+      return index < 0 ? 0 : index;
+    }
+
+    private showEdition(edition: Edition) {
+      const from = this.currentIndex();
+      const to = EDITIONS.indexOf(edition);
+      const direction = Math.sign(to - from);
+      this.currentSlug = edition.slug;
+
+      const snapshot = this.querySelector<HTMLElement>('.snapshot');
+      if (!snapshot) return;
+      const lang: 'en' | 'sk' = document.documentElement.lang === 'sk' ? 'sk' : 'en';
+
+      for (const text of snapshot.querySelectorAll<HTMLElement>('[data-field]')) {
+        const copy = text.dataset.field === 'title' ? edition.title : edition.description;
+        text.textContent = copy[lang];
+      }
+
+      const date = snapshot.querySelector<HTMLTimeElement>('[data-snapshot-date]');
+      if (date) { date.dateTime = edition.date; date.textContent = edition.label; }
+      const revision = snapshot.querySelector<HTMLElement>('[data-revision]');
+      if (revision) revision.textContent = edition.revision.slice(0, 8);
+
+      const imageLink = snapshot.querySelector<HTMLAnchorElement>('.snapshot-image');
+      const image = snapshot.querySelector<HTMLImageElement>('.snapshot-image img');
+      const imageUrl = editionImage(edition, this.currentTheme());
+      if (imageLink) imageLink.href = imageUrl;
+      if (image) {
+        image.alt = edition.alt[lang];
+        void this.swapImage(image, snapshot, imageUrl, direction);
+      }
+
+      const source = snapshot.querySelector<HTMLAnchorElement>('.snapshot-source');
+      if (source) source.href = `${this.dataset.sourceRoot}${edition.revision}`;
+
+      const number = snapshot.querySelector<HTMLElement>('[data-step-number]');
+      if (number) number.textContent = String(to + 1);
+      this.setStepLink(snapshot.querySelector<HTMLAnchorElement>('[data-step="-1"]'), EDITIONS[to - 1], to);
+      this.setStepLink(snapshot.querySelector<HTMLAnchorElement>('[data-step="1"]'), EDITIONS[to + 1], to);
+
+      for (const link of this.querySelectorAll<HTMLAnchorElement>('a[data-edition]')) {
+        if (link.dataset.edition === edition.slug) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      }
+
+      this.syncLocale();
+
+      // Replace instead of push: Back leaves the time machine, not just the edition.
+      history.replaceState({ edition: edition.slug }, '', editionPath(edition));
+    }
+
+    private setStepLink(link: HTMLAnchorElement | null, target: Edition | undefined, index: number) {
+      if (!link) return;
+      link.href = target ? editionPath(target) : editionPath(EDITIONS[index]);
+      if (target) {
+        link.removeAttribute('aria-disabled');
+        link.removeAttribute('tabindex');
+      } else {
+        link.setAttribute('aria-disabled', 'true');
+        link.setAttribute('tabindex', '-1');
+      }
+    }
+
+    private currentTheme(): 'dark' | 'light' {
+      return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+    }
+
+    private syncTheme() {
+      this.imageToken++;
+      const theme = this.currentTheme();
+      const url = editionImage(EDITIONS[this.currentIndex()], theme);
+      const link = this.querySelector<HTMLAnchorElement>('.snapshot-image');
+      const image = this.querySelector<HTMLImageElement>('.snapshot-image img');
+      if (link) link.href = url;
+      if (image) image.src = url;
+      const lightbox = this.querySelector<HTMLImageElement>('[data-lightbox-image]');
+      if (lightbox?.closest('dialog')?.open) lightbox.src = url;
+      for (const thumb of this.querySelectorAll<HTMLImageElement>('img[data-thumb]')) {
+        const edition = EDITIONS.find((item) => item.slug === thumb.dataset.thumb);
+        if (edition) thumb.src = editionImage(edition, theme);
+      }
+    }
+
+    private syncLocale() {
+      const edition = EDITIONS[this.currentIndex()];
+      const lang: 'en' | 'sk' = document.documentElement.lang === 'sk' ? 'sk' : 'en';
+      const image = this.querySelector<HTMLImageElement>('.snapshot-image img');
+      if (image) image.alt = edition.alt[lang];
+      document.title = `${edition.title[lang]} · ${t('historyTitle', lang)} | ${SITE.title}`;
+      document.querySelector<HTMLMetaElement>('meta[name="description"]')?.setAttribute('content', edition.description[lang]);
+    }
+
+    private async swapImage(image: HTMLImageElement, snapshot: HTMLElement, url: string, direction: number) {
+      const token = ++this.imageToken;
+      const preload = new Image();
+      preload.src = url;
+      try { await preload.decode(); } catch { /* a missing image still shows the browser's fallback */ }
+      if (token !== this.imageToken) return;
+      image.src = url;
+      if (direction !== 0) this.animateSwap(snapshot, direction);
+    }
+
+    private animateSwap(snapshot: HTMLElement, direction: number) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const textAnimOff = document.documentElement.dataset.textanim === 'off';
+      if (reduce || textAnimOff) return;
+      snapshot.querySelector('.snapshot-image')?.animate(
+        [
+          { opacity: 0.35, transform: `translateX(${direction * 12}px)` },
+          { opacity: 1, transform: 'translateX(0)' },
+        ],
+        { duration: 260, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+      );
+    }
   }
 
   if (!customElements.get('history-editions')) {
@@ -110,50 +334,221 @@ const repo = `https://github.com/${SITE.handle}/${new URL(SITE.url).hostname}`;
 
 <style>
   history-editions { display: block; }
-  .edition-list a { min-height: 52px; height: 100%; }
-  .edition-list a > span { min-width: 0; }
-  .edition-list a[aria-current] {
+
+  /* A dated spine makes the four editions read as a sequence, not a card grid. */
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0 0 0 18px;
+    list-style: none;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 19px;
+    bottom: 19px;
+    width: 1px;
+    background: var(--lo);
+  }
+  .timeline li { position: relative; min-width: 0; }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: -18px;
+    top: 25px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--lo);
+    box-shadow: 0 0 0 3px var(--bg);
+    transition: background-color .2s;
+  }
+  .timeline li:has(a[aria-current])::before { background: var(--accent); }
+
+  .timeline a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 58px;
+    padding: 7px 11px;
+    border-radius: 12px;
+    background-color: var(--rd-surf);
+    color: var(--item);
+    text-decoration: none;
+    transition: color .18s, background-color .18s, scale .12s;
+  }
+  .timeline a:hover { color: var(--hi); }
+  .timeline a:active { scale: .98; }
+  /* a faint tint marks the selection; the glow belongs to the viewer card */
+  .timeline a[aria-current] {
     background-color: color-mix(in oklab, var(--rd-surf), var(--accent) 13%);
     color: var(--hi);
   }
-  .edition-list time {
+  .timeline a[aria-current] small { color: var(--item); }
+  .timeline-thumb {
+    flex: none;
+    width: 46px;
+    height: 34px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--lo);
+  }
+  .timeline-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .timeline-copy { flex: 1; min-width: 0; }
+  .timeline time {
     display: block;
-    font-variant-numeric: tabular-nums;
+    font-size: .82rem;
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
-  .edition-list small {
-    display: block;
-    margin-top: 3px;
+  .timeline small {
+    display: -webkit-box;
+    margin-top: 2px;
+    overflow: hidden;
     font-size: .72rem;
+    line-height: 1.35;
+    color: var(--mid);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
+
+  /* A wider, softer version of the project card glow, scaled to the viewer. */
   .snapshot {
     display: block;
-    margin: 16px 0 0;
+    margin: 24px 0 0;
+    padding: 16px;
+    background-image:
+      radial-gradient(
+        420px circle at 8% -32%,
+        color-mix(in oklab, var(--accent) 28%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        220px circle at 100% 110%,
+        color-mix(in oklab, var(--accent) 9%, transparent),
+        transparent 72%
+      );
   }
-  .snapshot:active:has(.snapshot-source:active) { scale: none; }
-  .snapshot figcaption { padding: 2px 1px 12px; }
+  /* the main card is a viewer, not a button — never press it down */
+  .snapshot:active { scale: none !important; }
+  .snapshot figcaption { padding: 0 1px 12px; }
+  .snapshot-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: .06em;
+    text-transform: lowercase;
+    color: var(--mid);
+  }
+  .snapshot-meta time { font-variant-numeric: tabular-nums; }
+  .revision { color: color-mix(in oklab, var(--accent) 70%, var(--mid)); }
   .snapshot h2 {
+    margin-top: 8px;
     color: var(--hi);
     font-size: 1.06rem;
     font-weight: 600;
     line-height: 1.35;
   }
   .snapshot p {
-    color: var(--item);
     margin: 5px 0 0;
+    color: var(--item);
     font-size: .84rem;
     line-height: 1.55;
   }
+
   .snapshot-image {
     display: block;
+    overflow: hidden;
     border-radius: 10px;
     background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--lo);
   }
   .snapshot-image:focus-visible { outline-offset: -3px; }
-  .snapshot-image img { display: block; width: 100%; height: auto; border-radius: inherit; }
+  .snapshot-image img { display: block; width: 100%; height: auto; }
   .snapshot-links {
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
     margin-top: 8px;
   }
   .snapshot-links a { min-height: 44px; }
+
+  .step-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .step-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 10px;
+    border-radius: 10px;
+    background: var(--rd-surf);
+    color: var(--item);
+    font-size: .78rem;
+    text-decoration: none;
+    transition: color .15s, opacity .15s, scale .12s;
+  }
+  .step-link:hover:not([aria-disabled]) { color: var(--hi); }
+  .step-link:active:not([aria-disabled]) { scale: .97; }
+  .step-link[aria-disabled] { opacity: .45; pointer-events: none; }
+  .step-count {
+    color: var(--mid);
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+    text-transform: lowercase;
+  }
+
+  .lightbox {
+    width: min(1120px, calc(100vw - 32px));
+    max-width: none;
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    overflow: visible;
+    background: var(--bg);
+    color: var(--hi);
+  }
+  .lightbox::backdrop { background: color-mix(in oklab, var(--bg) 86%, transparent); }
+  .lightbox img { display: block; width: 100%; height: auto; border-radius: 12px; }
+  .lightbox-close {
+    position: absolute;
+    top: -13px;
+    right: -13px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--hi);
+    cursor: pointer;
+  }
+  .lightbox-close::before,
+  .lightbox-close::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 1.5px;
+    background: var(--bg);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .lightbox-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  @media (max-width: 480px) {
+    .step-nav { flex-wrap: wrap; justify-content: center; }
+    .step-count { flex: 1 1 100%; order: -1; text-align: center; }
+  }
 </style>
