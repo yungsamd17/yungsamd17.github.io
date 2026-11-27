@@ -572,19 +572,17 @@ const shortContribDate = (iso: string) => {
 /** Rebuild the calendar in place from fresh data (same markup as the build). */
 function applyContributions(grid: HTMLElement, data: ContributionsData) {
   const { weeks } = data;
-  const recentFrom = Math.max(0, weeks.length - 26);
-  const visibleCount = Math.min(26, weeks.length);
-  const monthsEl = grid.parentElement?.querySelector<HTMLElement>('.rd-contrib-months') ?? null;
+  const main = grid.parentElement;
+  const monthsEl = main?.querySelector<HTMLElement>('.rd-contrib-months') ?? null;
   const totalEl = grid.closest('.rd-contrib-section')?.querySelector<HTMLElement>('.rd-head-total') ?? null;
   const chartEl = grid.closest<HTMLElement>('.rd-contrib');
 
+  main?.style.setProperty('--weeks', String(weeks.length));
   if (monthsEl) {
     const months = document.createDocumentFragment();
     data.months.forEach((month) => {
       const el = document.createElement('span');
-      el.style.setProperty('--p', `${(month.col / weeks.length) * 100}%`);
-      el.style.setProperty('--mp', `${((month.col - recentFrom) / visibleCount) * 100}%`);
-      if (month.col < recentFrom) el.setAttribute('data-old', '');
+      el.style.setProperty('--week', String(month.col));
       el.textContent = month.label;
       months.appendChild(el);
     });
@@ -597,7 +595,6 @@ function applyContributions(grid: HTMLElement, data: ContributionsData) {
       const cell = document.createElement('span');
       cell.className = 'rd-contrib-cell';
       cell.setAttribute('aria-hidden', 'true');
-      if (col < recentFrom) cell.setAttribute('data-old', '');
       if (!day) {
         cell.setAttribute('data-empty', '');
       } else {

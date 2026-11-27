@@ -6,9 +6,6 @@ import { fetchContributions, contributionSignature } from '../lib/contributions'
 const data = await fetchContributions(SITE.handle);
 const sig = data ? contributionSignature(data) : '';
 const chartLabel = data ? `GitHub contributions, ${data.from} to ${data.to}` : 'GitHub contributions';
-// Narrow screens hide the oldest columns instead of scrolling the calendar.
-const recentFrom = data ? Math.max(0, data.weeks.length - 26) : 0;
-
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const shortDate = (iso: string) => {
   const [, month, day] = iso.split('-');
@@ -55,21 +52,11 @@ const monthlyTotals = data
           <span style="grid-row: 6">Fri</span>
         </div>
 
-        <div class="rd-contrib-main">
+        <div class="rd-contrib-main" style={`--weeks:${data.weeks.length}`}>
           <div class="rd-contrib-months" aria-hidden="true">
-            {data.months.map((month) => {
-              const visibleCount = Math.min(26, data.weeks.length);
-              const p = (month.col / data.weeks.length) * 100;
-              const mp = ((month.col - recentFrom) / visibleCount) * 100;
-              return (
-                <span
-                  style={`--p:${p}%;--mp:${mp}%`}
-                  data-old={month.col < recentFrom ? '' : undefined}
-                >
-                  {month.label}
-                </span>
-              );
-            })}
+            {data.months.map((month) => (
+              <span style={`--week:${month.col}`}>{month.label}</span>
+            ))}
           </div>
 
           <div
@@ -85,7 +72,6 @@ const monthlyTotals = data
                     <span
                       class="rd-contrib-cell"
                       data-empty
-                      data-old={col < recentFrom ? '' : undefined}
                       aria-hidden="true"
                     />
                   );
@@ -96,7 +82,6 @@ const monthlyTotals = data
                     class="rd-contrib-cell"
                     data-level={day.level}
                     data-date={day.date}
-                    data-old={col < recentFrom ? '' : undefined}
                     style={`--d:${(data.weeks.length - 1 - col) * 6}ms`}
                     data-tip-en={`${day.count} ${day.count === 1 ? 'contribution' : 'contributions'} on ${dateLabel}`}
                     data-tip-sk={`${day.count} ${day.count === 1 ? 'príspevok' : 'príspevkov'} · ${dateLabel}`}
