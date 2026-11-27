@@ -1,15 +1,8 @@
+import { writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
 
-const SOURCE = 'public/logo.jpg';
-const BRAND_BG = '#0e0e10';
-
-// Palette PNGs keep the generated icons small enough for mobile browsers to
-// fetch reliably (the truecolor 512px source was ~186 KB).
-const png = (input, size, file) =>
-  sharp(input)
-    .resize(size, size)
-    .png({ palette: true, quality: 90, compressionLevel: 9, effort: 10 })
-    .toFile(file);
+const ASSETS = 'public/assets';
+const SOURCE = `${ASSETS}/logo.jpg`;
 
 // Round avatar crop: the logo is clipped to a circle with transparent corners,
 // so the favicon reads as a circle in tabs and bookmark bars.
@@ -20,16 +13,6 @@ const roundAvatar = async (size) => {
   );
   return sharp(base)
     .composite([{ input: mask, blend: 'dest-in' }])
-    .png()
-    .toBuffer();
-};
-
-// Rounded logo on the brand background: iOS and maskable launchers mask their
-// own shape, so transparency there would show up as black corners.
-const roundOnBackground = async (size, scale = 1) => {
-  const inner = await roundAvatar(Math.round(size * scale));
-  return sharp({ create: { width: size, height: size, channels: 4, background: BRAND_BG } })
-    .composite([{ input: inner, gravity: 'center' }])
     .png()
     .toBuffer();
 };
@@ -56,25 +39,19 @@ const toIco = (images) => {
   return Buffer.concat([header, ...images.map(({ data }) => data)]);
 };
 
-const { writeFile } = await import('node:fs/promises');
-
-await png(await roundAvatar(32), 32, 'public/favicon-32x32.png');
-await png(await roundAvatar(192), 192, 'public/icon-192.png');
-await png(await roundAvatar(512), 512, 'public/icon-512.png');
-
-await png(await roundOnBackground(180), 180, 'public/apple-touch-icon.png');
-
-// Profile avatar for the hero (CSS crops it to a circle)
-await sharp(SOURCE).resize(128, 128).jpeg({ quality: 84, progressive: true }).toFile('public/avatar.jpg');
-
-// Maskable variant: logo scaled into the ~80% safe zone on the brand background
-await png(await roundOnBackground(512, 0.78), 512, 'public/icon-maskable.png');
+// Each PNG uses the same transparent circular crop as the favicon.
+for (const [name, size] of [['apple-touch-icon', 180], ['icon-192', 192], ['icon-512', 512]]) {
+  const data = await roundAvatar(size);
+  await sharp(data)
+    .png({ palette: true, quality: 90, compressionLevel: 9, effort: 10 })
+    .toFile(`${ASSETS}/${name}.png`);
+}
 
 const icoImages = [];
 for (const size of [16, 32, 48]) {
   const data = await sharp(await roundAvatar(size)).png({ compressionLevel: 9, effort: 10 }).toBuffer();
   icoImages.push({ size, data });
 }
-await writeFile('public/favicon.ico', toIco(icoImages));
+await writeFile(`${ASSETS}/favicon.ico`, toIco(icoImages));
 
 console.log('icons generated from', SOURCE);

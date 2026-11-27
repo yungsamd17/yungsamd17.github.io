@@ -97,7 +97,7 @@ export const EDITIONS: Edition[] = [
 
 export function editionImage(edition: Edition, theme: 'dark' | 'light' = 'dark') {
   const suffix = theme === 'light' && edition.light ? '-light' : '';
-  return `${HISTORY_PROJECT.site}${edition.slug}${suffix}.webp`;
+  return `/assets/history/${edition.slug}${suffix}.webp`;
 }
 
 export function editionPath(edition: Edition) {

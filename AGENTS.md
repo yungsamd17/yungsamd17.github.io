@@ -13,7 +13,7 @@ Sam (@yungsamd17) maintains [this personal site](https://yungsamd17.github.io) w
 - `src/pages/` serves the homepage, projects, links, extras, the custom 404 and generated OG images. The homepage includes a GitHub contribution calendar, and the projects page shows GitHub star counts.
 - Keep site identity and shared content in `src/data/site.ts`. Keep UI strings in `src/i18n/ui.ts` and add matching English and Slovak keys.
 - `BaseLayout.astro` renders the shared toolbar and footer. The toolbar holds the theme and language controls, with client-side behavior in `src/scripts/app.ts`.
-- Edit `public/logo.jpg` to update generated icons. The prebuild script regenerates them with sharp. Postbuild publishes the clean `/404/` route alongside GitHub Pages' root `404.html`.
+- Edit `public/assets/logo.jpg` to update generated icons. The prebuild script regenerates them with sharp. Postbuild publishes the clean `/404/` route alongside GitHub Pages' root `404.html`.
 - Keep the downloader in `public/downloader/` framework-free. `/extras/` is publicly reachable and excluded from the sitemap. Preserve `compressHTML: false` and `trailingSlash: 'ignore'` in `astro.config.mjs`.
 
 ## Git workflow

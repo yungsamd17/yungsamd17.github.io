@@ -1126,7 +1126,7 @@ async function initProjectStars() {
 let avatarRainStop: (() => void) | undefined;
 
 function initAvatarRain() {
-  const avatar = document.querySelector<HTMLElement>('[data-avatar]');
+  const avatar = document.querySelector<HTMLImageElement>('[data-avatar]');
   if (!avatar) return;
   // Off by default: without an opt-in the avatar is just the hero picture.
   const enabled = getStorage('avataregg') === 'on';
@@ -1148,7 +1148,7 @@ function initAvatarRain() {
     const duration = 2600 + Math.random() * 2600;
     const rotation = Math.round(Math.random() * 60 - 30);
     const img = document.createElement('img');
-    img.src = '/avatar.jpg';
+    img.src = avatar.src;
     img.alt = '';
     img.className = 'avatar-drop';
     img.style.width = `${size}px`;

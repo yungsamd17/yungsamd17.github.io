@@ -110,12 +110,12 @@ test('history editions stay in sync with their shipped snapshots', () => {
   assert.equal(slugs.length, 4);
   assert.equal(new Set(slugs).size, slugs.length);
   for (const slug of slugs) {
-    assert.ok(existsSync(join(root, 'public/history', `${slug}.webp`)), `missing snapshot: ${slug}`);
+    assert.ok(existsSync(join(root, 'public/assets/history', `${slug}.webp`)), `missing snapshot: ${slug}`);
   }
   assert.ok(data.includes('alt: LocalizedText'), 'editions need localized alt text');
   assert.equal((data.match(/light: true/g) ?? []).length, 2, 'two editions need light previews');
   for (const slug of ['minimal-site', 'card-redesign']) {
-    assert.ok(existsSync(join(root, 'public/history', `${slug}-light.webp`)), `missing light snapshot: ${slug}`);
+    assert.ok(existsSync(join(root, 'public/assets/history', `${slug}-light.webp`)), `missing light snapshot: ${slug}`);
   }
   assert.ok(component.includes('data-theme'), 'previews must follow the active theme');
   assert.ok(component.includes('replaceState'), 'edition changes must replace history');
