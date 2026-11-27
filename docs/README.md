@@ -282,7 +282,7 @@ The home page renders a GitHub contribution calendar.
 - **Fingerprint:** `contributionSignature()` hashes the dates, counts and levels, so a changed calendar is detectable.
 - **Caching:** `localStorage['contrib-cache']` stores `{ at, sig }` per calendar key (`home`) with a 10-minute TTL. A matching fingerprint renders the cells instantly; only new data animates in. The client refreshes the calendar in the background when the cache is stale, and falls back to the stale copy if the network fails.
 - **Tooltip:** one shared, viewport-anchored tooltip (`[data-contrib-tip]`) glides between dates instead of jumping.
-- **Cell states:** empty cells use the link-card colour, past empty cells are darker, future days (on or after the day after tomorrow) are dimmed, and tomorrow stays bright.
+- **Cell states:** empty cells use the link-card colour, past empty cells are darker, tomorrow is dimmed and non-interactive, and later days are hidden.
 
 ---
 

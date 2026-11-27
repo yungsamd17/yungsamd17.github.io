@@ -74,7 +74,7 @@ test('snack bar is shown by default', () => {
   assert.ok(docs.includes('**off** (toasts shown'));
 });
 
-test('contribution graph revalidates data and dims tomorrow', () => {
+test('contribution graph revalidates data, dims tomorrow and hides later days', () => {
   const app = read('src/scripts/app.ts');
   const lib = read('src/lib/contributions.ts');
   const css = read('src/styles/global.css');
@@ -84,10 +84,13 @@ test('contribution graph revalidates data and dims tomorrow', () => {
   // no localStorage TTL may skip the refresh
   assert.ok(!app.includes('CONTRIB_CACHE_TTL'));
   assert.ok(app.includes('void refreshContributions(grid, key, sig);'));
-  // tomorrow is a future day like any other
-  assert.ok(!app.includes('trailingIndex'));
-  assert.ok(app.includes('cutoff.setDate(cutoff.getDate() + 1);'));
-  assert.ok(!css.includes('tomorrow stays bright'));
+  assert.ok(app.includes("cell.toggleAttribute('data-tomorrow', date?.getTime() === tomorrow.getTime())"));
+  assert.ok(app.includes("cell.toggleAttribute('data-after-tomorrow', date !== undefined && date > tomorrow)"));
+  assert.match(css, /\.rd-contrib-cell\[data-tomorrow\]\s*\{\s*opacity: \.25;/);
+  assert.match(css, /\.rd-contrib-cell\[data-tomorrow\]\s*\{\s*pointer-events: none;/);
+  assert.match(css, /\.rd-contrib-cell\[data-after-tomorrow\]\s*\{\s*visibility: hidden;\s*pointer-events: none;/);
+  assert.ok(app.includes('.rd-contrib-cell:not([data-empty], [data-tomorrow], [data-after-tomorrow])'));
+  assert.match(css, /@media \(pointer: coarse\)\s*\{[^}]*\.rd-contrib-cell\[data-date\]:not\(\[data-tomorrow\], \[data-after-tomorrow\]\)::after\s*\{[^}]*inset: calc\(var\(--gap\) \/ -2\);/);
 });
 
 test('user-facing copy avoids em dashes', () => {

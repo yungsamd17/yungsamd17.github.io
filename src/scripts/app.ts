@@ -616,47 +616,32 @@ function applyContributions(grid: HTMLElement, data: ContributionsData) {
 
   if (totalEl) totalEl.textContent = data.total.toLocaleString('en-US');
   chartEl?.setAttribute('aria-label', `GitHub contributions, ${data.from} to ${data.to}`);
-  dimFutureAndPastEmptyContribDays();
+  updateContribDayVisibility();
 }
 
-function dimFutureAndPastEmptyContribDays() {
+function updateContribDayVisibility() {
+  const tomorrow = new Date();
+  tomorrow.setHours(0, 0, 0, 0);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
   document.querySelectorAll<HTMLElement>('.rd-contrib-grid').forEach((grid) => {
     const cells = Array.from(grid.querySelectorAll<HTMLElement>('.rd-contrib-cell'));
-    // find index of last cell that has a real date
-    let lastDateIdx = -1;
-    cells.forEach((cell, i) => { if (cell.dataset.date) lastDateIdx = i; });
-    cells.forEach((cell, i) => {
-      if (!cell.hasAttribute('data-empty')) return;
-      // leading / already-passed empty padding cells
-      if (i < (cells.findIndex((c) => c.dataset.date) || 0)) {
-        cell.setAttribute('data-past-empty', '');
-        cell.removeAttribute('data-future');
-        return;
-      }
-      // every trailing empty cell is a day that hasn't happened yet,
-      // including tomorrow
-      if (i > lastDateIdx) {
-        cell.setAttribute('data-future', '');
-        cell.removeAttribute('data-past-empty');
-        return;
-      }
-      cell.removeAttribute('data-future');
-      cell.removeAttribute('data-past-empty');
-    });
-  });
+    const firstDateIndex = cells.findIndex((cell) => cell.dataset.date);
+    const lastDateIndex = cells.findLastIndex((cell) => cell.dataset.date);
+    if (lastDateIndex === -1) return;
 
-  // dated cells for tomorrow or later are dimmed as well, in case the API
-  // already includes them
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const cutoff = new Date(today);
-  cutoff.setDate(cutoff.getDate() + 1);
-  document.querySelectorAll<HTMLElement>('.rd-contrib-cell[data-date]').forEach((cell) => {
-    const d = cell.dataset.date;
-    if (!d) return;
-    const date = new Date(`${d}T00:00:00`);
-    if (date.getTime() >= cutoff.getTime()) cell.setAttribute('data-future', '');
-    else cell.removeAttribute('data-future');
+    // Trailing padding follows the last supplied date, which can be older than today.
+    const lastDate = new Date(`${cells[lastDateIndex].dataset.date}T00:00:00`);
+    cells.forEach((cell, index) => {
+      let date = cell.dataset.date ? new Date(`${cell.dataset.date}T00:00:00`) : undefined;
+      if (!date && index > lastDateIndex) {
+        date = new Date(lastDate);
+        date.setDate(date.getDate() + index - lastDateIndex);
+      }
+      cell.toggleAttribute('data-past-empty', index < firstDateIndex);
+      cell.toggleAttribute('data-tomorrow', date?.getTime() === tomorrow.getTime());
+      cell.toggleAttribute('data-after-tomorrow', date !== undefined && date > tomorrow);
+    });
   });
 }
 
@@ -697,7 +682,7 @@ function initContributions() {
     // reveal animation, never whether fresh numbers are loaded.
     void refreshContributions(grid, key, sig);
   });
-  dimFutureAndPastEmptyContribDays();
+  updateContribDayVisibility();
 }
 
 /* One shared, viewport-anchored tooltip for the contribution graph. Being
@@ -713,12 +698,13 @@ function initContributionTooltip() {
   contribTipAbort = new AbortController();
   const { signal } = contribTipAbort;
 
-  let visible = false;
+  let activeCell: HTMLElement | undefined;
   let tipClearTimer: ReturnType<typeof setTimeout> | undefined;
+  let touchStart: { id: number; x: number; y: number } | undefined;
 
   const cellFrom = (target: EventTarget | null) =>
     target instanceof Element
-      ? (target.closest('.rd-contrib-cell:not([data-empty])') as HTMLElement | null)
+      ? (target.closest('.rd-contrib-cell:not([data-empty], [data-tomorrow], [data-after-tomorrow])') as HTMLElement | null)
       : null;
 
   const place = (cell: HTMLElement) => {
@@ -726,7 +712,12 @@ function initContributionTooltip() {
     const text = (lang === 'sk' ? cell.dataset.tipSk : cell.dataset.tipEn) ?? cell.dataset.tipEn;
     if (!text) return;
 
-    const wasVisible = visible;
+    const wasVisible = !!activeCell;
+    if (activeCell !== cell) {
+      activeCell?.removeAttribute('data-contrib-active');
+      cell.setAttribute('data-contrib-active', '');
+      activeCell = cell;
+    }
     clearTimeout(tipClearTimer);
     tipClearTimer = undefined;
     tip.textContent = text;
@@ -749,7 +740,6 @@ function initContributionTooltip() {
       void tip.offsetWidth;
       tip.style.transition = '';
       tip.dataset.open = 'true';
-      visible = true;
       return;
     }
 
@@ -759,22 +749,24 @@ function initContributionTooltip() {
   };
 
   const hide = () => {
-    if (!visible) return;
-    visible = false;
+    if (!activeCell) return;
+    activeCell.removeAttribute('data-contrib-active');
+    activeCell = undefined;
     delete tip.dataset.open;
     // keep the text while it fades out, then release it
     clearTimeout(tipClearTimer);
     tipClearTimer = setTimeout(() => {
       tipClearTimer = undefined;
-      if (!visible) tip.textContent = '';
+      if (!activeCell) tip.textContent = '';
     }, 240);
   };
 
   document.querySelectorAll<HTMLElement>('[data-contrib-grid]').forEach((grid) => {
     grid.addEventListener('pointerover', (event) => {
+      if (event.pointerType === 'touch') return;
       const cell = cellFrom(event.target);
       if (cell) place(cell);
-    });
+    }, { signal });
     grid.addEventListener('pointerout', (event) => {
       if (event.pointerType === 'touch') return;
       const cell = cellFrom(event.target);
@@ -782,18 +774,35 @@ function initContributionTooltip() {
       // moving straight onto a neighbouring day should just update the tip
       if (cellFrom(event.relatedTarget)) return;
       hide();
-    });
+    }, { signal });
   });
 
   window.addEventListener('scroll', hide, { passive: true, signal });
+  window.addEventListener('pointermove', (event) => {
+    if (touchStart?.id !== event.pointerId) return;
+    // A tap can move slightly before the finger lifts.
+    if (Math.hypot(event.clientX - touchStart.x, event.clientY - touchStart.y) < 8) return;
+    touchStart = undefined;
+    hide();
+  }, { passive: true, signal });
+  const endTouch = (event: PointerEvent) => {
+    if (touchStart?.id === event.pointerId) touchStart = undefined;
+  };
+  window.addEventListener('pointerup', endTouch, { signal });
+  window.addEventListener('pointercancel', endTouch, { signal });
+  window.addEventListener('pointercancel', hide, { signal });
   window.addEventListener('resize', hide, { signal });
   window.addEventListener('blur', hide, { signal });
-  // tapping anywhere outside the graph dismisses the touch tooltip
+  // Taps outside an interactive date dismiss the touch tooltip.
   document.addEventListener(
     'pointerdown',
     (event) => {
-      const target = event.target;
-      if (!(target instanceof Element) || !target.closest('[data-contrib-grid]')) hide();
+      const cell = cellFrom(event.target);
+      if (!cell) hide();
+      else if (event.pointerType === 'touch' && event.isPrimary) {
+        touchStart = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        place(cell);
+      }
     },
     { signal }
   );

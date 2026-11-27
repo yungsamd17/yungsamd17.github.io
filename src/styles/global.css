@@ -1858,16 +1858,16 @@ h1 {
 .rd-contrib-grid[data-instant] .rd-contrib-cell { transition: none; }
 
 /* GitHub-like focus: hovering/clicking a cell dims every other date. */
-.rd-contrib-grid:has(.rd-contrib-cell:hover) .rd-contrib-cell {
+.rd-contrib-grid:has([data-contrib-active]) .rd-contrib-cell {
   transition-delay: 0ms;
   transition-duration: .15s;
 }
 
-.rd-contrib-grid[data-shown="true"]:has(.rd-contrib-cell:hover) .rd-contrib-cell:not(:hover) {
+.rd-contrib-grid[data-shown="true"]:has([data-contrib-active]) .rd-contrib-cell:not([data-contrib-active], [data-tomorrow]) {
   opacity: .32 !important;
 }
 
-.rd-contrib-cell:hover {
+.rd-contrib-cell[data-contrib-active] {
   outline: 1px solid var(--hi);
   outline-offset: 1px;
   z-index: 2;
@@ -1877,10 +1877,27 @@ h1 {
 
 .rd-contrib-cell[data-empty][data-past-empty] { background: var(--rd-surf); }
 
-/* days that haven't happened yet, including tomorrow, are dimmed */
-.rd-contrib-grid[data-shown="true"] .rd-contrib-cell[data-future] {
+.rd-contrib-cell[data-tomorrow] { pointer-events: none; }
+
+.rd-contrib-grid[data-shown="true"] .rd-contrib-cell[data-tomorrow] {
   opacity: .25;
 }
+
+/* Keep the grid positions while removing later days from view and hit testing. */
+.rd-contrib-cell[data-after-tomorrow] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  /* Fill the gaps between date targets without changing the drawn squares. */
+  .rd-contrib-cell[data-date]:not([data-tomorrow], [data-after-tomorrow])::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--gap) / -2);
+  }
+}
+
 .rd-contrib-cell[data-level="1"] { background: var(--gh1); }
 .rd-contrib-cell[data-level="2"] { background: var(--gh2); }
 .rd-contrib-cell[data-level="3"] { background: var(--gh3); }
