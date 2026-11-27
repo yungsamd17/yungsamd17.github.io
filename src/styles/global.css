@@ -131,7 +131,7 @@ select:focus-visible {
   border-radius: 2px;
 }
 
-::selection { background: var(--accent); color: var(--bg); }
+::selection { background: color-mix(in oklab, var(--accent) 50%, transparent); }
 
 :root[lang="sk"] [data-lang="en"],
 :root[lang="en"] [data-lang="sk"],
