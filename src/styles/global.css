@@ -1272,6 +1272,26 @@ h1 {
 .featured-link:hover .featured-title,
 .featured-link:focus-visible .featured-title { color: var(--hi); }
 
+.featured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-end: 4px;
+  padding-block: 2px;
+  padding-inline: 3px 5px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--item) 10%, transparent);
+  font-size: .68rem;
+  font-weight: 500;
+  line-height: 1.2;
+  vertical-align: middle;
+}
+
+.featured-badge > svg { flex: none; }
+
+/* Optically center the Inter label alongside the GitHub mark. */
+.featured-badge > [data-lang] { position: relative; inset-block-start: .7px; }
+
 .featured-desc {
   display: block;
   color: var(--mid);

@@ -42,6 +42,7 @@ export interface FeaturedLink {
   site?: string;
   /** GitHub slug (owner/repo) for star count */
   repo?: string;
+  githubOrg?: boolean;
 }
 
 export const FEATURED: FeaturedLink[] = [
@@ -75,9 +76,10 @@ export const FEATURED: FeaturedLink[] = [
   {
     title: 's17 Labs',
     desc: {
-      en: 'GitHub Org - Lightweight, privacy-first software for the web and mobile.',
-      sk: 'GitHub Org - Ľahký softvér s dôrazom na súkromie pre web a mobil.',
+      en: 'Lightweight, privacy-first software for the web and mobile.',
+      sk: 'Ľahký softvér s dôrazom na súkromie pre web a mobil.',
     },
+    githubOrg: true,
     href: 'https://s17labs.github.io',
     site: 'https://s17labs.github.io',
     icon: 'flask',

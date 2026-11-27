@@ -130,6 +130,13 @@ if (!hadBirthday) age--;
               {item.title}
             </span>
             <span class="featured-desc">
+              {item.githubOrg && (
+                <span class="featured-badge">
+                  <Icon name="github" size={12} />
+                  <span data-lang="en">{t('featuredGitHubOrg')}</span>
+                  <span data-lang="sk">{t('featuredGitHubOrg', 'sk')}</span>
+                </span>
+              )}
               <span data-lang="en">{item.desc.en}</span>
               <span data-lang="sk">{item.desc.sk}</span>
             </span>

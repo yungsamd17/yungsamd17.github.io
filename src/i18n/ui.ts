@@ -4,6 +4,7 @@ export const UI = {
   en: {
     tagline: 'building tools for the web',
     projectsTitle: 'Projects',
+    featuredGitHubOrg: 'GitHub Org',
     projectsIntro: 'What I’m building now, and what I’ve built before.',
     projectsNow: 'now',
     projectsPast: 'past',
@@ -92,6 +93,7 @@ export const UI = {
   sk: {
     tagline: 'tvorím nástroje pre web',
     projectsTitle: 'Projekty',
+    featuredGitHubOrg: 'GitHub Organizácia',
     projectsIntro: 'Na čom práve pracujem a čo som už vytvoril.',
     projectsNow: 'teraz',
     projectsPast: 'predtým',
